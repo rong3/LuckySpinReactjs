@@ -1,0 +1,163 @@
+.luckyspin-wrapper {
+    width: 100vw;
+    height: 100vh;
+    margin: 0 0 auto;
+    // background-image: url(/asset/images/luckyspin/image/spotlight_spinthewheel.png),
+    //     linear-gradient(to bottom, #a3b9d0, #8644db);
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: auto;
+}
+
+audio {
+    display: none;
+}
+
+/* Sets the background image for the wheel */
+td.the_wheel {
+    // background-image: url(/asset/images/luckyspin/image/wheel_hdbank.png);
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Do some css reset on selected elements */
+.btn_luckyspin {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    color: #fff;
+    border: 0px;
+    margin-left: 5px;
+    cursor: pointer;
+    background-color: #ef6f6f;
+}
+.btn_luckyspin:hover {
+    background: #8644db;
+}
+.btn_luckyspin:disabled {
+    background: #cccccc;
+    color: #000;
+}
+
+/* Styles for the power selection controls */
+.pw1 {
+    background-color: #6fe8f0 !important;
+}
+
+.pw2 {
+    background-color: #86ef6f !important;
+}
+
+.pw3 {
+    background-color: #ef6f6f !important;
+}
+
+/* Common panel style */
+.panel_luckySpin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    z-index: 999;
+    color: #000;
+    box-sizing: border-box;
+}
+
+/* panel content (only for animation delay after open) */
+.panel__content {
+    opacity: 0;
+    will-change: margin-top;
+    transition: all 700ms;
+    transition-delay: 600ms;
+    // padding: 100px 200px;
+    width: 99vw;
+    height: 95vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Panel content animation after open */
+.panel_luckySpin:target .panel__content {
+    opacity: 1;
+    margin-top: 0;
+}
+
+/*  Specific "Home "panel */
+/* •••••••••••••••••••••••••••••••• */
+
+.panel_luckySpin#home {
+    z-index: 1;
+}
+
+/*  Specific panel "Slice" */
+/* •••••••••••••••••••••••••••••••• */
+
+.panel_luckySpin#slice {
+    background-color: #e53935;
+    transition: all 800ms cubic-bezier(0.19, 1, 0.56, 1);
+    transform: translate3d(0, -100%, 0);
+}
+
+.panel_luckySpin#slice:target {
+    transform: translate3d(0, 0, 0);
+}
+
+/*  Specific panel "Fade" effect */
+/* •••••••••••••••••••••••••••••••• */
+
+.panel_luckySpin#fade {
+    background-color: #fff;
+    opacity: 0;
+    transition: all 800ms;
+    pointer-events: none;
+}
+
+.panel_luckySpin#fade:target {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* EDITOR LAYOUT*/
+.layout_editor_spin {
+    cursor: pointer;
+    z-index: 10;
+    position: fixed;
+    width: 435px;
+    height: 80vh;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: none;
+    top: 20px;
+    left: 20px;
+    .center {
+        text-align: center;
+    }
+    .checkbox_spin {
+        opacity: 1;
+        left: 50%;
+        top: 50%;
+        z-index: 5;
+    }
+    .body_layout {
+        position: relative;
+        padding: 10px;
+        height: 85%;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}
+
+.checkbox_spin_table {
+    position: relative !important;
+    opacity: 1 !important;
+    left: 50%;
+    top: 50%;
+    z-index: 5 !important;
+}

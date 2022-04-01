@@ -1,0 +1,251 @@
+@import "../component/luckyspin/style/module.scss";
+@import "../shared/packages/control/listBox/style.scss";
+@import "../component/embedded/lucky-spin/style.scss";
+.content {
+    position: relative;
+    padding: 5px;
+    .row-title {
+        font-weight: bold;
+        .table-height {
+            min-height: 200px;
+        }
+    }
+    .title-head {
+        position: relative;
+        padding: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+        background: #dc3545;
+        .title-text {
+            color: #fff;
+            margin-top: 10px;
+        }
+    }
+    .block-content {
+        position: relative;
+        height: auto;
+        min-height: 100px;
+        height: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: #fff;
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        .title-text {
+            color: #000;
+        }
+        margin-top: 10px;
+    }
+    .block-input {
+        position: relative;
+        width: 100% !important;
+        top: 5px;
+    }
+}
+
+.box-action-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.headerColumn {
+    color: #fff;
+    background: #dc3545;
+}
+
+.react-dialog-overlay {
+    position: fixed;
+    min-width: 200px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1044;
+    background: rgba(255, 255, 255, 0.9);
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    justify-content: center;
+    -ms-align-items: center;
+    align-items: center;
+    opacity: 0;
+    -webkit-animation: react-dialog-fadeIn 0.5s 0.2s forwards;
+    -moz-animation: react-dialog-fadeIn 0.5s 0.2s forwards;
+    -o-animation: react-dialog-fadeIn 0.5s 0.2s forwards;
+    animation: react-dialog-fadeIn 0.5s 0.2s forwards;
+}
+
+@-webkit-keyframes react-dialog-fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes react-dialog-fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes react-dialog-fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes react-dialog-fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/*react tab*/
+.react-tabs__tab--selected {
+    background: #dc3545 !important;
+    border-color: #ccc !important;
+    color: #fff !important;
+    border-radius: 0px !important;
+    border-bottom: none !important;
+}
+
+.react-tabs__tab {
+    display: inline-block;
+    border: 1px solid #ccc !important;
+    border-bottom: none;
+    font-size: 15px !important;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 12px 16px !important;
+    cursor: pointer;
+}
+
+/** EXTRA CSS*/
+img {
+    text-indent: -9999px;
+    color: transparent;
+}
+
+//custom select control
+.css-1s2u09g-control {
+    margin-top: -5px !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    &:hover {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
+
+.css-1pahdxg-control {
+    margin-top: -5px !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    &:hover {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
+
+.css-1okebmr-indicatorSeparator {
+    display: none !important;
+}
+
+main {
+    padding-top: 98px;
+
+    @media (max-width: 767.98px) and (min-width: 320px) {
+        padding-top: 60px;
+    }
+}
+
+.empty-placeholder {
+    display: flex;
+    align-items: center;
+}
+
+.empty-placeholder_wrapper {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-placeholder_wrapper__img {
+    margin-bottom: 32px;
+}
+
+.empty-placeholder_wrapper__content {
+    text-align: center;
+}
+
+.empty-placeholder_wrapper__content p {
+    font-size: 20px;
+    color: #6f7279;
+}
+
+.empty-placeholder_wrapper__content p a {
+    color: #f3304a;
+    text-decoration: underline !important;
+}
+
+.styles_collapse__Yq_i8.styles_entered__cavQj {
+    height: 100%;
+
+    .styles_wrapper__y_KQV {
+        height: 100%;
+    }
+}
+
+strong {
+    font-family: "Be Vietnam", sans-serif !important;
+}
+
+.reveal {
+    position: relative;
+    transform: translateY(50px);
+    opacity: 0;
+    transition: 0.5s all ease;
+
+    &.active {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.styles_news-item-rss__4wN5n {
+    min-height: initial !important;
+}
+
+
+.inputstyle {
+    border: 1px solid #e7e7e7 !important;
+    background: #f6f6f5 !important;
+    border-radius: 40px !important;
+    height: 50px;
+    width: 100%;
+    padding-left: 20px;
+    text-align: center;
+  }
