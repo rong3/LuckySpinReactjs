@@ -202,7 +202,7 @@ function StrategySpinComponent(props) {
                             <i className="far fa-eye"></i>
                             <span className="title-text">&nbsp;Danh sách chiến lược</span>
                         </div>
-                        <div className="strategy-btn-add">
+                        <div className="btn-add">
                             <i className='fa fa-plus'
                                 title='Thêm mới'
                                 onClick={(e) => {

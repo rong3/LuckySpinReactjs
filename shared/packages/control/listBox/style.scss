@@ -8,6 +8,7 @@
             font-size: large;
             background: #ff7a68;
             padding: 5px;
+            border-radius: 20px;
         }
     }
     .btn-add:hover {
@@ -30,10 +31,8 @@
         cursor: pointer !important;
         .search-range {
             position: relative;
-            padding: 5px;
             .title {
-                color: #dc3545;
-                padding: 5px;
+                color: #dc3545 !important;
                 font-size: 18px;
                 text-align: center;
                 opacity: 1;

@@ -44,7 +44,7 @@ function ProxyAllocationComponent(props) {
         type: null
     })
 
-   
+
     useEffect(() => {
         dispatch(loadDataTableProxyAllocationGroup({
             header: {
@@ -137,8 +137,8 @@ function ProxyAllocationComponent(props) {
         }
     }
 
-      //update cate command
-      const resetModal = () => {
+    //update cate command
+    const resetModal = () => {
         setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
     }
 
@@ -148,15 +148,13 @@ function ProxyAllocationComponent(props) {
             <div className="content content-wrapper">
                 <div className="row row-title">
                     <div className='col-md-2'>
-                        <div className="row">
-                            <div className="btn-add">
-                                <i className='fa fa-plus'
-                                    title='Thêm mới'
-                                    onClick={(e) => {
-                                        setModalCustom({ ...modalCustom, type: 'new', data: { disabled: false }, isOpen: true })
-                                    }}>
-                                </i>
-                            </div>
+                        <div className="btn-add">
+                            <i className='fa fa-plus'
+                                title='Thêm mới'
+                                onClick={(e) => {
+                                    setModalCustom({ ...modalCustom, type: 'new', data: { disabled: false }, isOpen: true })
+                                }}>
+                            </i>
                         </div>
                         <ListBoxComponent
                             title={"Tệp khách hàng"}
@@ -221,7 +219,7 @@ function ProxyAllocationComponent(props) {
                                                             options={groupAllocationsList}
                                                         />
                                                     </div>
-                                                   
+
                                                 </div>
                                             </>
                                             :

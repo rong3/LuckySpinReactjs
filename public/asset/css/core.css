@@ -742,7 +742,7 @@ body {
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-  padding: 0 !important;
+  /* padding: 0 !important; */
   margin-bottom: 0 !important;
 }
 

@@ -1,11 +1,12 @@
 .strategy-btn-add {
     display: flex;
-    justify-content: right;
     cursor: pointer;
+    margin-left: 5px;
     i {
         color: #fff;
         font-size: large;
         background: #ff7a68;
         padding: 5px;
+        border-radius: 20px;
     }
 }
