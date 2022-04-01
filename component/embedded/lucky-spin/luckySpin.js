@@ -231,7 +231,6 @@ const LuckySpinComponent = (props) => {
         if (master_config_data.canvas?.pointerExtenal?.isUse) {
             // Set onload of the image to anonymous function to draw on the canvas once the image has loaded.
             handImage.onload = function () {
-                handImage.src = instance.url;
                 drawPointerCanvas(canvas, instance)
             };
             // Set source of the image. Once loaded the onload callback above will be triggered.
@@ -244,7 +243,7 @@ const LuckySpinComponent = (props) => {
             var canvas = document.getElementById('canvas');
             if (canvas) {
                 const instance = master_config_data.canvas?.pointerExtenal;
-                handImage.src = instance.url;
+                // handImage.src = instance.url;
                 drawPointerCanvas(canvas, instance)
             }
         }
@@ -503,9 +502,9 @@ const LuckySpinComponent = (props) => {
                     <>
                         <header>
                             <nav class="navbar d-flex align-items-center justify-content-between">
-                                <div class="navbar-brand"> <a href=""> <img src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt=""/></a></div>
+                                <div class="navbar-brand"> <a href=""> <img src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt="" /></a></div>
                                 <div class="navbar-right">
-                                    <div class="dropdown"><a class="navbar-avatar dropdown-toggle" href="#"> <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt=""/>
+                                    <div class="dropdown"><a class="navbar-avatar dropdown-toggle" href="#"> <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
                                         <p>&nbsp; Xin chào, User</p></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="">Logout</a></li>
