@@ -384,7 +384,7 @@ export const prizesCollection = [
                 allow_prize: true,
                 name: 'TRƯƠNG ĐẶNG THỊ MỸ LINH',
                 imgPrize: null,
-                color: "yellow",
+                color: "orange",
                 percent: 10,
                 quantity: null
             },
@@ -443,7 +443,7 @@ export const prizesCollection = [
                 allow_prize: true,
                 name: 'NGUYỄN KHÁNH DUY',
                 imgPrize: null,
-                color: "yellow",
+                color: "orange",
                 percent: 10,
                 quantity: null
             },
@@ -502,7 +502,7 @@ export const prizesCollection = [
                 allow_prize: true,
                 name: 'TRƯƠNG CHÍ TOÀN',
                 imgPrize: null,
-                color: "yellow",
+                color: "orange",
                 percent: 10,
                 quantity: null
             },
@@ -541,7 +541,7 @@ export const prizesCollection = [
                 allow_prize: true,
                 name: 'TRẦN NGUYỄN MINH HẢO',
                 imgPrize: null,
-                color: "yellow",
+                color: "orange",
                 percent: 10,
                 quantity: null
             },
