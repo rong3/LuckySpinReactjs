@@ -513,7 +513,8 @@ const LuckySpinComponent = (props) => {
                                 </div>
                             </nav>
                         </header>
-                        <section class="luckyspin-wrapper main-wrapper" id="luckyspin-wrapper">
+
+                        <section class="luckyspin-wrapper main-wrapper page-circle" id="luckyspin-wrapper">
                             <div class="wrapper-container d-flex align-items-center justify-content-center">
                                 <div class="wrap-circle">
                                     <div class="panel_luckySpin" id="home">
