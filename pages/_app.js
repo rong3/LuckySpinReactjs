@@ -26,7 +26,7 @@ import { ToastProvider } from 'react-toast-notifications';
 //Language
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../locales/index';
-
+import Script from 'next/script'
 
 function Default({ Component, pageProps }) {
   const router = useRouter();
@@ -62,7 +62,7 @@ function Default({ Component, pageProps }) {
 
   return (
     <ProvideAuth>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+      <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" />
       <AccessControlProvider>
         <I18nextProvider i18n={i18n}>
           <ToastProvider autoDismiss={true} autoDismissTimeout={2000} placement="bottom-right">
