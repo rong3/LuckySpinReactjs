@@ -44,6 +44,18 @@ export function InputControl({ editRef, defaultValue, handleSubmit, type, placeh
         }} value={value} />
     }
 
+    const rootInputNumber = (value) => {
+        return <input className="form-control muiInputBase-input-custom" {...rest} onChange={(e) => {
+            const value = e.target.value;
+            if (value != inputValue) {
+                setInputValue(value);
+                if (rest.onChange) {
+                    rest.onChange(e)
+                }
+            }
+        }} type="number" value={value} />
+    }
+
     const rootInputTextPhone = (value) => {
         return <input className="form-control muiInputBase-input-custom" {...rest} onChange={(e) => {
             const value = e.target.value;
@@ -90,7 +102,7 @@ export function InputControl({ editRef, defaultValue, handleSubmit, type, placeh
             dateFormat={INPUT_TYPE.DATE ? "dd/MM/yyyy" : "dd/MM/yyyy HH:mm"}
             portalId={"picker-portal-id"}
             shouldCloseOnSelect
-            showTimeInput={type===INPUT_TYPE.DATETIME}
+            showTimeInput={type === INPUT_TYPE.DATETIME}
             onChange={(e) => {
                 const value = e;
                 setInputValue(value);
@@ -105,6 +117,7 @@ export function InputControl({ editRef, defaultValue, handleSubmit, type, placeh
     const drawControl = (value) => {
         switch (type) {
             case INPUT_TYPE.TEXT: return rootInputText(value);
+            case INPUT_TYPE.NUMBER: return rootInputNumber(value);
             case INPUT_TYPE.PHONE: return rootInputTextPhone(value);
             default: return <></>
         }

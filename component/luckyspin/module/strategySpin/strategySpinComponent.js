@@ -17,7 +17,11 @@ import { loadDataTableThemeSpin } from "../../../../redux/actions/themeAction"
 import Modal from "../../../../shared/packages/control/modal/index";
 import SelectBox from "../../../../shared/packages/control/selectBox/selectBox"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../services/strategySpin.service"
+import { getGroupAllocationById } from "../../../../services/groupAllocation.service"
+import { getProxyAllocationStrategy, updateProxyStrategy } from "../../../../services/proxyAllocationStrategy.service"
 import showConfirm from "../../../../shared/packages/control/dialog/confirmation"
+import { strategyConfig } from "./config/strategyConfig"
+import UIBuilder from "../../../../shared/packages/control/uiBuilder/uiBuilder"
 
 const styles = theme => ({
     root: {
@@ -29,11 +33,18 @@ function StrategySpinComponent(props) {
     const [allows] = usePermission();
     const { addToast } = useToasts();
     const dispatch = useDispatch();
+    const [groupAllocationEditModel, setGroupAllocationEditModel] = useState(null);
     const [modalCustom, setModalCustom] = useState({
         isOpen: false,
         data: null,
         type: null
     })
+
+    const [modalAllocationAttribute, setModalAllocationAttribute] = useState({
+        isOpen: false,
+        data: null,
+    })
+
     const { strategyList } = useSelector((state) => state.strategy);
     const { channelSpinList } = useSelector((state) => state.channelSpin);
     const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
@@ -63,6 +74,15 @@ function StrategySpinComponent(props) {
             }
         }))
     }, [])
+
+    useEffect(() => {
+        if (modalAllocationAttribute.data)
+            setGroupAllocationEditModel([...modalAllocationAttribute.data?.groupAllocation?.masterAllocationSelecteds])
+    }, [modalAllocationAttribute.data])
+
+    useEffect(() => {
+        console.log({ groupAllocationEditModel });
+    }, [groupAllocationEditModel])
 
     const columns = [
         {
@@ -133,6 +153,75 @@ function StrategySpinComponent(props) {
         setModalCustom({ ...modalCustom });
     }
 
+    //To check data exists groupAllocationId for custom allocaiton object attribute
+    const checkShowLayerAllocation = (data) => {
+        const row_channelID = data?.channelSpinId;
+        if (row_channelID) {
+            const channelData = channelSpinList?.find(x => x?.id === row_channelID);
+            if (channelData) {
+                return {
+                    groupAllocationId: channelData?.proxyAllocationGroup?.groupAllocationId,
+                    show: channelData?.proxyAllocationGroup?.groupAllocationId !== null
+                }
+            }
+            else return {
+                groupAllocationId: null,
+                show: false
+            };
+        }
+        return {
+            groupAllocationId: null,
+            show: false
+        };
+    }
+
+    const convertEditAttributeUI = (data) => {
+        let maskCopyEdit = _.cloneDeep(strategyConfig.maskEditModel);
+        if (data === null)
+            return maskCopyEdit;
+        else {
+            const parse = JSON.parse(data);
+            Object.keys(parse)?.map((item) => {
+                maskCopyEdit[item].value = parse[item];
+            })
+            return maskCopyEdit;
+        }
+    }
+
+    const openAllocationLayer = (params) => {
+        const groupAllcationId = checkShowLayerAllocation(params?.row)?.groupAllocationId;
+
+        if (groupAllcationId) {
+            //get group id to get all master selected
+            getGroupAllocationById(groupAllcationId).then((res) => {
+                const strategyID = params?.row?.id;
+                const masterIds = res?.data?.data?.masterAllocationSelecteds?.map(x => x.id) ?? [];
+                //from list master selected, we put on proxy to get attributes data
+                getProxyAllocationStrategy({
+                    "strategySpinId": strategyID,
+                    "masterAllocationSelectedIds": masterIds
+                }).then((res2) => {
+                    const proxySelectedsList = res2?.data?.data;
+                    setModalAllocationAttribute({
+                        ...modalAllocationAttribute, data: {
+                            strategySpin: params?.row,
+                            groupAllocation: {
+                                ...res?.data?.data,
+                                masterAllocationSelecteds: res?.data?.data?.masterAllocationSelecteds?.map(x =>
+                                ({
+                                    ...x,
+                                    idProxy: proxySelectedsList?.find(y => x.id === y.masterAllocationSelectedId)?.id,
+                                    strategyId: params?.row?.id,
+                                    attributes: convertEditAttributeUI(proxySelectedsList?.find(y => x.id === y.masterAllocationSelectedId)?.attributes)
+                                }))
+                            }
+                        }, isOpen: true
+                    })
+                })
+            })
+        }
+    }
+
     const renderActionGrid = (params) => {
         return (
             <div className="box-action-container">
@@ -143,9 +232,10 @@ function StrategySpinComponent(props) {
                     }}></i>
                 </div>
                 {
-                    params?.row?.channelSpinId &&
+                    checkShowLayerAllocation(params?.row)?.show &&
                     <div>
-                        <i className="fas fa-layer-group" onClick={async (e) => {
+                        <i className="fas fa-layer-group" onClick={(e) => {
+                            openAllocationLayer(params)
                         }}></i>
                     </div>
                 }
@@ -164,6 +254,10 @@ function StrategySpinComponent(props) {
     //update strategy command
     const resetModal = () => {
         setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
+    }
+
+    const resetModalAttribute = () => {
+        setModalAllocationAttribute({ ...modalAllocationAttribute, isOpen: false, data: null })
     }
 
     const updateStrategyCommand = (data) => {
@@ -193,6 +287,30 @@ function StrategySpinComponent(props) {
         })
     }
 
+    const updateAttributes = (index, key, value) => {
+        groupAllocationEditModel[index].attributes[key] = value;
+        groupAllocationEditModel[index]["edited"] = true;
+        setGroupAllocationEditModel([...groupAllocationEditModel])
+    }
+
+    const updateAttributesCommand = (data) => {
+        const copyData = [...data];
+        copyData?.filter(x => x.edited)?.map(item => {
+            const convert = ({
+                "id": item?.idProxy,
+                "strategySpinId": item?.strategyId,
+                "masterAllocationSelectedId": item?.id,
+                "attributes": JSON.stringify(item?.attributes)
+            });
+            updateProxyStrategy(convert).then((res) => {
+                addToast(<div className="text-center">{`Cập nhật ${item?.masterId} thành công`}</div>, { appearance: 'success' });
+            }).catch((err) => {
+                addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+            })
+        });
+        resetModalAttribute();
+    }
+
     return (
         <div className={classes.root}>
             <div className="content">
@@ -219,6 +337,7 @@ function StrategySpinComponent(props) {
                                 count={strategyList.length}
                                 disableSelectionOnClick
                             />
+                            {/* //modal crud strategy */}
                             {
                                 <Modal
                                     isOpen={modalCustom.isOpen}
@@ -311,6 +430,54 @@ function StrategySpinComponent(props) {
                                                     return "Cập nhật"
                                                 }
                                             })()}
+                                        </button>
+                                    </Modal.Footer>
+                                </Modal>
+                            }
+
+                            {/* //modal attribute */}
+                            {
+                                <Modal
+                                    isOpen={modalAllocationAttribute.isOpen}
+                                    modalName="role-modal"
+                                    showOverlay={true}
+                                    onClose={() => resetModalAttribute()}
+                                    title="Cấu hình đối tượng phân bổ"
+                                    size="xl"
+                                    centered
+                                >
+                                    <Modal.Body>
+                                        <div class="accordion" id="myAccordion">
+                                            {
+                                                groupAllocationEditModel?.map((item, index) => {
+                                                    return (
+                                                        <div class="accordion-item">
+                                                            <h2 class="accordion-header" id={`index_${index}`}>
+                                                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#collapse_${index}`}>{`{ master Id: ${item?.masterId}, master Code: ${item?.masterCode}} ${item?.edited ? " (trạng thái: chỉnh sửa)" : ""}`}</button>
+                                                            </h2>
+                                                            <div id={`collapse_${index}`} class="accordion-collapse collapse">
+                                                                <div class="card-body">
+                                                                    <UIBuilder
+                                                                        objectKeys={item?.attributes}
+                                                                        indexData={index}
+                                                                        modelChange={updateAttributes} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <button className="btn btn-outline-danger mr-25" onClick={() => {
+                                            resetModalAttribute()
+                                        }}>Đóng</button>
+                                        <button className="btn btn-outline-primary mr-25" onClick={() => {
+                                            console.log({ data: groupAllocationEditModel });
+                                            updateAttributesCommand(groupAllocationEditModel);
+                                        }}>
+                                            Cập nhật
                                         </button>
                                     </Modal.Footer>
                                 </Modal>

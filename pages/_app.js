@@ -62,6 +62,7 @@ function Default({ Component, pageProps }) {
 
   return (
     <ProvideAuth>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
       <AccessControlProvider>
         <I18nextProvider i18n={i18n}>
           <ToastProvider autoDismiss={true} autoDismissTimeout={2000} placement="bottom-right">

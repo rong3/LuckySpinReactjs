@@ -8,6 +8,15 @@ export const getListGroupAllocation = (param) => {
     );
 };
 
+export const getGroupAllocationById = (id) => {
+    return request(
+        'GET',
+        `GroupAllocation/${id}`,
+        'vi'
+    );
+};
+
+
 export const createGroupAllocation= (data) => {
     return request(
         'POST',

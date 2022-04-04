@@ -963,7 +963,7 @@ export const category_wheel = [
                     bottom: 0
                 }
             },
-            prizes: prizesCollection[3].prizes
+            prizes: prizesCollection[1].prizes
         }
     },
 ]
