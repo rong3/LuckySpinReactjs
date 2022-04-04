@@ -37,7 +37,6 @@ function ProxyAllocationComponent(props) {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const { proxyAllocationGroupList } = useSelector((state) => state.proxyAllocationGroup);
     const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
-    const { categoryClientList } = useSelector((state) => state.categoryClient);
     const [modalCustom, setModalCustom] = useState({
         isOpen: false,
         data: null,
@@ -53,12 +52,6 @@ function ProxyAllocationComponent(props) {
             }
         }))
         dispatch(loadDataTableMasterObj({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-        dispatch(loadDataTableCategoryClient({
             header: {
                 pageNumber: 1,
                 pageSize: 999
@@ -193,7 +186,7 @@ function ProxyAllocationComponent(props) {
                                                             overwriteDataModal('desc', value)
                                                         }} defaultValue={modalCustom.data?.desc} />
                                                     </div>
-                                                    <div className="col-md-12">
+                                                    {/* <div className="col-md-12">
                                                         <span>Danh mục khách hàng</span>
                                                         <SelectBox id="selectbox"
                                                             optionLabel="categoryName"
@@ -205,7 +198,7 @@ function ProxyAllocationComponent(props) {
                                                             isPortal
                                                             options={categoryClientList}
                                                         />
-                                                    </div>
+                                                    </div> */}
                                                     <div className="col-md-12">
                                                         <span>Nhóm phân bổ</span>
                                                         <SelectBox id="selectbox"
@@ -260,13 +253,8 @@ function ProxyAllocationComponent(props) {
                         <div className='wrapper-tab'>
                             <Tabs>
                                 <TabList>
-                                    <Tab>Quản lý Danh mục khách hàng</Tab>
                                     <Tab>Quản lý Nhóm phân bổ</Tab>
                                 </TabList>
-                                <TabPanel>
-                                    <CategoryClientComponent selectedGroup={selectedGroup}
-                                    />
-                                </TabPanel>
                                 <TabPanel>
                                     <GroupAllocationComponent selectedGroup={selectedGroup}
                                     />
