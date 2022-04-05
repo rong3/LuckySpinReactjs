@@ -935,13 +935,13 @@ html body {
 }
 
 .menu-topbar {
-  z-index: 1401 !important;
+  z-index: 10 !important;
 }
 
 .navbar-hdbank {
   background-color: $primary-hdbank !important;
   position: relative !important;
-  z-index: 1400 !important;
+  z-index: 1 !important;
   div,
   button {
     color: #5a5a5a;

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { isNotNullAndUndefined } from "../../utils/objectHelper"
 import { useTranslation } from "react-i18next";
 import { InputControl } from "../input/inputControl"
+import SelectBox from "../selectBox/selectBox"
 
 const UIBuilder = ({ objectKeys, modelChange, indexData, ...props }) => {
     const { t } = useTranslation('common');
@@ -30,6 +31,7 @@ const UIBuilder = ({ objectKeys, modelChange, indexData, ...props }) => {
         switch (type) {
             case 'string': return 'text';
             case 'number': return 'number';
+            case 'boolean': return 'boolean';
             default: return "text";
         }
     }
@@ -37,17 +39,34 @@ const UIBuilder = ({ objectKeys, modelChange, indexData, ...props }) => {
     const convertDataType = (type, data) => {
         switch (type) {
             case 'number': return Number.parseInt(data);
+            case 'boolean': return data === "true" ? true : false;
             default: return data;
         }
     }
 
 
     const supportBuilderTypeControl = (item) => {
-        return <InputControl type={item.type} id={item.key} onChange={(e) => {
-            const value = convertDataType(item?.type, e.target.value) ?? null;
-            item.value = value;
-            modelChange(indexData, item.key, item.value)
-        }} defaultValue={item.value} />
+        if (["text", "number"].includes(item.type)) {
+            return <InputControl type={item.type} id={item.key} onChange={(e) => {
+                const value = convertDataType(item?.type, e.target.value) ?? null;
+                item.value = value;
+                modelChange(indexData, item.key, item.value)
+            }} defaultValue={item.value} />
+        }
+        if (["boolean"].includes(item.type)) {
+            return <SelectBox id="selectbox"
+                optionLabel="label"
+                optionValue="value"
+                onChange={(data) => {
+                    item.value = data;
+                    modelChange(indexData, item.key, item.value)
+                }}
+                value={item.value}
+                isPortal
+                options={[{ label: "True", value: true }, { label: "False", value: false }]}
+            />
+        }
+        else return null;
     }
 
     return (

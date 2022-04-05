@@ -18,10 +18,13 @@ import Modal from "../../../../shared/packages/control/modal/index";
 import SelectBox from "../../../../shared/packages/control/selectBox/selectBox"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../services/strategySpin.service"
 import { getGroupAllocationById } from "../../../../services/groupAllocation.service"
-import { getProxyAllocationStrategy, updateProxyStrategy } from "../../../../services/proxyAllocationStrategy.service"
+import { getProxyAllocationStrategy } from "../../../../services/proxyAllocationStrategy.service"
+import { getChannelPrizeByWheelId } from "../../../../services/channelPrize.service"
+import { getProxyPrize } from "../../../../services/proxyPrize.service"
 import showConfirm from "../../../../shared/packages/control/dialog/confirmation"
-import { strategyConfig } from "./config/strategyConfig"
-import UIBuilder from "../../../../shared/packages/control/uiBuilder/uiBuilder"
+import { strategyConfig, prizeConfig } from "./config/strategyConfig"
+import GroupAllocationAttributeModal from "./subModal/groupAllocationAttribute/groupAllocationAttribute"
+import ChannelPrizeModal from "./subModal/channelPrizeModal/channelprizeModal"
 
 const styles = theme => ({
     root: {
@@ -33,7 +36,7 @@ function StrategySpinComponent(props) {
     const [allows] = usePermission();
     const { addToast } = useToasts();
     const dispatch = useDispatch();
-    const [groupAllocationEditModel, setGroupAllocationEditModel] = useState(null);
+
     const [modalCustom, setModalCustom] = useState({
         isOpen: false,
         data: null,
@@ -41,6 +44,11 @@ function StrategySpinComponent(props) {
     })
 
     const [modalAllocationAttribute, setModalAllocationAttribute] = useState({
+        isOpen: false,
+        data: null,
+    })
+
+    const [modalPrizeAttribute, setModalPrizeAttribute] = useState({
         isOpen: false,
         data: null,
     })
@@ -75,10 +83,7 @@ function StrategySpinComponent(props) {
         }))
     }, [])
 
-    useEffect(() => {
-        if (modalAllocationAttribute.data)
-            setGroupAllocationEditModel([...modalAllocationAttribute.data?.groupAllocation?.masterAllocationSelecteds])
-    }, [modalAllocationAttribute.data])
+
 
     // useEffect(() => {
     //     console.log({ groupAllocationEditModel });
@@ -189,6 +194,14 @@ function StrategySpinComponent(props) {
         };
     }
 
+    const checkShowPrizeAllocation = (data) => {
+        return {
+            wheelInstanceId: data?.wheelInstanceId,
+            show: data?.wheelInstanceId !== null
+        };
+    }
+
+
     const convertEditAttributeUI = (data) => {
         let maskCopyEdit = _.cloneDeep(strategyConfig.maskEditModel);
         if (data === null) {
@@ -198,6 +211,19 @@ function StrategySpinComponent(props) {
             const parse = JSON.parse(data);
             const patch = { ...maskCopyEdit, ...parse }
             return patch;
+        }
+    }
+
+    const convertEditPrizeUI = (data) => {
+        let maskCopyEdit = _.cloneDeep(prizeConfig);
+        if (data === null) {
+            return maskCopyEdit;
+        }
+        else {
+            Object.keys(maskCopyEdit)?.map(x => {
+                maskCopyEdit[x].value = data[x];
+            })
+            return maskCopyEdit;
         }
     }
 
@@ -235,25 +261,64 @@ function StrategySpinComponent(props) {
         }
     }
 
+    const openPrizeLayer = (params) => {
+        const wheelId = params?.wheelInstanceId;
+        if (wheelId) {
+            getChannelPrizeByWheelId(wheelId).then((res) => {
+                const strategyID = params?.id;
+                const channelIds = res?.data?.data?.map(x => x.id) ?? [];
+                //from list master selected, we put on proxy to get attributes data
+                getProxyPrize({
+                    "strategySpinId": strategyID,
+                    "channelPrizeIds": channelIds
+                }).then((res2) => {
+                    const proxySelectedsList = res2?.data?.data;
+                    setModalPrizeAttribute({
+                        ...modalPrizeAttribute,
+                        data: {
+                            channelPrizes: res?.data?.data?.map(item => ({
+                                ...item,
+                                strategyId: params?.id,
+                                idProxy: proxySelectedsList?.find(y => item.id === y.channelPrizeId)?.id,
+                                proxyAttribute: convertEditPrizeUI(proxySelectedsList?.find(y => item.id === y.channelPrizeId)),
+                            }))
+                        },
+                        isOpen: true
+                    })
+                })
+
+            })
+        }
+    }
+
+
     const renderActionGrid = (params) => {
         return (
             <div className="box-action-container">
-                <div>
-                    <i className="fas fa-edit text-info" onClick={() => {
-                        console.log({ params });
-                        setModalCustom({ ...modalCustom, type: 'edit', data: { ...params?.row }, isOpen: true })
-                    }}></i>
-                </div>
                 {
                     checkShowLayerAllocation(params?.row)?.show &&
                     <div>
-                        <i className="fas fa-layer-group" onClick={(e) => {
+                        <i className="fas fa-layer-group" title='Chỉnh chỉ số đối tượng' onClick={(e) => {
                             openAllocationLayer(params)
                         }}></i>
                     </div>
                 }
+                {
+                    checkShowPrizeAllocation(params?.row)?.show &&
+                    <div>
+                        <i className="fas fa-gift text-success" title='Chỉnh chỉ số giải thưởng' onClick={(e) => {
+                            openPrizeLayer(params?.row)
+                        }}></i>
+                    </div>
+                }
                 <div>
-                    <i className="fas fa-trash text-danger" onClick={async (e) => {
+                    <i className="fas fa-edit text-info" title='Chỉnh sửa' onClick={() => {
+                        console.log({ params });
+                        setModalCustom({ ...modalCustom, type: 'edit', data: { ...params?.row }, isOpen: true })
+                    }}></i>
+                </div>
+                <div>
+                    <i className="fas fa-trash text-danger" title='Xoá' onClick={async (e) => {
                         const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${params?.row?.name} ?`, "Xoá", "Trở về");
                         if (confirm && params?.row?.id) {
                             removeStrategyCommand(params?.row?.id);
@@ -267,10 +332,6 @@ function StrategySpinComponent(props) {
     //update strategy command
     const resetModal = () => {
         setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
-    }
-
-    const resetModalAttribute = () => {
-        setModalAllocationAttribute({ ...modalAllocationAttribute, isOpen: false, data: null })
     }
 
     const updateStrategyCommand = (data) => {
@@ -298,30 +359,6 @@ function StrategySpinComponent(props) {
         }).catch((err) => {
             addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
         })
-    }
-
-    const updateAttributes = (index, key, value) => {
-        groupAllocationEditModel[index].attributes[key].value = value;
-        groupAllocationEditModel[index]["edited"] = true;
-        setGroupAllocationEditModel([...groupAllocationEditModel])
-    }
-
-    const updateAttributesCommand = (data) => {
-        const copyData = [...data];
-        copyData?.filter(x => x.edited)?.map(item => {
-            const convert = ({
-                "id": item?.idProxy,
-                "strategySpinId": item?.strategyId,
-                "masterAllocationSelectedId": item?.id,
-                "attributes": JSON.stringify(item?.attributes)
-            });
-            updateProxyStrategy(convert).then((res) => {
-                addToast(<div className="text-center">{`Cập nhật ${item?.masterId} thành công`}</div>, { appearance: 'success' });
-            }).catch((err) => {
-                addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
-            })
-        });
-        resetModalAttribute();
     }
 
     return (
@@ -446,52 +483,14 @@ function StrategySpinComponent(props) {
                             }
 
                             {/* //modal attribute */}
-                            {
-                                <Modal
-                                    isOpen={modalAllocationAttribute.isOpen}
-                                    modalName="role-modal"
-                                    showOverlay={true}
-                                    onClose={() => resetModalAttribute()}
-                                    title="Cấu hình đối tượng phân bổ"
-                                    size="xl"
-                                    centered
-                                >
-                                    <Modal.Body>
-                                        <div class="accordion" id="myAccordion">
-                                            {
-                                                groupAllocationEditModel?.map((item, index) => {
-                                                    return (
-                                                        <div class="accordion-item">
-                                                            <h2 class="accordion-header" id={`index_${index}`}>
-                                                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#collapse_${index}`}>{`{ master Id: ${item?.masterId}, master Code: ${item?.masterCode}} ${item?.edited ? " (trạng thái: chỉnh sửa)" : ""}`}</button>
-                                                            </h2>
-                                                            <div id={`collapse_${index}`} class="accordion-collapse collapse">
-                                                                <div class="card-body">
-                                                                    <UIBuilder
-                                                                        objectKeys={item?.attributes}
-                                                                        indexData={index}
-                                                                        modelChange={updateAttributes} />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                        <button className="btn btn-outline-danger mr-25" onClick={() => {
-                                            resetModalAttribute()
-                                        }}>Đóng</button>
-                                        <button className="btn btn-outline-primary mr-25" onClick={() => {
-                                            console.log({ data: groupAllocationEditModel });
-                                            updateAttributesCommand(groupAllocationEditModel);
-                                        }}>
-                                            Cập nhật
-                                        </button>
-                                    </Modal.Footer>
-                                </Modal>
-                            }
+                            <GroupAllocationAttributeModal modalAllocationAttribute={modalAllocationAttribute}
+                                setModalAllocationAttribute={setModalAllocationAttribute}
+                            />
+
+                            <ChannelPrizeModal
+                                modalPrizeAttribute={modalPrizeAttribute}
+                                setModalPrizeAttribute={setModalPrizeAttribute}
+                            />
                         </div>
                     </div>
                 </div>

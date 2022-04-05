@@ -41,16 +41,22 @@ const ListBoxComponent = ({ options, title, onClickItem, onUpdate, onDelete, def
                                 {
                                     isActive(item) &&
                                     <div className='operation'>
-                                        <em className='fas fa-edit action' onClick={(e) => {
-                                            if (onUpdate)
-                                                onUpdate(item)
-                                        }} >
-                                        </em>
-                                        <em className='fas fa-trash action' onClick={(e) => {
-                                            if (onDelete)
-                                                onDelete(item)
-                                        }} >
-                                        </em>
+                                        {
+                                            onUpdate &&
+                                            <em className='fas fa-edit action' onClick={(e) => {
+                                                if (onUpdate)
+                                                    onUpdate(item)
+                                            }} >
+                                            </em>
+                                        }
+                                        {
+                                            onDelete &&
+                                            <em className='fas fa-trash action' onClick={(e) => {
+                                                if (onDelete)
+                                                    onDelete(item)
+                                            }} >
+                                            </em>
+                                        }
                                     </div>
                                 }
                             </div>
