@@ -38,7 +38,6 @@ function Modal({ children, modalName, isOpen, size, className, centered, title, 
         {
           props.hasHeader && <div className="modal-header dialog-header d-flex align-items-center">
             <h3 className="modal-title">{title}</h3>
-            {props.rightControl && props.rightControl()}
             {
               props.showCloseButton && <a onClick={onClose}>
                 <em className="fa fa-times"
@@ -93,7 +92,7 @@ Modal.Body = function ModalBody({ children }) {
   return (
     <PerfectScrollbar options={{
       useBothWheelAxes: false,
-      suppressScrollX: true
+      suppressScrollX: false
     }} className="modal-body">
       {children}
     </PerfectScrollbar>

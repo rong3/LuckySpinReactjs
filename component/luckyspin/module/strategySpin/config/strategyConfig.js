@@ -3,6 +3,6 @@ export const strategyConfig = {
         quantity: {
             label:"Số lượng giải thưởng",
             value: 0
-        },
+        }
     }
 }

@@ -81,7 +81,7 @@ function NavBarMain(props) {
             >
                 {list(keyMenuFloat)}
             </Drawer>
-            <AppBar className="navbar-hdbank" position="static">
+            <AppBar className="navbar-hdbank" style={{ zIndex: "10 !important" }} position="static">
                 <Toolbar>
                     <IconButton
                         size="large"

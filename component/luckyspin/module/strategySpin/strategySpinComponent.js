@@ -80,9 +80,20 @@ function StrategySpinComponent(props) {
             setGroupAllocationEditModel([...modalAllocationAttribute.data?.groupAllocation?.masterAllocationSelecteds])
     }, [modalAllocationAttribute.data])
 
-    useEffect(() => {
-        console.log({ groupAllocationEditModel });
-    }, [groupAllocationEditModel])
+    // useEffect(() => {
+    //     console.log({ groupAllocationEditModel });
+    // }, [groupAllocationEditModel])
+
+    function getAttribute(params) {
+        if (params.field === 'channelSpinName')
+            return params.row?.channelSpin?.channelName;
+        if (params.field === 'wheelInstanceName')
+            return params.row?.wheelInstance?.name;
+        if (params.field === 'themeInstanceNamne')
+            return params.row?.themeInstance?.name;
+        else
+            return ""
+    }
 
     const columns = [
         {
@@ -93,24 +104,27 @@ function StrategySpinComponent(props) {
             editable: false,
         },
         {
-            field: 'channelSpinId',
-            headerName: 'Mã kênh',
+            field: 'channelSpinName',
+            headerName: 'Kênh',
             headerClassName: 'headerColumn',
             flex: 1,
+            valueGetter: getAttribute,
             editable: false,
         },
         {
-            field: 'wheelInstanceId',
-            headerName: 'Mã loại vòng quay',
+            field: 'wheelInstanceName',
+            headerName: 'Loại vòng quay',
             headerClassName: 'headerColumn',
             flex: 1,
+            valueGetter: getAttribute,
             editable: false,
         },
         {
-            field: 'themeInstanceId',
-            headerName: 'Mã theme',
+            field: 'themeInstanceNamne',
+            headerName: 'Theme',
             headerClassName: 'headerColumn',
             flex: 1,
+            valueGetter: getAttribute,
             editable: false,
         },
         {
@@ -177,14 +191,13 @@ function StrategySpinComponent(props) {
 
     const convertEditAttributeUI = (data) => {
         let maskCopyEdit = _.cloneDeep(strategyConfig.maskEditModel);
-        if (data === null)
+        if (data === null) {
             return maskCopyEdit;
+        }
         else {
             const parse = JSON.parse(data);
-            Object.keys(parse)?.map((item) => {
-                maskCopyEdit[item].value = parse[item];
-            })
-            return maskCopyEdit;
+            const patch = { ...maskCopyEdit, ...parse }
+            return patch;
         }
     }
 
@@ -288,7 +301,7 @@ function StrategySpinComponent(props) {
     }
 
     const updateAttributes = (index, key, value) => {
-        groupAllocationEditModel[index].attributes[key] = value;
+        groupAllocationEditModel[index].attributes[key].value = value;
         groupAllocationEditModel[index]["edited"] = true;
         setGroupAllocationEditModel([...groupAllocationEditModel])
     }
@@ -316,20 +329,17 @@ function StrategySpinComponent(props) {
             <div className="content">
                 <div className="block-content">
                     <div className="row row-title">
-                        <div className="col-md-12">
-                            <i className="far fa-eye"></i>
-                            <span className="title-text">&nbsp;Danh sách chiến lược</span>
-                        </div>
                         <div className="btn-add">
                             <i className='fa fa-plus'
                                 title='Thêm mới'
                                 onClick={(e) => {
                                     setModalCustom({ ...modalCustom, type: 'new', data: { disabled: false }, isOpen: true })
                                 }}>
+                                Thêm mới
                             </i>
                         </div>
                     </div>
-                    <div className="row row-title mt-3">
+                    <div className="row row-title mt-5">
                         <div className="col-md-12 table-height">
                             <DataGridControl
                                 rows={strategyList}

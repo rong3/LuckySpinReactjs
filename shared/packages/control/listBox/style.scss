@@ -4,10 +4,14 @@
         justify-content: center;
         cursor: pointer;
         i {
-            color: #fff;
+            color: #dc3545;
             font-size: large;
-            background: #ff7a68;
             padding: 5px;
+        }
+        i:hover{
+            transform: scale(1.2);
+            -webkit-transition: 0.3s ease-in-out;
+            transition: 0.3s ease-in-out;
         }
     }
     .btn-add:hover {
@@ -15,7 +19,7 @@
         transition: 0.3s ease-in-out;
     }
     .list-box-custom {
-        background: linear-gradient(167.6deg, #ffd541 7.65%, #ff6372 89.4%);
+        // background: linear-gradient(167.6deg, #ffd541 7.65%, #ff6372 89.4%);
         background-blend-mode: multiply, overlay, normal;
         border-radius: 2px;
         min-height: 150px;
@@ -26,7 +30,7 @@
         width: auto;
         overflow: auto;
         overflow-x: hidden;
-
+        border: 1px solid #dc3545;
         cursor: pointer !important;
         .search-range {
             position: relative;
@@ -48,13 +52,13 @@
             max-height: 70vh;
             .item {
                 background: transparent;
-                color: #fff;
+                color: #dc3545;
                 display: flex;
                 justify-content: space-between;
                 padding: 13px 10px;
                 .operation {
                     position: absolute;
-                    right: 0;
+                    right: 5px;
                     padding: 1px;
                     .action {
                         position: relative;
@@ -63,18 +67,18 @@
                     .action:hover {
                         -webkit-transition: 0.3s ease-in-out;
                         transition: 0.3s ease-in-out;
-                        color: #ff6372;
+                        color: #000;
                     }
                 }
             }
             .item:hover {
-                color: #dc3545;
+                color: #ff6372;
                 -webkit-transition: 0.3s ease-in-out;
                 transition: 0.3s ease-in-out;
             }
             .active {
-                color: #dc3545;
-                background: #fff;
+                color: #fff;
+                background: #dc3545;
                 border-radius: 10px;
                 -webkit-transition: 0.3s ease-in-out;
                 transition: 0.3s ease-in-out;

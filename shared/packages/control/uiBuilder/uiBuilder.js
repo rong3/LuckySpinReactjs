@@ -52,20 +52,18 @@ const UIBuilder = ({ objectKeys, modelChange, indexData, ...props }) => {
 
     return (
         <div className="row">
-            <div className="col-md-6">
-                {
-                    propConvert?.map((item, index) => {
-                        return (
-                            <>
-                                <span>{item?.label}</span>
-                                {
-                                    supportBuilderTypeControl(item)
-                                }
-                            </>
-                        )
-                    })
-                }
-            </div>
+            {
+                propConvert?.map((item, index) => {
+                    return (
+                        <div className="col-md-6">
+                            <span>{item?.label}</span>
+                            {
+                                supportBuilderTypeControl(item)
+                            }
+                        </div>
+                    )
+                })
+            }
         </div>
     );
 };

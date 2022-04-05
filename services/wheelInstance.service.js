@@ -7,3 +7,29 @@ export const getListWheel = (param) => {
         'vi', param?.payload?.header
     );
 };
+
+export const createWheelSpin = (data) => {
+    return request(
+        'POST',
+        `WheelInstance`,
+        'vi',
+        data
+    );
+};
+
+export const updateWheelSpin = (data) => {
+    return request(
+        'POST',
+        `WheelInstance/update`,
+        'vi',
+        data
+    );
+};
+
+export const removeWheelSpin = (id) => {
+    return request(
+        'DELETE',
+        `WheelInstance/${id}`,
+        'vi',
+    );
+};

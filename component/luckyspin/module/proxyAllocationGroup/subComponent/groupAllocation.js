@@ -318,12 +318,18 @@ function GroupAllocationComponent(props) {
                     selectedGroupAllocation &&
                     <div className="col-md-10">
                         <div className="row">
+                            <i className='fa fa-list'>
+                                <span>&nbsp;Danh sách đối tượng phân bổ&nbsp;</span>
+                            </i>
+                            <br/>
+                            <hr />
                             <div className="strategy-btn-add">
                                 <i className='fa fa-plus'
                                     title='Thêm mới'
                                     onClick={(e) => {
                                         setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, type: 'new', data: { disabled: false }, isOpen: true })
                                     }}>
+                                    Thêm mới
                                 </i>
                             </div>
                         </div>

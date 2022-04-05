@@ -9,13 +9,15 @@ import { useToasts } from "react-toast-notifications";
 import mobileDetectHOC from "../../../../shared/packages/hocs/mobileDetect"
 import { usePermission } from "../../../../shared/packages/provider/accessGateway"
 import withPermission from "../../../../shared/packages/hocs/permission/permissionHOC"
+import { loadDataTableWheel } from "../../../../redux/actions/wheelInstanceAction"
 import DataGridControl from '../../../../shared/packages/control/grid/datagrid';
-import { loadDataTableChannelSpin } from "../../../../redux/actions/channelActions"
-import { loadDataTableProxyAllocationGroup } from "../../../../redux/actions/proxyAllocationGroupActions"
-import { updateChannelSpin, createChannelSpin, removeChannelSpin } from "../../../../services/channelSpin.service"
 import Modal from "../../../../shared/packages/control/modal/index";
-import SelectBox from "../../../../shared/packages/control/selectBox/selectBox"
+import { createWheelSpin, updateWheelSpin, removeWheelSpin } from "../../../../services/wheelInstance.service"
 import showConfirm from "../../../../shared/packages/control/dialog/confirmation"
+import 'react-tabs/style/react-tabs.css';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import UIBuilder from "../../../../shared/packages/control/uiBuilder/uiBuilder"
+import { wheelConfig } from "./config/wheelUIConfig"
 
 const styles = theme => ({
     root: {
@@ -23,7 +25,7 @@ const styles = theme => ({
     },
 });
 
-function ChannelSpinComponent(props) {
+function WheelUIComponent(props) {
     const [allows] = usePermission();
     const { addToast } = useToasts();
     const dispatch = useDispatch();
@@ -32,20 +34,12 @@ function ChannelSpinComponent(props) {
         data: null,
         type: null
     })
-
-    const { channelSpinList } = useSelector((state) => state.channelSpin);
-    const { proxyAllocationGroupList } = useSelector((state) => state.proxyAllocationGroup);
     const { classes } = props;
     const { t } = useTranslation('common');
+    const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
 
     useEffect(() => {
-        dispatch(loadDataTableChannelSpin({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-        dispatch(loadDataTableProxyAllocationGroup({
+        dispatch(loadDataTableWheel({
             header: {
                 pageNumber: 1,
                 pageSize: 999
@@ -53,44 +47,28 @@ function ChannelSpinComponent(props) {
         }))
     }, [])
 
-    function getProxyName(params) {
-        return `${params?.row?.proxyAllocationGroup?.name || ''}`;
-    }
-
-    function getProxyDesc(params) {
-        return `${params?.row?.proxyAllocationGroup?.desc || ''}`;
-    }
-
     const columns = [
         {
-            field: 'channelName',
-            headerName: 'Tên channel',
+            field: 'name',
+            headerName: 'Tên',
             headerClassName: 'headerColumn',
             flex: 1,
             editable: false,
         },
         {
-            field: 'channelDesc',
-            headerName: 'Mô tả channel',
+            field: 'desc',
+            headerName: 'Mô tả',
             headerClassName: 'headerColumn',
             flex: 1,
             editable: false,
         },
         {
-            field: 'proxyAllocationGroup_name',
-            headerName: 'Tệp khách hàng',
+            field: 'quantityPrize',
+            headerName: 'Số giải thưởng hiện có',
             headerClassName: 'headerColumn',
-            valueGetter: getProxyName,
             flex: 1,
             editable: false,
-        },
-        {
-            field: 'proxyAllocationGroup_desc',
-            headerName: 'Mô tả tệp khách hàng',
-            headerClassName: 'headerColumn',
-            valueGetter: getProxyDesc,
-            flex: 1,
-            editable: false,
+            valueGetter: getAttribute,
         },
         {
             field: 'created',
@@ -120,9 +98,22 @@ function ChannelSpinComponent(props) {
         },
     ]
 
-    const overwriteDataModal = (prefix, value) => {
-        modalCustom.data[prefix] = value;
-        setModalCustom({ ...modalCustom });
+    const convertEditAttributeUI = (data) => {
+        let maskCopyEdit = _.cloneDeep(wheelConfig.spin_config);
+        if (data === null) {
+            return maskCopyEdit;
+        }
+        else {
+            const parse = JSON.parse(data);
+            const patch = { ...maskCopyEdit, ...parse }
+            return patch;
+        }
+    }
+
+    const editWheelModalAction = (params) => {
+        console.log({ params });
+        const convert = { ...params?.row, configJson: convertEditAttributeUI(params?.row?.configJson) }
+        setModalCustom({ ...modalCustom, type: 'edit', data: convert, isOpen: true })
     }
 
     const renderActionGrid = (params) => {
@@ -130,15 +121,15 @@ function ChannelSpinComponent(props) {
             <div className="box-action-container">
                 <div>
                     <i className="fas fa-edit text-info" onClick={() => {
-                        console.log({ params });
-                        setModalCustom({ ...modalCustom, type: 'edit', data: { ...params?.row }, isOpen: true })
+                        editWheelModalAction(params)
                     }}></i>
                 </div>
+
                 <div>
                     <i className="fas fa-trash text-danger" onClick={async (e) => {
-                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${params?.row?.channelName} ?`, "Xoá", "Trở về");
+                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${params?.row?.name} ?`, "Xoá", "Trở về");
                         if (confirm && params?.row?.id) {
-                            removeChannelCommand(params?.row?.id);
+                            removeWheelCommand(params?.row?.id);
                         }
                     }}></i>
                 </div>
@@ -146,36 +137,61 @@ function ChannelSpinComponent(props) {
         )
     }
 
-    //update channel command
+    //update strategy command
     const resetModal = () => {
         setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
     }
 
-    const createChannelCommand = (data) => {
-        createChannelSpin(data).then((res) => {
-            dispatch(loadDataTableChannelSpin());
-            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
-        }).catch((err) => {
-            addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
-        })
+    function getAttribute(params) {
+        if (params.field === 'quantityPrize')
+            return params.row?.channelPrizes?.length ?? 0;
+        else
+            return ""
     }
 
-    const updateChannelCommand = (data) => {
-        updateChannelSpin(data).then((res) => {
-            dispatch(loadDataTableChannelSpin());
+    const overwriteDataModal = (prefix, value) => {
+        modalCustom.data[prefix] = value;
+        setModalCustom({ ...modalCustom });
+    }
+
+    const updateWheelCommand = (data) => {
+        const copyData = {
+            id: data?.id,
+            name: data?.name,
+            desc: data?.desc,
+            configJson: JSON.stringify(data?.configJson)
+        };
+
+        updateWheelSpin(copyData).then((res) => {
+            dispatch(loadDataTableWheel());
             addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
         })
     }
 
-    const removeChannelCommand = (data) => {
-        removeChannelSpin(data).then((res) => {
-            dispatch(loadDataTableChannelSpin());
+    const createWheelCommand = (data) => {
+        createWheelSpin(data).then((res) => {
+            dispatch(loadDataTableWheel());
+            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const removeWheelCommand = (data) => {
+        removeWheelSpin(data).then((res) => {
+            dispatch(loadDataTableWheel());
             addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
         })
+    }
+
+    const updateAttributes = (index, key, value) => {
+        modalCustom.data.configJson[key].value = value;
+        modalCustom.data["edited"] = true;
+        setModalCustom({ ...modalCustom })
     }
 
     return (
@@ -183,32 +199,33 @@ function ChannelSpinComponent(props) {
             <div className="content">
                 <div className="block-content">
                     <div className="row row-title">
-                        <div className="strategy-btn-add">
+                        <div className="btn-add">
                             <i className='fa fa-plus'
                                 title='Thêm mới'
                                 onClick={(e) => {
                                     setModalCustom({ ...modalCustom, type: 'new', data: { disabled: false }, isOpen: true })
                                 }}>
-                                    Thêm mới
+                                Thêm mới
                             </i>
                         </div>
                     </div>
-                    <div className="row row-title mt-3">
+                    <div className="row row-title mt-5">
                         <div className="col-md-12 table-height">
                             <DataGridControl
-                                rows={channelSpinList}
+                                rows={wheelInstanceList}
                                 columns={columns}
-                                count={channelSpinList.length}
+                                count={wheelInstanceList.length}
                                 disableSelectionOnClick
                             />
+                            {/* //modal crud strategy */}
                             {
                                 <Modal
                                     isOpen={modalCustom.isOpen}
                                     modalName="role-modal"
                                     showOverlay={true}
                                     onClose={() => resetModal()}
-                                    title="Kênh vòng quay"
-                                    size="md"
+                                    title="Đại diện vòng quay"
+                                    size="xl"
                                     centered
                                 >
                                     <Modal.Body>
@@ -217,33 +234,26 @@ function ChannelSpinComponent(props) {
                                                 <>
                                                     <div className="row">
                                                         <div className="col-md-12">
-                                                            <span>Tên channel</span>
+                                                            <span>Tên vòng quay</span>
                                                             <InputControl type="text" id="name" onChange={(e) => {
                                                                 const value = e.target.value ?? '';
-                                                                overwriteDataModal('channelName', value)
-                                                            }} defaultValue={modalCustom.data?.channelName} />
+                                                                overwriteDataModal('name', value)
+                                                            }} defaultValue={modalCustom.data?.name} />
                                                         </div>
                                                         <div className="col-md-12">
                                                             <span>Mô tả</span>
                                                             <InputControl type="text" id="name" onChange={(e) => {
                                                                 const value = e.target.value ?? '';
-                                                                overwriteDataModal('channelDesc', value)
-                                                            }} defaultValue={modalCustom.data?.channelDesc} />
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <span>Tệp khách hàng</span>
-                                                            <SelectBox id="selectbox"
-                                                                optionLabel="name"
-                                                                optionValue="value"
-                                                                onChange={(data) => {
-                                                                    overwriteDataModal('proxyAllocationGroupId', data)
-                                                                }}
-                                                                value={modalCustom.data?.proxyAllocationGroupId}
-                                                                isPortal
-                                                                options={proxyAllocationGroupList?.map(x => ({ ...x, name: x?.name, value: x?.id })) ?? []}
-                                                            />
+                                                                overwriteDataModal('desc', value)
+                                                            }} defaultValue={modalCustom.data?.desc} />
                                                         </div>
                                                     </div>
+                                                    <hr />
+                                                    <UIBuilder
+                                                        objectKeys={modalCustom?.data?.configJson}
+                                                        indexData={0}
+                                                        modelChange={updateAttributes} />
+
                                                 </>
                                                 :
                                                 <>
@@ -259,10 +269,10 @@ function ChannelSpinComponent(props) {
                                         <button className="btn btn-outline-primary mr-25" onClick={() => {
                                             console.log({ data: modalCustom.data });
                                             if (modalCustom.type === 'new') {
-                                                createChannelCommand(modalCustom.data)
+                                                createWheelCommand(modalCustom.data)
                                             }
                                             if (modalCustom.type === 'edit') {
-                                                updateChannelCommand(modalCustom.data)
+                                                updateWheelCommand(modalCustom.data)
                                             }
                                             resetModal();
                                         }}>
@@ -286,8 +296,8 @@ function ChannelSpinComponent(props) {
     )
 }
 
-ChannelSpinComponent.propTypes = {
+WheelUIComponent.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withPermission(mobileDetectHOC(withStyles(styles)(ChannelSpinComponent)));
+export default withPermission(mobileDetectHOC(withStyles(styles)(WheelUIComponent)));
