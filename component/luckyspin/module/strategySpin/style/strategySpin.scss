@@ -7,3 +7,13 @@
         padding: 5px;
     }
 }
+.accordion-item {
+    margin-top: 10px;
+    .accordion-header {
+        border: 1px solid #dc3545;
+        button {
+            color: #dc3545;
+            font-size: 15px;
+        }
+    }
+}

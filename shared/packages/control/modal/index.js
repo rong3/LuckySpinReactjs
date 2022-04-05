@@ -94,7 +94,9 @@ Modal.Body = function ModalBody({ children }) {
       useBothWheelAxes: false,
       suppressScrollX: false
     }} className="modal-body">
-      {children}
+      <div className='col-md-12'>
+        {children}
+      </div>
     </PerfectScrollbar>
   );
 };

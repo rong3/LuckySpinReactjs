@@ -1,7 +1,7 @@
 export const strategyConfig = {
     maskEditModel: {
         quantity: {
-            label: "Số lượng giải thưởng",
+            label: "Số lượt quay",
             value: 0
         }
     }

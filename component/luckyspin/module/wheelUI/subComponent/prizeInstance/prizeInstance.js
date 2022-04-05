@@ -201,7 +201,7 @@ function PrizeInstanceComponent(props) {
                                                 <>
                                                     <div className="row">
                                                         <div className="col-md-12">
-                                                            <span>Tên gỉải thưởng</span>
+                                                            <span>Tên giải thưởng</span>
                                                             <InputControl type="text" id="name" onChange={(e) => {
                                                                 const value = e.target.value ?? '';
                                                                 overwriteDataModal('name', value)
