@@ -522,11 +522,12 @@ const LuckySpinComponent = (props) => {
                             <nav class="navbar d-flex align-items-center justify-content-between">
                                 <div class="navbar-brand"> <a href=""> <img src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt="" /></a></div>
                                 <div class="navbar-right">
-                                    <div class="dropdown"><a class="navbar-avatar dropdown-toggle" href="#"> <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
+                                    <div class="dropdown"><a class="navbar-avatar" href="#">
+                                        <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
                                         <p>&nbsp; Xin chào, User</p></a>
-                                        <ul class="dropdown-menu">
+                                        {/* <ul class="dropdown-menu">
                                             <li><a href="">Logout</a></li>
-                                        </ul>
+                                        </ul> */}
                                     </div>
                                 </div>
                             </nav>
@@ -552,7 +553,9 @@ const LuckySpinComponent = (props) => {
                                         </div>
                                         <div className="row" style={{ width: '100vw' }}>
                                             <div className="col-md-12" align="center">
-                                                <a role={"button"} href="#fade">
+                                                <a role={"button"} onClick={() => {
+                                                    setDevMode(true)
+                                                }}>
                                                     <em className="material-icons">settings</em>
                                                 </a>
                                             </div>
