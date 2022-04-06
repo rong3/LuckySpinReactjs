@@ -26,7 +26,7 @@ const ListItemBody = ({ config, ...props }) => {
     const dispatchEvent = () => {
         if (config?.to) {
             props?.functionInject?.toogleSideBar(false);
-            router.replace(config?.to ?? "/")
+            router.push(config?.to ?? "/")
         }
     }
 

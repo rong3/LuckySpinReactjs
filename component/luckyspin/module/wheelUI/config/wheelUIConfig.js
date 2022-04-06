@@ -6,7 +6,7 @@ export const wheelConfig = {
         },
         imageRender: {
             label: "Giải thưởng hình ảnh",
-            value: true
+            value: false
         },
         drawText: {
             label: "Chế độ vẽ chữ",

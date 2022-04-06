@@ -79,7 +79,7 @@ export const style_login_HDBank = (data) => {
                     <p class="small-txt">Chào mừng bạn đến với</p>
                     <h1 class="big-txt">Vòng quay may mắn</h1>
                 </div>
-                <form class="wrap-form" action="">
+                <form class="wrap-form">
                     <div class="form-group">
                         <label class="label" for="">Tên truy cập</label>
                         <input class="form-control" onChange={(e) => {
@@ -95,7 +95,7 @@ export const style_login_HDBank = (data) => {
                         }} id="core" type="password" placeholder="Nhập mã pin" />
                         <img class="show-pass" src="/asset/images/luckyspin/theme/HDbank/background/eye.svg" alt="" />
                     </div>
-                    <button class="btn btn-submit" onClick={() => data?.checkAuthSpin()}> <span>Truy cập ngay</span></button>
+                    <button type="button" class="btn btn-submit" onClick={() => data?.checkAuthSpin()}> <span>Truy cập ngay</span></button>
                 </form>
             </div>
         </div>

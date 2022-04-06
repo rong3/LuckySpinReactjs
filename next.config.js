@@ -9,6 +9,7 @@ module.exports =
   reactStrictMode: true,
   env: {
     BASE_URL: process.env.BASE_URL,
+    BASE_AUTH_URL: process.env.BASE_AUTH_URL
   },
   swcMinify: false,
   images: {

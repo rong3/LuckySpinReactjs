@@ -8,6 +8,13 @@ export const getListStrategySpin = () => {
     );
 };
 
+export const getListStrategySpinbyId = (id) => {
+    return request(
+        'GET',
+        `StrategySpin/${id}`
+    );
+};
+
 export const updateStrategySpin = (data) => {
     return request(
         'POST',

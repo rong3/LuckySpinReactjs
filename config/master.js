@@ -1,4 +1,4 @@
-import { ROOT, LOGIN, ROLEPAGE, DASHBOARD, PAGE1, WHEEL_SPIN, PROXY_ALLOCATION_GROUP, CHANNEL_SPIN, EXAMPLE_PAGE, STRATEGY_SPIN } from "../utils/constant"
+import { ROOT, LOGIN, ROLEPAGE, DASHBOARD, LOGSPIN, WHEEL_SPIN, PROXY_ALLOCATION_GROUP, CHANNEL_SPIN, EXAMPLE_PAGE, STRATEGY_SPIN } from "../utils/constant"
 import NavBarMain from "../shared/packages/layout/nav/style_HDBank/nav-main"
 import NavBarMainOtherStyle from "../shared/packages/layout/nav/other_Style/nav-main"
 import IconCustomize, { ICON_CODE } from "../shared/packages/control/icon"
@@ -66,6 +66,13 @@ export const masterConfig = {
                     menuLevel: 2,
                     auth: true,
                     to: WHEEL_SPIN
+                },
+                {
+                    icon: <IconCustomize code={ICON_CODE.LOGIN} />,
+                    title: "Lịch sử vòng quay",
+                    menuLevel: 2,
+                    auth: true,
+                    to: LOGSPIN
                 }
             ]
         },

@@ -63,6 +63,9 @@ function Default({ Component, pageProps }) {
   return (
     <ProvideAuth>
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" />
+      <Script src="/asset/images/luckyspin/js/core_wheel.js" strategy='beforeInteractive' />
+      <Script src="/asset/images/luckyspin/js/tweenMax.min.js" strategy='beforeInteractive' />
+      <Script src="/asset/images/luckyspin/js/sweet_alert.min.js" strategy='beforeInteractive' />
       <AccessControlProvider>
         <I18nextProvider i18n={i18n}>
           <ToastProvider autoDismiss={true} autoDismissTimeout={2000} placement="bottom-right">

@@ -6,15 +6,25 @@ import { withStyles } from '@material-ui/core/styles';
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useToasts } from "react-toast-notifications";
-import { loadDataTableWheel } from "../../../../../../redux/actions/wheelInstanceAction"
+import { loadDataTableThemeSpin } from "../../../../../../redux/actions/themeAction"
 import DataGridControl from '../../../../../../shared/packages/control/grid/datagrid';
 import Modal from "../../../../../../shared/packages/control/modal/index";
-import { createWheelSpin, updateWheelSpin, removeWheelSpin } from "../../../../../../services/wheelInstance.service"
+import { createTheme, updateTheme, removeTheme } from "../../../../../../services/themeInstance.service"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
 import UIBuilder from "../../../../../../shared/packages/control/uiBuilder/uiBuilder"
-import { wheelConfig } from "../../config/wheelUIConfig"
+import { themeConfig } from "./config/themeConfig"
 
-function WheelInstanceComponent(props) {
+function ThemeInstanceComponent(props) {
+
+    useEffect(() => {
+        dispatch(loadDataTableThemeSpin({
+            header: {
+                pageNumber: 1,
+                pageSize: 999
+            }
+        }))
+    }, [])
+
     const { addToast } = useToasts();
     const dispatch = useDispatch();
     const [modalCustom, setModalCustom] = useState({
@@ -23,15 +33,7 @@ function WheelInstanceComponent(props) {
         type: null
     })
     const { t } = useTranslation('common');
-    const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
-    useEffect(() => {
-        dispatch(loadDataTableWheel({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-    }, [])
+    const { themeInstanceList } = useSelector((state) => state.themeInstance);
 
     const columns = [
         {
@@ -47,14 +49,6 @@ function WheelInstanceComponent(props) {
             headerClassName: 'headerColumn',
             flex: 1,
             editable: false,
-        },
-        {
-            field: 'quantityPrize',
-            headerName: 'Số giải thưởng hiện có',
-            headerClassName: 'headerColumn',
-            flex: 1,
-            editable: false,
-            valueGetter: getAttribute,
         },
         {
             field: 'created',
@@ -85,7 +79,7 @@ function WheelInstanceComponent(props) {
     ]
 
     const convertEditAttributeUI = (data) => {
-        let maskCopyEdit = _.cloneDeep(wheelConfig.spin_config);
+        let maskCopyEdit = _.cloneDeep(themeConfig);
         if (data === null) {
             return maskCopyEdit;
         }
@@ -96,7 +90,7 @@ function WheelInstanceComponent(props) {
         }
     }
 
-    const editWheelModalAction = (params) => {
+    const editThemeModalAction = (params) => {
         console.log({ params });
         const convert = { ...params?.row, configJson: convertEditAttributeUI(params?.row?.configJson) }
         setModalCustom({ ...modalCustom, type: 'edit', data: convert, isOpen: true })
@@ -107,7 +101,7 @@ function WheelInstanceComponent(props) {
             <div className="box-action-container">
                 <div>
                     <i className="fas fa-edit text-info" onClick={() => {
-                        editWheelModalAction(params)
+                        editThemeModalAction(params)
                     }}></i>
                 </div>
 
@@ -115,7 +109,7 @@ function WheelInstanceComponent(props) {
                     <i className="fas fa-trash text-danger" onClick={async (e) => {
                         const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${params?.row?.name} ?`, "Xoá", "Trở về");
                         if (confirm && params?.row?.id) {
-                            removeWheelCommand(params?.row?.id);
+                            removeThemeCommand(params?.row?.id);
                         }
                     }}></i>
                 </div>
@@ -128,19 +122,12 @@ function WheelInstanceComponent(props) {
         setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
     }
 
-    function getAttribute(params) {
-        if (params.field === 'quantityPrize')
-            return params.row?.channelPrizes?.length ?? 0;
-        else
-            return ""
-    }
-
     const overwriteDataModal = (prefix, value) => {
         modalCustom.data[prefix] = value;
         setModalCustom({ ...modalCustom });
     }
 
-    const updateWheelCommand = (data) => {
+    const updateThemeCommand = (data) => {
         const copyData = {
             id: data?.id,
             name: data?.name,
@@ -148,26 +135,26 @@ function WheelInstanceComponent(props) {
             configJson: JSON.stringify(data?.configJson)
         };
 
-        updateWheelSpin(copyData).then((res) => {
-            dispatch(loadDataTableWheel());
+        updateTheme(copyData).then((res) => {
+            dispatch(loadDataTableThemeSpin());
             addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
         })
     }
 
-    const createWheelCommand = (data) => {
-        createWheelSpin(data).then((res) => {
-            dispatch(loadDataTableWheel());
+    const createThemeCommand = (data) => {
+        createTheme(data).then((res) => {
+            dispatch(loadDataTableThemeSpin());
             addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
         })
     }
 
-    const removeWheelCommand = (data) => {
-        removeWheelSpin(data).then((res) => {
-            dispatch(loadDataTableWheel());
+    const removeThemeCommand = (data) => {
+        removeTheme(data).then((res) => {
+            dispatch(loadDataTableThemeSpin());
             addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
@@ -196,12 +183,15 @@ function WheelInstanceComponent(props) {
                 </div>
                 <div className="row row-title mt-5">
                     <div className="col-md-12 table-height">
-                        <DataGridControl
-                            rows={wheelInstanceList}
-                            columns={columns}
-                            count={wheelInstanceList.length}
-                            disableSelectionOnClick
-                        />
+                        {
+                            themeInstanceList?.length &&
+                            <DataGridControl
+                                rows={themeInstanceList}
+                                columns={columns}
+                                count={themeInstanceList.length}
+                                disableSelectionOnClick
+                            />
+                        }
                         {/* //modal crud strategy */}
                         {
                             <Modal
@@ -209,7 +199,7 @@ function WheelInstanceComponent(props) {
                                 modalName="role-modal"
                                 showOverlay={true}
                                 onClose={() => resetModal()}
-                                title="Đại diện vòng quay"
+                                title="Theme vòng quay"
                                 size="xl"
                                 centered
                             >
@@ -219,7 +209,7 @@ function WheelInstanceComponent(props) {
                                             <>
                                                 <div className="row">
                                                     <div className="col-md-12">
-                                                        <span>Tên vòng quay</span>
+                                                        <span>Tên theme vòng quay</span>
                                                         <InputControl type="text" id="name" onChange={(e) => {
                                                             const value = e.target.value ?? '';
                                                             overwriteDataModal('name', value)
@@ -238,7 +228,6 @@ function WheelInstanceComponent(props) {
                                                     objectKeys={modalCustom?.data?.configJson}
                                                     indexData={0}
                                                     modelChange={updateAttributes} />
-
                                             </>
                                             :
                                             <>
@@ -254,10 +243,10 @@ function WheelInstanceComponent(props) {
                                     <button className="btn btn-outline-primary mr-25" onClick={() => {
                                         console.log({ data: modalCustom.data });
                                         if (modalCustom.type === 'new') {
-                                            createWheelCommand(modalCustom.data)
+                                            createThemeCommand(modalCustom.data)
                                         }
                                         if (modalCustom.type === 'edit') {
-                                            updateWheelCommand(modalCustom.data)
+                                            updateThemeCommand(modalCustom.data)
                                         }
                                         resetModal();
                                     }}>
@@ -280,7 +269,7 @@ function WheelInstanceComponent(props) {
     )
 }
 
-WheelInstanceComponent.propTypes = {
+ThemeInstanceComponent.propTypes = {
 };
 
-export default WheelInstanceComponent;
+export default ThemeInstanceComponent;

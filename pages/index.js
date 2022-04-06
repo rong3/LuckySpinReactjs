@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import CommonLayout from "../shared/packages/layout/root-layout.package";
 import Utility from "../shared/packages/utils/common";
+import DashBoardComponent from "../component/dashboard/dashboard"
 
 function HomePage() {
   const { t } = useTranslation('common');
@@ -11,8 +12,7 @@ function HomePage() {
       <Head>
         <title>{t('mainMenu.dashboard')}</title>
       </Head>
-      <h3 className="text-center">DASHBOARD</h3>
-      <h5 className="text-center">The env is {process.env.SERVICE_HOST}</h5>
+      <DashBoardComponent />
     </React.Fragment>
   );
 }

@@ -601,26 +601,26 @@ export const category_client = [
 export const type_allocation = [
     {
         id: 0,
-        key: 'system',
-        name: 'Trong hệ thống',
+        objectKey: 'in-system',
+        objectName: 'Trong hệ thống',
         desc: ''
     },
     {
         id: 1,
-        key: 'outsystem',
-        name: 'Ngoài hệ thống',
+        objectKey: 'out-system',
+        objectName: 'Ngoài hệ thống',
         desc: ''
     },
     {
         id: 2,
-        key: 'free',
-        name: 'Không kiểm soát',
+        objectKey: 'non-system',
+        objectName: 'Không kiểm soát',
         desc: ''
     },
     {
         id: 3,
-        key: 'otp',
-        name: 'OTP gateway',
+        objectKey: 'otp-system',
+        objectName: 'OTP gateway',
         desc: ''
     }
 ]
@@ -634,12 +634,12 @@ export const group_allocation = [
         type: 'Nhóm IT 1',
         data: [
             {
-                master_id: 'trieuth3',
-                master_code: 'Nguyen Van A',
+                masterId: 'trieuth3',
+                masterCode: 'Nguyen Van A',
             },
             {
-                master_id: 'Abc_2',
-                master_code: 'Nguyen Van B',
+                masterId: 'Abc_2',
+                masterCode: 'Nguyen Van B',
             }
         ]
     },
@@ -650,12 +650,12 @@ export const group_allocation = [
         type: 'Nhóm IT 2',
         data: [
             {
-                master_id: 'Abc_3',
-                master_code: 'Nguyen Van C',
+                masterId: 'Abc_3',
+                masterCode: 'Nguyen Van C',
             },
             {
-                master_id: 'Abc_4',
-                master_code: 'Nguyen Van D',
+                masterId: 'Abc_4',
+                masterCode: 'Nguyen Van D',
             }
         ]
     },
@@ -666,12 +666,12 @@ export const group_allocation = [
         type: 'Nhóm khách vãng lai trên 100 lượt truy cập',
         data: [
             {
-                master_id: 'guest',
-                master_code: '012345',
+                masterId: 'guest',
+                masterCode: '012345',
             },
             {
-                master_id: 'guest',
-                master_code: '012346',
+                masterId: 'guest',
+                masterCode: '012346',
             }
         ]
     },
@@ -690,12 +690,12 @@ export const group_allocation = [
         type: 'Nhóm ưu đãi trong tháng 1',
         data: [
             {
-                master_id: '0987654321',
-                master_code: 'ab04d',
+                masterId: '0987654321',
+                masterCode: 'ab04d',
             },
             {
-                master_id: '0123456789',
-                master_code: 'zze56o',
+                masterId: '0123456789',
+                masterCode: 'zze56o',
             }
         ]
     },
@@ -709,7 +709,7 @@ export const category_wheel = [
         spin_config: {
             random_prize: true,
             imageRender: false,
-            drawText: true,
+            drawText: true, 
             wheel_bg: '/asset/images/luckyspin/image/wheel_hdbank_bk.png',
             object: {
                 'outerRadius': 220,

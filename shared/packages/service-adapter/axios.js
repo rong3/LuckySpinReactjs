@@ -3,6 +3,7 @@ import { authenticationConstant } from "../globalConstant/authenticationConstant
 import { CookieHelper } from "../utils/cookie"
 import { trackPromise } from 'react-promise-tracker';
 import Emitter from "./emit"
+import Utility from "../utils/common"
 
 axios.interceptors.request.use(function (config) {
     const token = CookieHelper.getCookie(authenticationConstant.tokenKey);
@@ -18,6 +19,7 @@ export function request(method,
     locale = 'vi',
     data,
     headers = {},
+    prefixHost = process.env.BASE_URL,
     isCheck = true,
     responseType = '',
     isTracking = true,
@@ -30,7 +32,7 @@ export function request(method,
 
     const params = {
         method: method,
-        url: `${process.env.BASE_URL}${url}`,
+        url: `${prefixHost}${url}`,
         headers: defaultHeaders,
     };
 
@@ -53,7 +55,11 @@ export function request(method,
     }).catch(error => {
         //execute the status code enum and operation like logout , remove cookie when expired
         //Emitter.emit(EMITTER_EVENT.ACCESS_DENIED, error?.response?.data);
-        throw error;
+        if(error?.response?.status===401){
+            CookieHelper.removeCookie(authenticationConstant.tokenKey);
+            Utility.redirect('/login')
+        }
+        return error?.response?.data;
     });
 
     if (isGet(method) && isTracking) {

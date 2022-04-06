@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ConfigSpinComponent from "./configSpin"
 import EditorSpinComponent from "./editorSpin"
-import { enum_master_type } from "./data/enum"
 import { theme_area } from "./interface/coreInterface"
 import { channel_spin, category_client, group_allocation, category_wheel, theme_instance, type_allocation } from "./data/masterData"
 import mobileDetectHOC from "../../../shared/packages/hocs/mobileDetect"
+import { transformWheelData } from "./data/convertData"
 
 const LuckySpinComponent = (props) => {
     let handImage = null;
-    const default_config_data = {
-        channel: channel_spin[2],
-        categoryClient: category_client[2],
-        allocation: group_allocation[3],
-        wheel_config: category_wheel[4],
-        theme: theme_instance[4]
-    }
+
+    const [default_config_data, setDefaultConfigData] = useState(null)
     const [devMode, setDevMode] = useState(false);
     const [wheelInstance, setWheelInstance] = useState(null)
     let [wheelSpinning, setWheelSpinning] = useState(false)
@@ -50,21 +45,41 @@ const LuckySpinComponent = (props) => {
     }, [master_config_data])
 
     useEffect(() => {
-        importData(default_config_data)
-    }, [])
+        if (props?.data) {
+            try {
+                const data = transformWheelData(props?.data);
+                console.log({ data: data });
+                setDefaultConfigData(data)
+            }
+            catch {
+                setDefaultConfigData({
+                    channel: channel_spin[2],
+                    categoryClient: category_client[2],
+                    allocation: group_allocation[3],
+                    wheel_config: category_wheel[4],
+                    theme: theme_instance[4]
+                })
+            }
+        }
+    }, [props?.data])
+
+    useEffect(() => {
+        if (default_config_data) {
+            importData(default_config_data)
+        }
+    }, [default_config_data])
 
     useEffect(() => {
         if (import_config) {
-            console.log({ import_config });
             const wheel_instance = import_config?.wheel_config?.spin_config;
             //close modal
             document.getElementById('close_modal').click();
             initPrizes(wheel_instance);
 
             //auth Check
-            const typeAuth = import_config?.allocation?.object?.key;
+            const typeAuth = import_config?.allocation?.object?.objectKey;
             authRequire.type = typeAuth
-            if ([type_allocation[0]?.key, type_allocation[1]?.key].includes(typeAuth)) {
+            if (['in-system', 'out-system'].includes(typeAuth)) {
                 authRequire.enabled = true;
                 authRequire.isAuth = false;
                 authRequire.isOtp = false;
@@ -73,7 +88,7 @@ const LuckySpinComponent = (props) => {
                 authRequire.credential.otp = null;
                 setAuthRequire({ ...authRequire })
             }
-            if ([type_allocation[2]?.key].includes(typeAuth)) {
+            if (['non-system'].includes(typeAuth)) {
                 authRequire.enabled = false;
                 authRequire.isAuth = false;
                 authRequire.isOtp = false;
@@ -82,7 +97,7 @@ const LuckySpinComponent = (props) => {
                 authRequire.credential.otp = null;
                 setAuthRequire({ ...authRequire })
             }
-            if ([type_allocation[3]?.key].includes(typeAuth)) {
+            if (['otp-system'].includes(typeAuth)) {
                 authRequire.enabled = true;
                 authRequire.isAuth = false;
                 authRequire.isOtp = true;
@@ -105,10 +120,8 @@ const LuckySpinComponent = (props) => {
         //theme setting
         const theme_instance = import_config?.theme?.config_json;
         var wrapper = document.getElementById('luckyspin-wrapper');
-        wrapper.style.backgroundImage = `url(${theme_instance.main_bg}),${theme_instance.style}`;
+        wrapper.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
     }
-
-
 
     const initPrizes = (wheel_instance) => {
         const isImagePrize = wheel_instance?.imageRender;
@@ -350,26 +363,26 @@ const LuckySpinComponent = (props) => {
 
     //function import history
     function importHistory(result) {
-        historyWheel.type = authRequire.type;
-        if ([type_allocation[0]?.key, type_allocation[1]?.key, type_allocation[3]?.key].includes(authRequire.type)) {
-            const model = {
-                id: authRequire.credential.id,
-                name: authRequire.credential.name,
-                prize: result,
-                time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
-            }
-            historyWheel.data.push(model);
-        }
-        if ([type_allocation[2]?.key].includes(authRequire.type)) {
-            const model = {
-                id: null,
-                name: null,
-                prize: result,
-                time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
-            }
-            historyWheel.data.push(model);
-        }
-        setHistoryWheel({ ...historyWheel })
+        // historyWheel.type = authRequire.type;
+        // if ([type_allocation[0]?.key, type_allocation[1]?.key, type_allocation[3]?.key].includes(authRequire.type)) {
+        //     const model = {
+        //         id: authRequire.credential.id,
+        //         name: authRequire.credential.name,
+        //         prize: result,
+        //         time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
+        //     }
+        //     historyWheel.data.push(model);
+        // }
+        // if ([type_allocation[2]?.key].includes(authRequire.type)) {
+        //     const model = {
+        //         id: null,
+        //         name: null,
+        //         prize: result,
+        //         time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
+        //     }
+        //     historyWheel.data.push(model);
+        // }
+        // setHistoryWheel({ ...historyWheel })
     }
     /**
      * Apply editor preview
@@ -406,9 +419,9 @@ const LuckySpinComponent = (props) => {
     /**Authorize func */
     //enable auth
     function checkAuthSpin() {
-        if (authRequire.type === type_allocation[0]?.key) {
+        if (authRequire.type === 'in-system') {
             if (import_config.allocation.data?.some(x =>
-                x.master_id === authRequire.credential.id
+                x.masterId === authRequire.credential.id
             )) {
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
@@ -426,10 +439,10 @@ const LuckySpinComponent = (props) => {
             }
         }
 
-        if (authRequire.type === type_allocation[1]?.key) {
+        if (authRequire.type === 'out-system') {
             if (import_config.allocation.data?.some(x =>
-                x.master_code === authRequire.credential.pass &&
-                x.master_id === authRequire.credential.id
+                x.masterCode === authRequire.credential.pass &&
+                x.masterId === authRequire.credential.id
             )) {
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
@@ -447,10 +460,10 @@ const LuckySpinComponent = (props) => {
             }
         }
 
-        if (authRequire.type === type_allocation[3]?.key) {
+        if (authRequire.type === 'otp-system') {
             if (import_config.allocation.data?.some(x =>
-                x.master_code === authRequire.credential.pass &&
-                x.master_id === authRequire.credential.id
+                x.masterCode === authRequire.credential.pass &&
+                x.masterId === authRequire.credential.id
             )) {
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
@@ -560,9 +573,9 @@ const LuckySpinComponent = (props) => {
                             </div>
                             <audio controls="controls" id="wheel_audio" src={import_config?.theme?.config_json?.audio?.spinStart} type="audio/mp3"></audio>
                             <audio controls="controls" id="applause_audio" src={import_config?.theme?.config_json?.audio?.spinEnd} type="audio/mp3"></audio>
-                            <script src="/asset/images/luckyspin/js/core_wheel.js"></script>
+                            {/* <script src="/asset/images/luckyspin/js/core_wheel.js"></script>
                             <script src="/asset/images/luckyspin/js/tweenMax.min.js"></script>
-                            <script src="/asset/images/luckyspin/js/sweet_alert.min.js"></script>
+                            <script src="/asset/images/luckyspin/js/sweet_alert.min.js"></script> */}
                         </section>
                         {
                             devMode &&

@@ -7,11 +7,11 @@ import { useToasts } from "react-toast-notifications";
 import mobileDetectHOC from "../../../../shared/packages/hocs/mobileDetect"
 import { usePermission } from "../../../../shared/packages/provider/accessGateway"
 import withPermission from "../../../../shared/packages/hocs/permission/permissionHOC"
-import { loadDataTableWheel } from "../../../../redux/actions/wheelInstanceAction"
 import 'react-tabs/style/react-tabs.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import WheelInstanceComponent from "./subComponent/wheelInstance/wheelInstance"
 import PrizeInstanceComponent from "./subComponent/prizeInstance/prizeInstance"
+import ThemeInstanceComponent from "./subComponent/themeInstance/themeInstance"
 
 const styles = theme => ({
     root: {
@@ -21,18 +21,6 @@ const styles = theme => ({
 
 function WheelUIComponent(props) {
     const { addToast } = useToasts();
-    const dispatch = useDispatch();
-    const { classes } = props;
-    useEffect(() => {
-        dispatch(loadDataTableWheel({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-    }, [])
-
-
     return (
         <div className="content">
             <div className='wrapper-tab'>
@@ -40,12 +28,16 @@ function WheelUIComponent(props) {
                     <TabList>
                         <Tab>Quản lý giao diện vòng quay</Tab>
                         <Tab>Quản lý giải thưởng</Tab>
+                        <Tab>Quản lý chủ đề vòng quay</Tab>
                     </TabList>
                     <TabPanel>
                         <WheelInstanceComponent />
                     </TabPanel>
                     <TabPanel>
                         <PrizeInstanceComponent />
+                    </TabPanel>
+                    <TabPanel>
+                        <ThemeInstanceComponent />
                     </TabPanel>
                 </Tabs>
             </div>

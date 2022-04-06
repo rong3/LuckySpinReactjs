@@ -4,10 +4,11 @@ import { authenticationConstant } from "../globalConstant/authenticationConstant
 import { CookieHelper } from "../utils/cookie"
 import { TYPELAYOUT } from "../globalConstant/common"
 import { masterConfig } from "../../../config/master"
+import { loginGateway } from "../../../services/auth.service"
 
 export function useProvideAuth(props) {
     const [user, setUser] = useState(null);
-  
+
     const checkTokenMiddleWare = () => {
         if (masterConfig.type === TYPELAYOUT.WEB_APP) {
             const token = CookieHelper.getCookie(authenticationConstant.tokenKey);
@@ -33,25 +34,30 @@ export function useProvideAuth(props) {
 
     // signin method: It can either return a promise or execute a callback function.
     // You can prefer to keep this in userServices.js
-    const signin = (id) => {
+    const signin = (credentials) => {
         console.log("SS:: PrivateRoute > useProviderAuth > signin() called...");
         return new Promise((resolve, reject) => {
             try {
-                // do db call or API endpoint axios call here and return the promise.
-                getUserDetails(2)
-                    .then((res) => {
-                        console.log("useProvideAuth > signin > getUserDetails > res=", res);
-                        CookieHelper.setCookie(authenticationConstant.tokenKey, Math.random());
-                        setUser(res);
+                loginGateway(credentials).then((res) => {
+                    if (res?.data?.succeeded) {
+                        const data = res?.data?.data;
+                        const accessToken = data?.jwToken;
+                        CookieHelper.setCookie(authenticationConstant.tokenKey, accessToken);
+                        setUser({
+                            id: data?.id,
+                            userName: data?.userName,
+                            email: data?.email,
+                            roles: data?.roles
+                        });
                         setIsAuthenticated(true)
                         resolve(res);
-                    })
-                    .catch((err) => {
-                        console.log("useProvideAuth > signin > getUserDetails > err=", err);
+                    }
+                    else {
                         setUser([]);
                         setIsAuthenticated(false)
-                        reject("signin error!");
-                    });
+                        reject(res?.Message);
+                    }
+                })
             } catch (error) {
                 console.error("signin error!==", error);
                 setIsAuthenticated(false);

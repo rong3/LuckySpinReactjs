@@ -2,9 +2,14 @@ import React, { useEffect, useState, useRef } from "react";
 import NonLayout from "/shared/packages/layout/non-layout";
 import LuckySpinComponent from "../../../component/embedded/lucky-spin/luckySpin"
 import $ from "jquery"
+import { getListStrategySpinbyId } from "../../../services/strategySpin.service"
+import { getProxyPrize } from "../../../services/proxyPrize.service"
+import { useRouter } from 'next/router'
 
-const LuckySpin = (props) => {
+export default function LuckySpin(props) {
     const sizeBrowserCache = useRef(typeof window !== "undefined" && window.innerWidth)
+    const router = useRouter()
+    const [data, setData] = useState(null);
     const detectMetaViewPort = (size) => {
         if (size < 768) {
             return <meta name="viewport"
@@ -27,6 +32,20 @@ const LuckySpin = (props) => {
     };
 
     useEffect(() => {
+        async function fetchMyAPI() {
+            let res = await getListStrategySpinbyId(router?.query?.id);
+            const dataRes = res?.data?.data;
+            const getchannelPrizesIds = dataRes?.wheelInstance?.channelPrizes?.map(x => x.id) ?? [];
+            const getProxyPrizeAttribute = await getProxyPrize({
+                "strategySpinId": router?.query?.id,
+                "channelPrizeIds": getchannelPrizesIds
+            })
+            const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
+            setData(_mergeData)
+        }
+
+        fetchMyAPI()
+
         $(window).resize(updateWindowDimensions);
         return () => $(window).off("resize", updateWindowDimensions);
     }, [])
@@ -41,11 +60,24 @@ const LuckySpin = (props) => {
                 <link rel="stylesheet" type="text/css" href="/asset/images/luckyspin/theme/HDbank/css/hdbank_wheel.min.css" />
             </head>
             <NonLayout>
-                <LuckySpinComponent />
+                <LuckySpinComponent {...props} data={data} />
             </NonLayout>
         </React.Fragment>
     );
 }
 
+export async function getServerSideProps(router) {
+    try {
+        const { id } = router.query;
+        return {
+            props: {
+                id: id ?? null,
+            }
+        };
+    }
+    catch (e) {
+    }
+}
 
-export default LuckySpin
+LuckySpin.Title = "Chiến lược";
+

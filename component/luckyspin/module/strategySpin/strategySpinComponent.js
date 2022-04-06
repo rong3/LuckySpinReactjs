@@ -107,6 +107,11 @@ function StrategySpinComponent(props) {
             headerClassName: 'headerColumn',
             flex: 1,
             editable: false,
+            renderCell: (cell) => {
+                return <a href={`/embedded/lucky-spin?id=${cell?.row?.id}`} target={'_blank'}>
+                    {cell?.row?.name}
+                </a>
+            }
         },
         {
             field: 'channelSpinName',
