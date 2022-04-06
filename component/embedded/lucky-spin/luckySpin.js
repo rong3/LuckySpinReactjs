@@ -16,7 +16,7 @@ const LuckySpinComponent = (props) => {
     const [import_config, setImport_config] = useState(null);
 
     const [authRequire, setAuthRequire] = useState({
-        type: type_allocation[2]?.key,
+        type: type_allocation[2]?.objectKey,
         enabled: false,
         isAuth: false,
         isOtp: false,
@@ -37,6 +37,16 @@ const LuckySpinComponent = (props) => {
     //should be removed and be moved to BE
     const [custom_prize_allows, setCustomPrizeAllow] = useState({})
 
+    const setDefault = () => {
+        setDefaultConfigData({
+            channel: channel_spin[2],
+            categoryClient: category_client[2],
+            allocation: group_allocation[3],
+            wheel_config: category_wheel[4],
+            theme: theme_instance[4]
+        })
+    }
+
     useEffect(() => {
         if (master_config_data) {
             handImage = new Image();
@@ -52,15 +62,10 @@ const LuckySpinComponent = (props) => {
                 setDefaultConfigData(data)
             }
             catch {
-                setDefaultConfigData({
-                    channel: channel_spin[2],
-                    categoryClient: category_client[2],
-                    allocation: group_allocation[3],
-                    wheel_config: category_wheel[4],
-                    theme: theme_instance[4]
-                })
+                setDefault()
             }
         }
+        else setDefault()
     }, [props?.data])
 
     useEffect(() => {
