@@ -40,8 +40,10 @@ export default function LuckySpin(props) {
                 "strategySpinId": router?.query?.id,
                 "channelPrizeIds": getchannelPrizesIds
             })
-            const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
-            setData(_mergeData)
+            if (getProxyPrizeAttribute) {
+                const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
+                setData(_mergeData)
+            }
         }
 
         fetchMyAPI()

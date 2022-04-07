@@ -331,7 +331,7 @@ const LuckySpinComponent = (props) => {
         //     }
         // }
 
-        if (props?.id) {
+        if (props?.id && authRequire.enabled) {
             spinService({
                 "masterAllocationSelectedId": authRequire.masterSelectedId,
                 "strategySpinId": props?.id
@@ -355,6 +355,13 @@ const LuckySpinComponent = (props) => {
                         "error"
                     );
                 }
+            }).catch((err)=>{
+                resetWheel();
+                swal(
+                    "Lỗi",
+                    err?.message,
+                    "error"
+                );
             })
         }
         else {
