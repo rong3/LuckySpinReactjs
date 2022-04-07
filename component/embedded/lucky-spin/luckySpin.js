@@ -65,6 +65,11 @@ const LuckySpinComponent = (props) => {
     }, [master_config_data])
 
     useEffect(() => {
+        if (authRequire.enabled)
+            settingTheme();
+    }, [authRequire.enabled])
+
+    useEffect(() => {
         if (props?.data) {
             try {
                 const data = transformWheelData(props?.data);
@@ -127,7 +132,12 @@ const LuckySpinComponent = (props) => {
         //theme setting
         const theme_instance = import_config?.theme?.config_json;
         var wrapper = document.getElementById('luckyspin-wrapper');
-        wrapper.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
+        if (wrapper)
+            wrapper.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
+
+        var wrapperLogin = document.getElementById('login-wrapper');
+        if (wrapperLogin)
+            wrapperLogin.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
     }
 
     const initPrizes = (wheel_instance) => {
@@ -502,13 +512,16 @@ const LuckySpinComponent = (props) => {
             <ConfigSpinComponent export={importData} devMode={changeDevMode} />
             {
                 (authRequire.enabled && !authRequire.isAuth) ?
-                    <div class="luckyspin-wrapper" id="luckyspin-wrapper">
+                    <div class="luckyspin-wrapper" id="login-wrapper">
                         {
-                            theme_area(import_config?.theme?.config_json?.key, {
-                                authRequire: authRequire,
-                                inputEvent: inputEvent,
-                                checkAuthSpin: checkAuthSpin
-                            })?.login
+                            {
+                                ...
+                                theme_area(import_config?.theme?.config_json?.key, {
+                                    authRequire: authRequire,
+                                    inputEvent: inputEvent,
+                                    checkAuthSpin: checkAuthSpin
+                                })?.login
+                            }
                         }
                     </div>
                     :
@@ -552,20 +565,26 @@ const LuckySpinComponent = (props) => {
                                                 </a>
                                             </div>
                                             {
-                                                theme_area(import_config?.theme?.config_json?.key, {
-                                                    authRequire: authRequire,
-                                                    disabled: wheelSpinning,
-                                                    startSpin: startSpin
-                                                })?.spinBtn
+                                                {
+                                                    ...
+                                                    theme_area(import_config?.theme?.config_json?.key, {
+                                                        authRequire: authRequire,
+                                                        disabled: wheelSpinning,
+                                                        startSpin: startSpin
+                                                    })?.spinBtn
+                                                }
                                             }
-                                            {
-                                                theme_area(import_config?.theme?.config_json?.key, {
-                                                    authRequire: authRequire,
-                                                    reset_wheel: reset_wheel,
-                                                    historyWheel: historyWheel,
-                                                    isMobile: props?.isMobile
-                                                })?.historyTable
-                                            }
+                                            {/* {
+                                                {
+                                                    ...
+                                                    theme_area(import_config?.theme?.config_json?.key, {
+                                                        authRequire: authRequire,
+                                                        reset_wheel: reset_wheel,
+                                                        historyWheel: historyWheel,
+                                                        isMobile: props?.isMobile
+                                                    })?.historyTable
+                                                }
+                                            } */}
                                         </div>
                                     </div>
 

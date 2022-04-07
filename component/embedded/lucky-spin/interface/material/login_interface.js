@@ -72,7 +72,7 @@ export const style_login_new = (data) => {
 
 export const style_login_HDBank = (data) => {
     const type_otp = data?.authRequire?.type === "otp";
-    return <section class="main-wrapper login-page" style={{ backgroundImage: `url(/asset/images/luckyspin/theme/HDbank/background/bg-1.jpg) !important` }} >
+    return <section class="main-wrapper login-page">
         <div class="wrapper-container d-flex align-items-center justify-content-center">
             <div class="wrap-login"> <a href=""><img class="logo" src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt="" /></a>
                 <div class="login-title">
