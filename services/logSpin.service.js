@@ -8,3 +8,12 @@ export const getLogSpin = (data) => {
         'vi', data
     );
 };
+
+
+export const spinService = (data) => {
+    return request(
+        'POST',
+        `LogSpin/spin`,
+        'vi', data
+    );
+};

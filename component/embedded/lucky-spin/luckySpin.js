@@ -5,16 +5,16 @@ import { theme_area } from "./interface/coreInterface"
 import { channel_spin, category_client, group_allocation, category_wheel, theme_instance, type_allocation } from "./data/masterData"
 import mobileDetectHOC from "../../../shared/packages/hocs/mobileDetect"
 import { transformWheelData } from "./data/convertData"
+import { authGateWayMasterSelected } from "../../../services/masterAllocationSelected.service"
+import { spinService } from "../../../services/logSpin.service"
 
 const LuckySpinComponent = (props) => {
     let handImage = null;
-
     const [default_config_data, setDefaultConfigData] = useState(null)
     const [devMode, setDevMode] = useState(false);
     const [wheelInstance, setWheelInstance] = useState(null)
     let [wheelSpinning, setWheelSpinning] = useState(false)
     const [import_config, setImport_config] = useState(null);
-
     const [authRequire, setAuthRequire] = useState({
         type: type_allocation[2]?.objectKey,
         enabled: false,
@@ -24,7 +24,9 @@ const LuckySpinComponent = (props) => {
             id: null,
             pass: null,
             otp: null
-        }
+        },
+        masterSelectedId: null,
+        dataUser: null
     })
 
     const [historyWheel, setHistoryWheel] = useState({
@@ -36,6 +38,14 @@ const LuckySpinComponent = (props) => {
     //index of items which will be appeared
     //should be removed and be moved to BE
     const [custom_prize_allows, setCustomPrizeAllow] = useState({})
+
+    const resetAuthData = () => {
+        authRequire.credential.id = null;
+        authRequire.credential.name = null;
+        authRequire.credential.otp = null;
+        authRequire.dataUser = null
+        authRequire.masterSelectedId = null;
+    }
 
     const setDefault = () => {
         setDefaultConfigData({
@@ -77,8 +87,6 @@ const LuckySpinComponent = (props) => {
     useEffect(() => {
         if (import_config) {
             const wheel_instance = import_config?.wheel_config?.spin_config;
-            //close modal
-            document.getElementById('close_modal').click();
             initPrizes(wheel_instance);
 
             //auth Check
@@ -88,27 +96,21 @@ const LuckySpinComponent = (props) => {
                 authRequire.enabled = true;
                 authRequire.isAuth = false;
                 authRequire.isOtp = false;
-                authRequire.credential.id = null;
-                authRequire.credential.name = null;
-                authRequire.credential.otp = null;
+                resetAuthData();
                 setAuthRequire({ ...authRequire })
             }
             if (['non-system'].includes(typeAuth)) {
                 authRequire.enabled = false;
                 authRequire.isAuth = false;
                 authRequire.isOtp = false;
-                authRequire.credential.id = null;
-                authRequire.credential.name = null;
-                authRequire.credential.otp = null;
+                resetAuthData();
                 setAuthRequire({ ...authRequire })
             }
             if (['otp-system'].includes(typeAuth)) {
                 authRequire.enabled = true;
                 authRequire.isAuth = false;
                 authRequire.isOtp = true;
-                authRequire.credential.id = null;
-                authRequire.credential.name = null;
-                authRequire.credential.otp = null;
+                resetAuthData();
                 setAuthRequire({ ...authRequire })
             }
             settingTheme();
@@ -159,6 +161,7 @@ const LuckySpinComponent = (props) => {
         setMasterConfig({ ...wheel_instance, prizes: segmentData_convert })
 
         //custom allow prizes
+        // move to BE
         if (!wheel_instance.random_prize) {
             const segmentAllow = prizesTotal?.filter(x => x.allow_prize)?.map(item => ({ key: item.position, value: item.percent }));
             const objectAllowConvert = segmentAllow?.reduce((obj, item) => ({
@@ -267,60 +270,90 @@ const LuckySpinComponent = (props) => {
         }
     }
 
-    function transformRatiosToAccPercentages(ratios) {
-        const total = ratios.reduce((sum, el) => sum += el, 0);
-        let acc = 0;
-        const accPercentages = ratios.map(rat => acc += rat / total);
-        return accPercentages;
-    }
+    // function transformRatiosToAccPercentages(ratios) {
+    //     const total = ratios.reduce((sum, el) => sum += el, 0);
+    //     let acc = 0;
+    //     const accPercentages = ratios.map(rat => acc += rat / total);
+    //     return accPercentages;
+    // }
 
-    function chooseBiasedRandom(accPercentages) {
-        const random = Math.random();
-        const index = accPercentages.findIndex(acc => random < acc);
-        return index;
-    }
+    // function chooseBiasedRandom(accPercentages) {
+    //     const random = Math.random();
+    //     const index = accPercentages.findIndex(acc => random < acc);
+    //     return index;
+    // }
 
-    function chooseRandomSuffle(arr) {
-        try {
-            const ratios = Object.values(arr);
-            const accPercentages = transformRatiosToAccPercentages(ratios);
-            const random = chooseBiasedRandom(accPercentages);
-            return Number.parseInt(Object.keys(arr)[random]) ?? null;
-        }
-        catch {
-            return null;
-        }
-    }
+    // function chooseRandomSuffle(arr) {
+    //     try {
+    //         const ratios = Object.values(arr);
+    //         const accPercentages = transformRatiosToAccPercentages(ratios);
+    //         const random = chooseBiasedRandom(accPercentages);
+    //         return Number.parseInt(Object.keys(arr)[random]) ?? null;
+    //     }
+    //     catch {
+    //         return null;
+    //     }
+    // }
 
     // Called from Click of the Spin button.
     function startWheelSpin() {
         // This formula always makes the wheel stop somewhere inside prize 3 at least
         // 1 degree away from the start and end edges of the segment.
         //let stopAt = (36 * 3 + 1 + Math.floor((Math.random() * 35)))//stopAt;
-        if (Object.keys(custom_prize_allows)?.length > 0) {
-            const random_objAllow = chooseRandomSuffle(custom_prize_allows);
-            if (random_objAllow) {
-                const avg_rad = Math.round(360 / (wheelInstance.segments?.length - 1), 2);
-                const rotationAngle = import_config?.wheel_config?.spin_config?.object?.rotationAngle ?? 0;
-                let stopAt = (avg_rad * (random_objAllow - 1) + 5 + rotationAngle + Math.floor((Math.random() * (avg_rad - 5 - rotationAngle))))
-                // console.log({ stopAt });
-                // Important thing is to set the stopAngle of the animation before stating the spin.
-                // Should be convert formula to BE then saved the angle stop deg to DB then and return the angle stop deg to FE
-                wheelInstance.animation.stopAngle = stopAt;
-            }
-            else {
-                swal(
-                    "Lỗi",
-                    "Vòng quay lỗi",
-                    "error"
-                );
-            }
+        //move to BE
+        // if (Object.keys(custom_prize_allows)?.length > 0) {
+        //     const random_objAllow = chooseRandomSuffle(custom_prize_allows);
+        //     if (random_objAllow) {
+        //         const avg_rad = Math.round(360 / (wheelInstance.segments?.length - 1), 2);
+        //         const rotationAngle = import_config?.wheel_config?.spin_config?.object?.rotationAngle ?? 0;
+        //         let stopAt = (avg_rad * (random_objAllow - 1) + 5 + rotationAngle + Math.floor((Math.random() * (avg_rad - 5 - rotationAngle))))
+        //         // console.log({ stopAt });
+        //         // Important thing is to set the stopAngle of the animation before stating the spin.
+        //         // Should be convert formula to BE then saved the angle stop deg to DB then and return the angle stop deg to FE
+        //         wheelInstance.animation.stopAngle = stopAt;
+        //     }
+        //     else {
+        //         swal(
+        //             "Lỗi",
+        //             "Vòng quay lỗi",
+        //             "error"
+        //         );
+        //     }
+        // }
+
+        if (props?.id) {
+            spinService({
+                "masterAllocationSelectedId": authRequire.masterSelectedId,
+                "strategySpinId": props?.id
+            }).then((res) => {
+                const data = res?.data;
+                if (data?.succeeded) {
+                    if (data?.data > 0) {
+                        wheelInstance.animation.stopAngle = data?.data;
+                    }
+                    // May as well start the spin from here.
+                    applause_audio.pause();
+                    applause_audio.currentTime = 0;
+                    wheel_audio.play();
+                    wheelInstance.startAnimation();
+                }
+                else {
+                    resetWheel();
+                    swal(
+                        "Lỗi",
+                        data?.message,
+                        "error"
+                    );
+                }
+            })
         }
-        // May as well start the spin from here.
-        applause_audio.pause();
-        applause_audio.currentTime = 0;
-        wheel_audio.play();
-        wheelInstance.startAnimation();
+        else {
+            // May as well start the spin from here.
+            applause_audio.pause();
+            applause_audio.currentTime = 0;
+            wheel_audio.play();
+            wheelInstance.startAnimation();
+        }
     }
 
     // -------------------------------------------------------
@@ -411,7 +444,6 @@ const LuckySpinComponent = (props) => {
 
     const changeDevMode = (boolean) => {
         //close modal
-        document.getElementById('close_modal').click();
         setDevMode(boolean)
     }
 
@@ -424,10 +456,15 @@ const LuckySpinComponent = (props) => {
     /**Authorize func */
     //enable auth
     function checkAuthSpin() {
-        if (authRequire.type === 'in-system') {
-            if (import_config.allocation.data?.some(x =>
-                x.masterId === authRequire.credential.id
-            )) {
+        authGateWayMasterSelected({
+            "groupAllocationId": import_config.allocation?.id,
+            "masterId": authRequire.credential.id,
+            "masterCode": authRequire.credential.pass,
+            "masterProps": {}
+        }).then((res) => {
+            const response = res?.data;
+            if (response?.succeeded) {
+                authRequire.masterSelectedId = response?.data;
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
                 setAuthRequire({ ...authRequire })
@@ -442,49 +479,7 @@ const LuckySpinComponent = (props) => {
                     "error"
                 );
             }
-        }
-
-        if (authRequire.type === 'out-system') {
-            if (import_config.allocation.data?.some(x =>
-                x.masterCode === authRequire.credential.pass &&
-                x.masterId === authRequire.credential.id
-            )) {
-                authRequire.enabled = true;
-                authRequire.isAuth = true;
-                setAuthRequire({ ...authRequire })
-                setTimeout(() => {
-                    editor_config_apply(master_config_data)
-                }, 0);
-            }
-            else {
-                swal(
-                    "Lỗi",
-                    "Mã không hợp lệ",
-                    "error"
-                );
-            }
-        }
-
-        if (authRequire.type === 'otp-system') {
-            if (import_config.allocation.data?.some(x =>
-                x.masterCode === authRequire.credential.pass &&
-                x.masterId === authRequire.credential.id
-            )) {
-                authRequire.enabled = true;
-                authRequire.isAuth = true;
-                setAuthRequire({ ...authRequire })
-                setTimeout(() => {
-                    editor_config_apply(master_config_data)
-                }, 0);
-            }
-            else {
-                swal(
-                    "Lỗi",
-                    "Mã không hợp lệ",
-                    "error"
-                );
-            }
-        }
+        })
     }
 
     const inputEvent = (type, data) => {
@@ -524,10 +519,7 @@ const LuckySpinComponent = (props) => {
                                 <div class="navbar-right">
                                     <div class="dropdown"><a class="navbar-avatar" href="#">
                                         <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
-                                        <p>&nbsp; Xin chào, User</p></a>
-                                        {/* <ul class="dropdown-menu">
-                                            <li><a href="">Logout</a></li>
-                                        </ul> */}
+                                        <p>&nbsp; Xin chào, {`${authRequire.credential.id ?? 'khách'}`}</p></a>
                                     </div>
                                 </div>
                             </nav>
@@ -581,9 +573,6 @@ const LuckySpinComponent = (props) => {
                             </div>
                             <audio controls="controls" id="wheel_audio" src={import_config?.theme?.config_json?.audio?.spinStart} type="audio/mp3"></audio>
                             <audio controls="controls" id="applause_audio" src={import_config?.theme?.config_json?.audio?.spinEnd} type="audio/mp3"></audio>
-                            {/* <script src="/asset/images/luckyspin/js/core_wheel.js"></script>
-                            <script src="/asset/images/luckyspin/js/tweenMax.min.js"></script>
-                            <script src="/asset/images/luckyspin/js/sweet_alert.min.js"></script> */}
                         </section>
                         {
                             devMode &&

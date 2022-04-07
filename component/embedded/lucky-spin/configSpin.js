@@ -44,7 +44,7 @@ const ConfigSpinComponent = (props) => {
     return (
         <div class="panel_luckySpin" id="fade">
             <div class="panel__content">
-                <a className="btn btn-danger" style={{ marginLeft: '50%' }} id="close_modal" href="#home">Đóng</a>
+                {/* <a className="btn btn-danger" style={{ marginLeft: '50%' }} id="close_modal" href="">Đóng</a> */}
                 <br />
                 <div className="row">
                     <div className="col-md-12">
