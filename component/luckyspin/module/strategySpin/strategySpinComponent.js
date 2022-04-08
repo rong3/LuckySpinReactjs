@@ -20,7 +20,7 @@ import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../.
 import { getGroupAllocationById } from "../../../../services/groupAllocation.service"
 import { getProxyAllocationStrategy } from "../../../../services/proxyAllocationStrategy.service"
 import { getChannelPrizeByWheelId } from "../../../../services/channelPrize.service"
-import { getProxyPrize } from "../../../../services/proxyPrize.service"
+import { getProxyPrizeAdmin } from "../../../../services/proxyPrize.service"
 import showConfirm from "../../../../shared/packages/control/dialog/confirmation"
 import { strategyConfig, prizeConfig } from "./config/strategyConfig"
 import GroupAllocationAttributeModal from "./subModal/groupAllocationAttribute/groupAllocationAttribute"
@@ -273,7 +273,7 @@ function StrategySpinComponent(props) {
                 const strategyID = params?.id;
                 const channelIds = res?.data?.data?.map(x => x.id) ?? [];
                 //from list master selected, we put on proxy to get attributes data
-                getProxyPrize({
+                getProxyPrizeAdmin({
                     "strategySpinId": strategyID,
                     "channelPrizeIds": channelIds
                 }).then((res2) => {

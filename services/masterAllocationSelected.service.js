@@ -4,7 +4,7 @@ import { request } from '../shared/packages/service-adapter/axios';
 export const authGateWayMasterSelected = (data) => {
     return request(
         'POST',
-        `MasterAllocationSelected/findKey`,
+        `MasterAllocationSelected/authGatewaySelected`,
         'vi', data
     );
 };

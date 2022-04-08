@@ -11,7 +11,7 @@ export const getListStrategySpin = () => {
 export const getListStrategySpinbyId = (id) => {
     return request(
         'GET',
-        `StrategySpin/${id}`
+        `StrategySpin/data/${id}`
     );
 };
 

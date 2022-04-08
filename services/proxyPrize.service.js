@@ -9,6 +9,16 @@ export const getProxyPrize = (data) => {
     );
 };
 
+
+
+export const getProxyPrizeAdmin = (data) => {
+    return request(
+        'POST',
+        `ProxyStrategyPrize/admin/findKey`,
+        'vi', data
+    );
+};
+
 export const updateProxyPrize = (data) => {
     return request(
         'POST',

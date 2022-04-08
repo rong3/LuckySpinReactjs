@@ -281,7 +281,7 @@ const EditorSpinComponent = (props) => {
                             </div>
                             <hr />
                             <div className="row">
-                                <div className="col-md-4">
+                                {/* <div className="col-md-4">
                                     <span>Random giải thưởng</span>
                                     <div class="form-check">
                                         <input type="checkbox" className="checkbox_spin" checked={object_copy?.random_prize}
@@ -290,7 +290,7 @@ const EditorSpinComponent = (props) => {
                                             }}
                                         />
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="col-md-4">
                                     <span>Ảnh giải thưởng</span>
                                     <div class="form-check">
@@ -354,9 +354,9 @@ const EditorSpinComponent = (props) => {
                                     <th>Name</th>
                                     <th>Image Prize</th>
                                     <th>Color</th>
-                                    <th>Allow prize</th>
+                                    {/* <th>Allow prize</th>
                                     <th>Percent</th>
-                                    <th>Quantity</th>
+                                    <th>Quantity</th> */}
                                     <th>Action</th>
                                 </tr>
                                 {
@@ -383,7 +383,7 @@ const EditorSpinComponent = (props) => {
                                                         updatePrizeObject(index, "color", e.target?.value)
                                                     }} type="text"></input>
                                                 </td>
-                                                <td>
+                                                {/* <td>
                                                     <input type="checkbox" className="checkbox_spin_table" checked={item?.allow_prize}
                                                         onClick={(e) => {
                                                             updatePrizeObject(index, "allow_prize", e.target?.checked)
@@ -399,7 +399,7 @@ const EditorSpinComponent = (props) => {
                                                     <input className="inputstyle" value={item?.quantity} onChange={(e) => {
                                                         updatePrizeObject(index, "quantity", Number.parseInt(e.target?.value))
                                                     }} type="number"></input>
-                                                </td>
+                                                </td> */}
                                                 <td>
                                                     <button class="btn_luckyspin center pw3"
                                                         onClick={() => {

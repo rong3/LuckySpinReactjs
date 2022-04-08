@@ -572,13 +572,17 @@ const LuckySpinComponent = (props) => {
                                             </table>
                                         </div>
                                         <div className="row" style={{ width: '100vw' }}>
-                                            <div className="col-md-12" align="center">
-                                                <a role={"button"} onClick={() => {
-                                                    setDevMode(true)
-                                                }}>
-                                                    <em className="material-icons">settings</em>
-                                                </a>
-                                            </div>
+
+                                            {
+                                                (props?.id === null || authRequire.type === "non-system") &&
+                                                <div className="col-md-12" align="center">
+                                                    <a role={"button"} onClick={() => {
+                                                        setDevMode(true)
+                                                    }}>
+                                                        <em className="material-icons">settings</em>
+                                                    </a>
+                                                </div>
+                                            }
                                             {
                                                 {
                                                     ...
