@@ -359,8 +359,13 @@ function StrategySpinComponent(props) {
 
     const removeStrategyCommand = (data) => {
         removeStrategySpin(data).then((res) => {
-            dispatch(loadDataTable());
-            addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            if (res?.Succeeded === false) {
+                addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+            }
+            else {
+                dispatch(loadDataTable());
+                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            }
         }).catch((err) => {
             addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
         })

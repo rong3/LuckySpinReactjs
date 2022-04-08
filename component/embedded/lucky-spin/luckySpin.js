@@ -10,6 +10,7 @@ import { spinService } from "../../../services/logSpin.service"
 
 const LuckySpinComponent = (props) => {
     let handImage = null;
+    const [loadingWheel, setLoadingWheel] = useState(false);
     const [default_config_data, setDefaultConfigData] = useState(null)
     const [devMode, setDevMode] = useState(false);
     const [wheelInstance, setWheelInstance] = useState(null)
@@ -35,9 +36,6 @@ const LuckySpinComponent = (props) => {
     })
 
     const [master_config_data, setMasterConfig] = useState(null)
-    //index of items which will be appeared
-    //should be removed and be moved to BE
-    const [custom_prize_allows, setCustomPrizeAllow] = useState({})
 
     const resetAuthData = () => {
         authRequire.credential.id = null;
@@ -56,6 +54,10 @@ const LuckySpinComponent = (props) => {
             theme: theme_instance[4]
         })
     }
+
+    useEffect(() => {
+        setLoadingWheel(true);
+    }, [])
 
     useEffect(() => {
         if (master_config_data) {
@@ -138,6 +140,10 @@ const LuckySpinComponent = (props) => {
         var wrapperLogin = document.getElementById('login-wrapper');
         if (wrapperLogin)
             wrapperLogin.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
+
+        setTimeout(() => {
+            setLoadingWheel(false);
+        }, 0);
     }
 
     const initPrizes = (wheel_instance) => {
@@ -171,18 +177,18 @@ const LuckySpinComponent = (props) => {
         setMasterConfig({ ...wheel_instance, prizes: segmentData_convert })
 
         //custom allow prizes
-        // move to BE
-        if (!wheel_instance.random_prize) {
-            const segmentAllow = prizesTotal?.filter(x => x.allow_prize)?.map(item => ({ key: item.position, value: item.percent }));
-            const objectAllowConvert = segmentAllow?.reduce((obj, item) => ({
-                ...obj,
-                [item.key]: item.value
-            }), {});
-            setCustomPrizeAllow({ ...objectAllowConvert })
-        }
-        else {
-            setCustomPrizeAllow({});
-        }
+        // // move to BE
+        // if (!wheel_instance.random_prize) {
+        //     const segmentAllow = prizesTotal?.filter(x => x.allow_prize)?.map(item => ({ key: item.position, value: item.percent }));
+        //     const objectAllowConvert = segmentAllow?.reduce((obj, item) => ({
+        //         ...obj,
+        //         [item.key]: item.value
+        //     }), {});
+        //     setCustomPrizeAllow({ ...objectAllowConvert })
+        // }
+        // else {
+        //     setCustomPrizeAllow({});
+        // }
     }
 
     const initWheel = (master_config_data) => {
@@ -355,7 +361,7 @@ const LuckySpinComponent = (props) => {
                         "error"
                     );
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
                 resetWheel();
                 swal(
                     "Lỗi",
@@ -474,6 +480,7 @@ const LuckySpinComponent = (props) => {
     //enable auth
     function checkAuthSpin() {
         authGateWayMasterSelected({
+            "strategyId": props?.id,
             "groupAllocationId": import_config.allocation?.id,
             "masterId": authRequire.credential.id,
             "masterCode": authRequire.credential.pass,
@@ -532,6 +539,7 @@ const LuckySpinComponent = (props) => {
                         }
                     </div>
                     :
+                    loadingWheel ||
                     <>
                         <header>
                             <nav class="navbar d-flex align-items-center justify-content-between">
