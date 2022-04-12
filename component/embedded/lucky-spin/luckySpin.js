@@ -75,7 +75,7 @@ const LuckySpinComponent = (props) => {
         if (props?.data) {
             try {
                 const data = transformWheelData(props?.data);
-                console.log({ data: data });
+                // console.log({ data: data });
                 setDefaultConfigData(data)
             }
             catch {
@@ -87,7 +87,8 @@ const LuckySpinComponent = (props) => {
 
     useEffect(() => {
         if (default_config_data) {
-            importData(default_config_data)
+            importData(default_config_data);
+            setLoadingWheel(false);
         }
     }, [default_config_data])
 
@@ -95,7 +96,6 @@ const LuckySpinComponent = (props) => {
         if (import_config) {
             const wheel_instance = import_config?.wheel_config?.spin_config;
             initPrizes(wheel_instance);
-
             //auth Check
             const typeAuth = import_config?.allocation?.object?.objectKey;
             authRequire.type = typeAuth
@@ -121,6 +121,7 @@ const LuckySpinComponent = (props) => {
                 setAuthRequire({ ...authRequire })
             }
             settingTheme();
+
         }
 
     }, [import_config])
@@ -140,16 +141,12 @@ const LuckySpinComponent = (props) => {
         var wrapperLogin = document.getElementById('login-wrapper');
         if (wrapperLogin)
             wrapperLogin.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
-
-        setTimeout(() => {
-            setLoadingWheel(false);
-        }, 0);
     }
 
     const initPrizes = (wheel_instance) => {
         const isImagePrize = wheel_instance?.imageRender;
         //setting it up!
-        const prizesTotal = wheel_instance?.prizes?.sort((a, b) => a.position - b.position) ?? [];
+        const prizesTotal = wheel_instance?.prizes?.filter(x => !x?.hidden)?.sort((a, b) => a.position - b.position) ?? [];
         //convert segment
         const segmentData_convert = prizesTotal?.map(item => {
             return (
@@ -218,7 +215,7 @@ const LuckySpinComponent = (props) => {
             },
             'animation':           // Define spin to stop animation.
             {
-                // 'clearTheCanvas': true, 
+                'clearTheCanvas': false,
                 'type': master_config_data.animation.type,
                 'duration': master_config_data.animation.duration,
                 'spins': master_config_data.animation.spins,

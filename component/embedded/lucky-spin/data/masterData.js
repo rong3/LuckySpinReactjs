@@ -254,7 +254,7 @@ export const prizesCollection = [
                 allow_prize: true,
                 name: 'Lego 7',
                 imgPrize: "/asset/images/luckyspin/image/lego/steve.png",
-                color: "pink",
+                color: "grey",
                 percent: 30,
                 quantity: null
             },
@@ -264,7 +264,7 @@ export const prizesCollection = [
                 allow_prize: true,
                 name: 'Lego 8',
                 imgPrize: "/asset/images/luckyspin/image/lego/tom.png",
-                color: "pink",
+                color: "orange",
                 percent: 10,
                 quantity: null
             }
