@@ -76,7 +76,7 @@ Modal.propTypes = {
 };
 
 Modal.defaultProps = {
-  zIndex: 1040,
+  zIndex: 1,
   isOpen: false,
   title: 'Untitled',
   className: '',

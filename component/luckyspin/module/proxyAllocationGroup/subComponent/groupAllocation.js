@@ -201,13 +201,18 @@ function GroupAllocationComponent(props) {
 
     const removeGroupAllocationCommand = (data) => {
         removeGroupAllocation(data).then((res) => {
-            dispatch(loadDataTableGroupAllocation({
-                header: {
-                    pageNumber: 1,
-                    pageSize: 999
-                }
-            }))
-            addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            if (res?.data?.succeeded) {
+                dispatch(loadDataTableGroupAllocation({
+                    header: {
+                        pageNumber: 1,
+                        pageSize: 999
+                    }
+                }))
+                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            }
+            else {
+                addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+            }
         }).catch((err) => {
             addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
         })
@@ -321,7 +326,7 @@ function GroupAllocationComponent(props) {
                             <i className='fa fa-list'>
                                 <span>&nbsp;Danh sách đối tượng phân bổ&nbsp;</span>
                             </i>
-                            <br/>
+                            <br />
                             <hr />
                             <div className="strategy-btn-add">
                                 <i className='fa fa-plus'

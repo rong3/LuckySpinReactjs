@@ -48,14 +48,7 @@ export const masterConfig = {
                 },
                 {
                     icon: <IconCustomize code={ICON_CODE.LOGIN} />,
-                    title: "Quản lý kênh",
-                    menuLevel: 2,
-                    auth: true,
-                    to: CHANNEL_SPIN
-                },
-                {
-                    icon: <IconCustomize code={ICON_CODE.LOGIN} />,
-                    title: "Quản lý tệp khách hàng",
+                    title: "Quản lý nhóm phân bổ",
                     menuLevel: 2,
                     auth: true,
                     to: PROXY_ALLOCATION_GROUP

@@ -11,11 +11,12 @@ import { usePermission } from "../../../../shared/packages/provider/accessGatewa
 import withPermission from "../../../../shared/packages/hocs/permission/permissionHOC"
 import DataGridControl from '../../../../shared/packages/control/grid/datagrid';
 import { loadDataTable } from "../../../../redux/actions/strategyActions"
-import { loadDataTableChannelSpin } from "../../../../redux/actions/channelActions"
+import { loadDataTableGroupAllocation } from "../../../../redux/actions/groupAllocationActions"
 import { loadDataTableWheel } from "../../../../redux/actions/wheelInstanceAction"
 import { loadDataTableThemeSpin } from "../../../../redux/actions/themeAction"
 import Modal from "../../../../shared/packages/control/modal/index";
 import SelectBox from "../../../../shared/packages/control/selectBox/selectBox"
+import DateTimeInput from "../../../../shared/packages/control/input/datetime"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../services/strategySpin.service"
 import { getGroupAllocationById } from "../../../../services/groupAllocation.service"
 import { getProxyAllocationStrategy } from "../../../../services/proxyAllocationStrategy.service"
@@ -54,7 +55,7 @@ function StrategySpinComponent(props) {
     })
 
     const { strategyList } = useSelector((state) => state.strategy);
-    const { channelSpinList } = useSelector((state) => state.channelSpin);
+    const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
     const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
     const { themeInstanceList } = useSelector((state) => state.themeInstance);
 
@@ -63,7 +64,7 @@ function StrategySpinComponent(props) {
 
     useEffect(() => {
         dispatch(loadDataTable());
-        dispatch(loadDataTableChannelSpin({
+        dispatch(loadDataTableGroupAllocation({
             header: {
                 pageNumber: 1,
                 pageSize: 999
@@ -90,8 +91,8 @@ function StrategySpinComponent(props) {
     // }, [groupAllocationEditModel])
 
     function getAttribute(params) {
-        if (params.field === 'channelSpinName')
-            return params.row?.channelSpin?.channelName;
+        if (params.field === 'groupAllocationName')
+            return params.row?.groupAllocation?.name;
         if (params.field === 'wheelInstanceName')
             return params.row?.wheelInstance?.name;
         if (params.field === 'themeInstanceNamne')
@@ -114,8 +115,8 @@ function StrategySpinComponent(props) {
             }
         },
         {
-            field: 'channelSpinName',
-            headerName: 'Kênh',
+            field: 'groupAllocationName',
+            headerName: 'Nhóm phân bổ',
             headerClassName: 'headerColumn',
             flex: 1,
             valueGetter: getAttribute,
@@ -179,21 +180,14 @@ function StrategySpinComponent(props) {
 
     //To check data exists groupAllocationId for custom allocaiton object attribute
     const checkShowLayerAllocation = (data) => {
-        const row_channelID = data?.channelSpinId;
-        if (row_channelID) {
-            const channelData = channelSpinList?.find(x => x?.id === row_channelID);
-            if (channelData) {
-                return {
-                    groupAllocationId: channelData?.proxyAllocationGroup?.groupAllocationId,
-                    show: channelData?.proxyAllocationGroup?.groupAllocationId !== null
-                }
+        const row_GroupAllocationID = data?.groupAllocationId;
+        if (row_GroupAllocationID) {
+            return {
+                groupAllocationId: row_GroupAllocationID,
+                show: true
             }
-            else return {
-                groupAllocationId: null,
-                show: false
-            };
         }
-        return {
+        else return {
             groupAllocationId: null,
             show: false
         };
@@ -233,11 +227,10 @@ function StrategySpinComponent(props) {
     }
 
     const openAllocationLayer = (params) => {
-        const groupAllcationId = checkShowLayerAllocation(params?.row)?.groupAllocationId;
-
-        if (groupAllcationId) {
+        const groupAllocationId = checkShowLayerAllocation(params?.row)?.groupAllocationId;
+        if (groupAllocationId) {
             //get group id to get all master selected
-            getGroupAllocationById(groupAllcationId).then((res) => {
+            getGroupAllocationById(groupAllocationId).then((res) => {
                 const strategyID = params?.row?.id;
                 const masterIds = res?.data?.data?.masterAllocationSelecteds?.map(x => x.id) ?? [];
                 //from list master selected, we put on proxy to get attributes data
@@ -418,16 +411,16 @@ function StrategySpinComponent(props) {
                                                             }} defaultValue={modalCustom.data?.name} />
                                                         </div>
                                                         <div className="col-md-12">
-                                                            <span>Kênh vòng quay</span>
+                                                            <span>Nhóm phân bổ</span>
                                                             <SelectBox id="selectbox"
                                                                 optionLabel="name"
-                                                                optionValue="value"
+                                                                optionValue="id"
                                                                 onChange={(data) => {
-                                                                    overwriteDataModal('channelSpinId', data)
+                                                                    overwriteDataModal('groupAllocationId', data)
                                                                 }}
-                                                                value={modalCustom.data?.channelSpinId}
+                                                                value={modalCustom.data?.groupAllocationId}
                                                                 isPortal
-                                                                options={channelSpinList?.map(x => ({ ...x, name: x?.channelName, value: x?.id })) ?? []}
+                                                                options={groupAllocationsList ?? []}
                                                             />
                                                         </div>
                                                         <div className="col-md-12">
@@ -456,6 +449,36 @@ function StrategySpinComponent(props) {
                                                                 options={themeInstanceList?.map(x => ({ ...x, name: x?.name, value: x?.id })) ?? []}
                                                             />
                                                         </div>
+                                                        <div className="col-md-6">
+                                                            <span>Ngày hiệu lực</span>
+                                                            <DateTimeInput selected={modalCustom.data?.startDate && new Date(modalCustom.data?.startDate)}
+                                                                isDefaultEmpty
+                                                                id="startDate" isOnlyDate={false} onChange={(data) => {
+                                                                    overwriteDataModal('startDate', data)
+                                                                }} />
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <span>Ngày kết thúc hiệu lực</span>
+                                                            <DateTimeInput selected={modalCustom.data?.endDate && new Date(modalCustom.data?.endDate)} id="endDate"
+                                                                isDefaultEmpty
+                                                                isOnlyDate={false} onChange={(data) => {
+                                                                    overwriteDataModal('endDate', data)
+                                                                }} />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Vô hiệu vòng quay</span>
+                                                            &nbsp;
+                                                            <input class="form-check-input"
+                                                                type="checkbox"
+                                                                id="disabeldWheel"
+                                                                name="disabeldWheel"
+                                                                onChange={(e) => {
+                                                                    const checked = e.target?.checked;
+                                                                    overwriteDataModal('disabled', checked);
+                                                                }}
+                                                                checked={modalCustom?.data?.disabled} />
+                                                        </div>
+
                                                     </div>
                                                 </>
                                                 :

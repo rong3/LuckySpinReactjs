@@ -8,11 +8,8 @@ import { appReducer } from "./appReducer";
 import { userReducer } from "./userReducer";
 import fetchDataReducer from "./fetchDataReducer"
 import strategyReducer from "./strategyReducer"
-import channelSpinReducer from "./channelSpinReducer"
 import wheelInstanceReducer from "./wheelInstanceReducer"
 import themeInstanceReducer from "./themeInstanceReducer"
-import proxyAllocationGroupReducer from "./proxyAllocationGroupReducer"
-import categoryClientReducer from "./categoryClientReducer"
 import groupAllocationReducer from "./groupAllocationReducer"
 import masterObjectAllocationReducer from "./masterObjectAllocationReducer"
 
@@ -21,11 +18,8 @@ export const rootReducer = combineReducers({
     user: userReducer,
     fetchData: fetchDataReducer,
     strategy: strategyReducer,
-    channelSpin: channelSpinReducer,
     wheelInstance: wheelInstanceReducer,
     themeInstance: themeInstanceReducer,
-    proxyAllocationGroup: proxyAllocationGroupReducer,
-    categoryClient: categoryClientReducer,
     groupAllocation: groupAllocationReducer,
     masterObjectAllocation: masterObjectAllocationReducer
 })

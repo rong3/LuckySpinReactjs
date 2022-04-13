@@ -41,8 +41,6 @@ function LogSpinComponent(props) {
             return `${params?.row?.proxyStrategyPrize?.channelPrize?.name || ''}`;
         if (params.field === 'strategySpinName')
             return `${params?.row?.proxyStrategyPrize?.strategySpin?.name || ''}`;
-        if (params.field === 'channelSpinName')
-            return `${params?.row?.proxyStrategyPrize?.strategySpin?.channelSpin?.channelName || ''}`;
         else
             return '';
     }
@@ -51,14 +49,6 @@ function LogSpinComponent(props) {
         {
             field: 'strategySpinName',
             headerName: 'Tên chiến lược',
-            headerClassName: 'headerColumn',
-            flex: 1,
-            editable: false,
-            valueGetter: getProxyName,
-        },
-        {
-            field: 'channelSpinName',
-            headerName: 'Tên kênh',
             headerClassName: 'headerColumn',
             flex: 1,
             editable: false,

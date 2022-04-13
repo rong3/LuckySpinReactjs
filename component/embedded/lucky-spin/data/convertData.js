@@ -18,10 +18,10 @@ export const transformWheelData = (dataOriginal) => {
         categoryClient: {
         },
         allocation: {
-            id: dataOriginal?.channelSpin?.proxyAllocationGroup?.groupAllocation?.id,
-            object: dataOriginal?.channelSpin?.proxyAllocationGroup?.groupAllocation?.masterObjectAllocation,
-            type: dataOriginal?.channelSpin?.proxyAllocationGroup?.groupAllocation?.name,
-            data: dataOriginal?.channelSpin?.proxyAllocationGroup?.groupAllocation?.masterAllocationSelecteds
+            id: dataOriginal?.groupAllocationId,
+            object: dataOriginal?.groupAllocation?.masterObjectAllocation,
+            type: dataOriginal?.groupAllocation?.name,
+            data: dataOriginal?.groupAllocation?.masterAllocationSelecteds
         },
         wheel_config: {
             id: wheelInstance?.id,
