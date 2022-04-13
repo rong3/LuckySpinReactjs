@@ -707,263 +707,186 @@ export const category_wheel = [
         id: 0,
         name: 'Vòng quay kiểu 1',
         spin_config: {
-            random_prize: true,
-            imageRender: false,
-            drawText: true, 
-            wheel_bg: '/asset/images/luckyspin/image/wheel_hdbank_bk.png',
-            object: {
-                'outerRadius': 220,
-                'innerRadius': 110,
-                'textFontSize': 15,
-                'textMargin': 0,
-                'textOrientation': 'horizontal',
-                'textAlignment': 'center',
-                'textFontFamily': 'monospace',
-                'textLineWidth': 0,
-                'textFillStyle': 'black',
-                'rotationAngle': 0
+            "random_prize": false,
+            "imageRender": false,
+            "drawText": true,
+            "wheel_bg": "/asset/images/luckyspin/theme/HDbank/wheel/circle_2.gif",
+            "object": {
+                "outerRadius": 265,
+                "innerRadius": 36,
+                "textFontSize": 15,
+                "textMargin": 0,
+                "textOrientation": "horizontal",
+                "textAlignment": "center",
+                "textFontFamily": "consolas",
+                "textLineWidth": 5,
+                "lineWidth": 1,
+                "textFillStyle": "#fff",
+                "rotationAngle": 0
             },
-            animation: {
-                'type': 'spinToStop',
-                'duration': 5,
-                'spins': 8,
-                'soundTrigger': 'pin',
+            "animation": {
+                "type": "spinToStop",
+                "duration": 5,
+                "spins": 8,
+                "soundTrigger": "pin"
             },
-            pins: {
-                'outerRadius': 0,
-                'responsive': true, // This must be set to true if pin size is to be responsive, if not just location is.
+            "pins": {
+                "outerRadius": 0,
+                "responsive": true
             },
-            canvas: {
-                pointerExtenal: {
-                    isUse: false,
-                    translateX: 0,
-                    translateY: 0,
-                    drawX: 0,
-                    drawY: 0,
-                    rotate: 0,
-                    url: null,
+            "canvas": {
+                "pointerExtenal": {
+                    "isUse": true,
+                    "translateX": 250,
+                    "translateY": 0,
+                    "drawX": 0,
+                    "drawY": 20,
+                    "rotate": 0,
+                    "url": "/asset/images/luckyspin/theme/HDbank/wheel/arrow_2.png"
                 },
-                width: 450,
-                height: 575,
-                margin: {
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                },
-            },
-            prizes: prizesCollection[2].prizes
-        }
-    },
-    {
-        id: 1,
-        name: 'Vòng quay kiểu 2',
-        spin_config: {
-            random_prize: true,
-            imageRender: true,
-            drawText: true,
-            wheel_bg: '/asset/images/luckyspin/image/wheel_hdbank.png',
-            object: {
-                'outerRadius': 160,
-                'innerRadius': 45,
-                'textFontSize': 15,
-                'textMargin': 20,
-                'textOrientation': 'horizontal',
-                'textAlignment': 'center',
-                'textFontFamily': 'monospace',
-                'textLineWidth': 5,
-                'textFillStyle': 'red',
-                'rotationAngle': 0
-            },
-            animation: {
-                'type': 'spinToStop',
-                'duration': 5,
-                'spins': 8,
-                'soundTrigger': 'pin',
-            },
-            pins: {
-                'outerRadius': 0,
-                'responsive': true, // This must be set to true if pin size is to be responsive, if not just location is.
-            },
-            canvas: {
-                pointerExtenal: {
-                    isUse: false,
-                    translateX: 0,
-                    translateY: 0,
-                    drawX: 0,
-                    drawY: 0,
-                    rotate: 0,
-                    url: null,
-                },
-                width: 450,
-                height: 575,
-                margin: {
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                },
-            },
-            prizes: prizesCollection[1].prizes
-        }
-    },
-    {
-        id: 2,
-        name: 'Vòng quay kiểu 3',
-        spin_config: {
-            random_prize: false,
-            imageRender: false,
-            drawText: true,
-            wheel_bg: '/asset/images/luckyspin/image/color_wheel_3.png',
-            object: {
-                'outerRadius': 215,
-                'innerRadius': 10,
-                'textFontSize': 15,
-                'textMargin': 0,
-                'textOrientation': 'horizontal',
-                'textAlignment': 'center',
-                'textFontFamily': 'monospace',
-                'textLineWidth': 0,
-                'textFillStyle': 'white',
-                'rotationAngle': 1.1
-            },
-            animation: {
-                'type': 'spinToStop',
-                'duration': 5,
-                'spins': 8,
-                'soundTrigger': 'pin',
-            },
-            pins: {
-                'fillStyle': 'silver',
-                'outerRadius': 4,
-                'responsive': true, // This must be set to true if pin size is to be responsive, if not just location is.
-            },
-            canvas: {
-                pointerExtenal: {
-                    isUse: false,
-                    translateX: 0,
-                    translateY: 0,
-                    drawX: 0,
-                    drawY: 0,
-                    rotate: 0,
-                    url: null,
-                },
-                width: 450,
-                height: 575,
-                margin: {
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
-                },
-            },
-            prizes: prizesCollection[0].prizes
-        }
-    },
-    {
-        id: 3,
-        name: 'Vòng quay kiểu 4',
-        spin_config: {
-            random_prize: true,
-            imageRender: false,
-            drawText: true,
-            wheel_bg: '/asset/images/luckyspin/image/wheel_style/animate.gif',
-            object: {
-                'outerRadius': 187,
-                'innerRadius': 0,
-                'textFontSize': 15,
-                'textMargin': 0,
-                'textOrientation': 'horizontal',
-                'textAlignment': 'center',
-                'textFontFamily': 'monospace',
-                'textLineWidth': 0,
-                'textFillStyle': 'white',
-                'rotationAngle': 0
-            },
-            animation: {
-                'type': 'spinToStop',
-                'duration': 5,
-                'spins': 8,
-                'soundTrigger': 'pin',
-            },
-            pins: {
-                'fillStyle': 'silver',
-                'outerRadius': 4,
-                'responsive': true, // This must be set to true if pin size is to be responsive, if not just location is.
-            },
-            canvas: {
-                pointerExtenal: {
-                    isUse: true,
-                    translateX: 190,
-                    translateY: 65,
-                    drawX: 0,
-                    drawY: 0,
-                    rotate: 0,
-                    url: '/asset/images/luckyspin/image/wheel_arrow/red_arrow.png',
-                },
-                width: 450,
-                height: 575,
-                margin: {
-                    top: -10,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
+                "width": 600,
+                "height": 700,
+                "margin": {
+                    "top": 9,
+                    "left": 0,
+                    "right": 0,
+                    "bottom": 0
                 }
             },
-            prizes: prizesCollection[0].prizes
-        }
-    },
-    {
-        id: 4,
-        name: 'Vòng quay kiểu HDBank',
-        spin_config: {
-            random_prize: true,
-            imageRender: false,
-            drawText: true,
-            wheel_bg: '/asset/images/luckyspin/theme/HDbank/wheel/circle_2.gif',
-            object: {
-                'outerRadius': 265,
-                'innerRadius': 37,
-                'textFontSize': 15,
-                'textMargin': 0,
-                'textOrientation': 'horizontal',
-                'textAlignment': 'center',
-                'textFontFamily': 'monospace',
-                'textLineWidth': 0,
-                'textFillStyle': 'white',
-                'rotationAngle': 0
-            },
-            animation: {
-                'type': 'spinToStop',
-                'duration': 5,
-                'spins': 8,
-                'soundTrigger': 'pin',
-            },
-            pins: {
-                'fillStyle': 'silver',
-                'outerRadius': 4,
-                'responsive': true, // This must be set to true if pin size is to be responsive, if not just location is.
-            },
-            canvas: {
-                pointerExtenal: {
-                    isUse: true,
-                    translateX: 250,
-                    translateY: 20,
-                    drawX: 0,
-                    drawY: 0,
-                    rotate: 0,
-                    url: '/asset/images/luckyspin/theme/HDbank/wheel/arrow_2.png',
+            "prizes": [
+                {
+                    "id": "1b692078-3212-4835-8f11-08da1071ba8d",
+                    "position": 1,
+                    "name": "Giải 1",
+                    "imgPrize": null,
+                    "color": "#fff",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
                 },
-                width: 600,
-                height: 700,
-                margin: {
-                    top: 9,
-                    left: 0,
-                    right: 0,
-                    bottom: 0
+                {
+                    "id": "745ac3de-bd3a-42e6-bf38-08da17a70f09",
+                    "position": 2,
+                    "name": "Giải 2",
+                    "imgPrize": null,
+                    "color": "#FF6F61",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": null,
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "6fa149bc-1a56-431e-bf39-08da17a70f09",
+                    "position": 3,
+                    "name": "Giải 3",
+                    "imgPrize": null,
+                    "color": "#fff",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "5913f1aa-77ac-4843-bf3a-08da17a70f09",
+                    "position": 4,
+                    "name": "Giải 4",
+                    "imgPrize": null,
+                    "color": "#88B04B",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": null,
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "39659890-8883-416a-bf3b-08da17a70f09",
+                    "position": 5,
+                    "name": "Giải 5",
+                    "imgPrize": null,
+                    "color": "#fff",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "e20fb72b-e2c3-4dd8-bf3c-08da17a70f09",
+                    "position": 6,
+                    "name": "Giải 6",
+                    "imgPrize": null,
+                    "color": "#92A8D1",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": null,
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "adc6024b-3822-4f5a-a40b-08da1d1a8ceb",
+                    "position": 7,
+                    "name": "Giải 7",
+                    "imgPrize": null,
+                    "color": "#fff",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "56a4ad65-0f5e-428c-a40c-08da1d1a8ceb",
+                    "position": 8,
+                    "name": "Giải 8",
+                    "imgPrize": null,
+                    "color": "#F7CAC9",
+                    "strokeStyle": "#F7CAC9",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "a620c589-679d-49e8-a40d-08da1d1a8ceb",
+                    "position": 9,
+                    "name": "Giải 9",
+                    "imgPrize": null,
+                    "color": "#fff",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "6497c3c9-7187-47bd-a40e-08da1d1a8ceb",
+                    "position": 10,
+                    "name": "Giải 10",
+                    "imgPrize": null,
+                    "color": "#955251",
+                    "strokeStyle": "#955251",
+                    "textFillStyle": "#fff",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "a556d10b-6213-4d85-a40f-08da1d1a8ceb",
+                    "position": 11,
+                    "name": "Giải 11",
+                    "imgPrize": null,
+                    "color": "#fff",
+                    "strokeStyle": "#fff",
+                    "textFillStyle": "#000",
+                    "textFontSize": null,
+                    "hidden": false
+                },
+                {
+                    "id": "7cd84336-2922-4213-a410-08da1d1a8ceb",
+                    "position": 12,
+                    "name": "Giải 12",
+                    "imgPrize": null,
+                    "color": "#D65076",
+                    "strokeStyle": "#D65076",
+                    "textFillStyle": "#fff",
+                    "textFontSize": null,
+                    "hidden": false
                 }
-            },
-            prizes: prizesCollection[1].prizes
+            ]
         }
     },
 ]

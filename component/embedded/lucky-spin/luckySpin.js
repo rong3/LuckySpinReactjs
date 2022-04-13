@@ -50,7 +50,7 @@ const LuckySpinComponent = (props) => {
             channel: channel_spin[2],
             categoryClient: category_client[2],
             allocation: group_allocation[3],
-            wheel_config: category_wheel[4],
+            wheel_config: category_wheel[0],
             theme: theme_instance[4]
         })
     }
@@ -75,7 +75,7 @@ const LuckySpinComponent = (props) => {
         if (props?.data) {
             try {
                 const data = transformWheelData(props?.data);
-                // console.log({ data: data });
+                console.log({ data: data });
                 setDefaultConfigData(data)
             }
             catch {
