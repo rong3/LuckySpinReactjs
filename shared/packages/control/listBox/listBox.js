@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 
-const ListBoxComponent = ({ options, title, onClickItem, onUpdate, onDelete, defaultValue, value, ...props }) => {
+const ListBoxComponent = ({ options, title, onClickItem, onAddNew, onUpdate, onDelete, defaultValue, value, ...props }) => {
     const { t } = useTranslation('common');
     const [selected, setSelected] = useState(null)
     const onClickItemInternal = (item) => {
@@ -26,7 +26,14 @@ const ListBoxComponent = ({ options, title, onClickItem, onUpdate, onDelete, def
         <div className='list-box-custom'>
             <div className='search-range'>
                 <div className='title'>
-                    {title}
+                    {title} &nbsp;
+                    {
+                        onAddNew && <i className='fa fa-plus'
+                            onClick={() => onAddNew()}
+                            title='Thêm mới'>
+                        </i>
+                    }
+
                 </div>
             </div>
             <div className='wrapper-item'>
@@ -73,7 +80,8 @@ ListBoxComponent.propTypes = {
     title: PropTypes.string,
     defaultValue: PropTypes.any,
     value: PropTypes.any,
-    onClickItem: PropTypes.func
+    onClickItem: PropTypes.func,
+    onAddNew: PropTypes.func
 };
 
 ListBoxComponent.defaultProps = {

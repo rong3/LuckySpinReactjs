@@ -9,11 +9,16 @@
 }
 .accordion-item {
     margin-top: 10px;
+    border-radius: 10px !important;
     .accordion-header {
-        border: 1px solid #dc3545;
         button {
-            color: #dc3545;
+            color: #fff;
             font-size: 15px;
+            background: radial-gradient(50.32% 68.71% at 79.1% 10.71%,#6cd3ff 0,#0085ff 100%),radial-gradient(81.28% 120.11% at 88.19% -19%,#fe9595 0,#ff1332 100%);
+            border-radius: 10px !important;
         }
+    }
+    .accordion-collapse{
+        transition: 0.3s all ease;
     }
 }

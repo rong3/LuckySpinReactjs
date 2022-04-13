@@ -194,7 +194,7 @@ function WheelInstanceComponent(props) {
                         </i>
                     </div>
                 </div>
-                <div className="row row-title mt-5">
+                <div className="row row-title mt-2">
                     <div className="col-md-12 table-height">
                         <DataGridControl
                             rows={wheelInstanceList}

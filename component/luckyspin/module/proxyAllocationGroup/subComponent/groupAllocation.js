@@ -233,16 +233,11 @@ function GroupAllocationComponent(props) {
         <div className='content'>
             <div className="row">
                 <div className='col-md-2'>
-                    <div className="btn-add">
-                        <i className='fa fa-plus'
-                            title='Thêm mới'
-                            onClick={(e) => {
-                                setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'new', data: { disabled: false }, isOpen: true })
-                            }}>
-                        </i>
-                    </div>
                     <ListBoxComponent
                         title={"Nhóm phân bổ"}
+                        onAddNew={()=>{
+                            setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'new', data: { disabled: false }, isOpen: true })
+                        }}
                         onClickItem={(e) => {
                             setSelectedGroupAllocation(e);
                         }}

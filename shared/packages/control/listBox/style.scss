@@ -1,12 +1,11 @@
 .content-wrapper {
     .btn-add {
-        position: absolute;
-        justify-content: center;
+        position: relative;
         cursor: pointer;
+        text-align: center;
         i {
-            color: #dc3545;
+            color: #000;
             font-size: large;
-            padding: 5px;
         }
         i:hover {
             transform: scale(1.2);
@@ -19,9 +18,6 @@
         transition: 0.3s ease-in-out;
     }
     .list-box-custom {
-        // background: linear-gradient(167.6deg, #ffd541 7.65%, #ff6372 89.4%);
-        background-blend-mode: multiply, overlay, normal;
-        border-radius: 2px;
         min-height: 150px;
         height: -webkit-fit-content;
         height: -moz-fit-content;
@@ -30,13 +26,17 @@
         width: auto;
         overflow: auto;
         overflow-x: hidden;
-        border: 1px solid #dc3545;
+        border-radius: 12px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 1.21795px 1.21795px 6.08974px rgb(0 0 0 / 7%);
+        background: radial-gradient(81.28% 120.11% at 88.19% -19%,#fe9595 0,#ff1332 100%);
         cursor: pointer !important;
         .search-range {
             position: relative;
             top: -20px;
             .title {
-                color: #dc3545 !important;
+                color: #fff !important;
                 font-size: 18px;
                 text-align: center;
                 opacity: 1;
@@ -53,7 +53,7 @@
             max-height: 70vh;
             .item {
                 background: transparent;
-                color: #dc3545;
+                color: #fff;
                 display: flex;
                 justify-content: space-between;
                 padding: 13px 10px;
@@ -78,8 +78,8 @@
                 transition: 0.3s ease-in-out;
             }
             .active {
-                color: #fff;
-                background: #dc3545;
+                color: #ff6372;
+                background: #fff;
                 border-radius: 10px;
                 -webkit-transition: 0.3s ease-in-out;
                 transition: 0.3s ease-in-out;
@@ -88,7 +88,7 @@
     }
     .wrapper-tab {
         padding: 10px;
-        border: 1px solid #ff0202;
+        border: 1px solid #fff;
         border-radius: 5px;
         width: 100%;
         height: 90vh;

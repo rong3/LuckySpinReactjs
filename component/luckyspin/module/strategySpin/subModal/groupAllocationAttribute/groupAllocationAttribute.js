@@ -59,25 +59,29 @@ function GroupAllocationAttributeModal(props) {
         >
             <Modal.Body>
                 <div class="accordion" id="myAccordion">
-                    {
-                        groupAllocationEditModel?.map((item, index) => {
-                            return (
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id={`index_${index}`}>
-                                        <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#collapse_${index}`}>{`{ master Id: ${item?.masterId}, master Code: ${item?.masterCode}} ${item?.edited ? " (trạng thái: chỉnh sửa)" : ""}`}</button>
-                                    </h2>
-                                    <div id={`collapse_${index}`} class="accordion-collapse collapse">
-                                        <div class="card-body">
-                                            <UIBuilder
-                                                objectKeys={item?.attributes}
-                                                indexData={index}
-                                                modelChange={updateAttributes} />
+                    <div className='row'>
+                        {
+                            groupAllocationEditModel?.map((item, index) => {
+                                return (
+                                    <div className='col-md-4'>
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id={`index_${index}`}>
+                                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#collapse_${index}`}>{`${item?.masterId} ${item?.edited ? " (trạng thái: chỉnh sửa)" : ""}`}</button>
+                                            </h2>
+                                            <div id={`collapse_${index}`} class="accordion-collapse collapse">
+                                                <div class="card-body">
+                                                    <UIBuilder
+                                                        objectKeys={item?.attributes}
+                                                        indexData={index}
+                                                        modelChange={updateAttributes} />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            )
-                        })
-                    }
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>

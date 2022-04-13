@@ -30,13 +30,9 @@
         overflow-x: hidden;
         overflow-y: auto;
         background: #fff;
-        padding: 10px;
-        border: 2px solid #ccc;
-        border-radius: 5px;
         .title-text {
             color: #000;
         }
-        margin-top: 10px;
     }
     .block-input {
         position: relative;
@@ -52,11 +48,6 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-}
-
-.headerColumn {
-    color: #fff;
-    background: #dc3545;
 }
 
 .react-dialog-overlay {
