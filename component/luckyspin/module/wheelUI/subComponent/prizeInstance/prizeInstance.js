@@ -26,7 +26,7 @@ function PrizeInstanceComponent(props) {
     const { t } = useTranslation('common');
     const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
     const [selectedWheelInstance, setSelectedWheelInstance] = useState(null);
-   
+
     useEffect(() => {
         const find = wheelInstanceList?.find(x => x.id === selectedWheelInstance?.id)
         if (find) {
@@ -142,7 +142,7 @@ function PrizeInstanceComponent(props) {
     }
 
     const overwriteDataModal = (prefix, value) => {
-        modalCustom.data[prefix] = value;
+        modalCustom.data[prefix] = value === "" ? null : value;
         setModalCustom({ ...modalCustom });
     }
 
@@ -215,11 +215,32 @@ function PrizeInstanceComponent(props) {
                                                             }} defaultValue={modalCustom.data?.image} />
                                                         </div>
                                                         <div className="col-md-12">
-                                                            <span>Màu giải thưởng</span>
+                                                            <span>Màu nền giải thưởng</span>
                                                             <InputControl type="text" id="name" onChange={(e) => {
                                                                 const value = e.target.value ?? '';
                                                                 overwriteDataModal('color', value)
                                                             }} defaultValue={modalCustom.data?.color} />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Màu đường kẻ</span>
+                                                            <InputControl type="text" id="name" onChange={(e) => {
+                                                                const value = e.target.value ?? null;
+                                                                overwriteDataModal('strokeStyle', value)
+                                                            }} defaultValue={modalCustom.data?.strokeStyle} />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Màu chữ</span>
+                                                            <InputControl type="text" id="name" onChange={(e) => {
+                                                                const value = e.target.value ?? null;
+                                                                overwriteDataModal('textFillStyle', value)
+                                                            }} defaultValue={modalCustom.data?.textFillStyle} />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Font size giải</span>
+                                                            <InputControl type="text" id="name" onChange={(e) => {
+                                                                const value = e.target.value ?? null;
+                                                                overwriteDataModal('textFontSize', value)
+                                                            }} defaultValue={modalCustom.data?.textFontSize} />
                                                         </div>
                                                     </div>
                                                 </>

@@ -156,9 +156,9 @@ const LuckySpinComponent = (props) => {
                         id: item?.id,
                         fillStyle: item?.color,
                         text: item?.name,
-                        //size: winwheelPercentToDegrees(40),
-                        // textFontSize: 18,
-                        // textFillStyle: '#ffffff',
+                        textFontSize: item?.textFontSize,
+                        textFillStyle: item?.textFillStyle,
+                        strokeStyle: item?.strokeStyle,
                         image: item?.imgPrize
                     }
                     :
@@ -166,26 +166,15 @@ const LuckySpinComponent = (props) => {
                         ...item,
                         id: item?.id,
                         fillStyle: item?.color,
+                        textFontSize: item?.textFontSize,
+                        textFillStyle: item?.textFillStyle,
+                        strokeStyle: item?.strokeStyle,
                         text: item?.name
                     }
             )
         })
         //other setting up
         setMasterConfig({ ...wheel_instance, prizes: segmentData_convert })
-
-        //custom allow prizes
-        // // move to BE
-        // if (!wheel_instance.random_prize) {
-        //     const segmentAllow = prizesTotal?.filter(x => x.allow_prize)?.map(item => ({ key: item.position, value: item.percent }));
-        //     const objectAllowConvert = segmentAllow?.reduce((obj, item) => ({
-        //         ...obj,
-        //         [item.key]: item.value
-        //     }), {});
-        //     setCustomPrizeAllow({ ...objectAllowConvert })
-        // }
-        // else {
-        //     setCustomPrizeAllow({});
-        // }
     }
 
     const initWheel = (master_config_data) => {
@@ -201,6 +190,7 @@ const LuckySpinComponent = (props) => {
             'textFontFamily': master_config_data.object.textFontFamily,
             'textStrokeStyle': master_config_data.object.textStrokeStyle,
             'textLineWidth': master_config_data.object.textLineWidth,
+            'lineWidth': master_config_data.object.lineWidth,
             'textFillStyle': master_config_data.object.textFillStyle,
             'segments': master_config_data.prizes,      // Define segments including colour and text.
             'drawMode': master_config_data.imageRender ? 'segmentImage' : '',
@@ -283,57 +273,8 @@ const LuckySpinComponent = (props) => {
         }
     }
 
-    // function transformRatiosToAccPercentages(ratios) {
-    //     const total = ratios.reduce((sum, el) => sum += el, 0);
-    //     let acc = 0;
-    //     const accPercentages = ratios.map(rat => acc += rat / total);
-    //     return accPercentages;
-    // }
-
-    // function chooseBiasedRandom(accPercentages) {
-    //     const random = Math.random();
-    //     const index = accPercentages.findIndex(acc => random < acc);
-    //     return index;
-    // }
-
-    // function chooseRandomSuffle(arr) {
-    //     try {
-    //         const ratios = Object.values(arr);
-    //         const accPercentages = transformRatiosToAccPercentages(ratios);
-    //         const random = chooseBiasedRandom(accPercentages);
-    //         return Number.parseInt(Object.keys(arr)[random]) ?? null;
-    //     }
-    //     catch {
-    //         return null;
-    //     }
-    // }
-
     // Called from Click of the Spin button.
     function startWheelSpin() {
-        // This formula always makes the wheel stop somewhere inside prize 3 at least
-        // 1 degree away from the start and end edges of the segment.
-        //let stopAt = (36 * 3 + 1 + Math.floor((Math.random() * 35)))//stopAt;
-        //move to BE
-        // if (Object.keys(custom_prize_allows)?.length > 0) {
-        //     const random_objAllow = chooseRandomSuffle(custom_prize_allows);
-        //     if (random_objAllow) {
-        //         const avg_rad = Math.round(360 / (wheelInstance.segments?.length - 1), 2);
-        //         const rotationAngle = import_config?.wheel_config?.spin_config?.object?.rotationAngle ?? 0;
-        //         let stopAt = (avg_rad * (random_objAllow - 1) + 5 + rotationAngle + Math.floor((Math.random() * (avg_rad - 5 - rotationAngle))))
-        //         // console.log({ stopAt });
-        //         // Important thing is to set the stopAngle of the animation before stating the spin.
-        //         // Should be convert formula to BE then saved the angle stop deg to DB then and return the angle stop deg to FE
-        //         wheelInstance.animation.stopAngle = stopAt;
-        //     }
-        //     else {
-        //         swal(
-        //             "Lỗi",
-        //             "Vòng quay lỗi",
-        //             "error"
-        //         );
-        //     }
-        // }
-
         if (props?.id && authRequire.enabled) {
             spinService({
                 "masterAllocationSelectedId": authRequire.masterSelectedId,

@@ -453,6 +453,7 @@ function StrategySpinComponent(props) {
                                                             <span>Ngày hiệu lực</span>
                                                             <DateTimeInput selected={modalCustom.data?.startDate && new Date(modalCustom.data?.startDate)}
                                                                 isDefaultEmpty
+                                                                isPortal
                                                                 id="startDate" isOnlyDate={false} onChange={(data) => {
                                                                     overwriteDataModal('startDate', data)
                                                                 }} />

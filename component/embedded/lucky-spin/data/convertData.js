@@ -40,6 +40,7 @@ export const transformWheelData = (dataOriginal) => {
                     'textAlignment': wheelInstance?.configJson?.object_textAlignment?.value,
                     'textFontFamily': wheelInstance?.configJson?.object_textFontFamily?.value,
                     'textLineWidth': wheelInstance?.configJson?.object_textLineWidth?.value,
+                    'lineWidth': wheelInstance?.configJson?.object_lineWidth?.value,
                     'textFillStyle': wheelInstance?.configJson?.object_textFillStyle?.value,
                     'rotationAngle': wheelInstance?.configJson?.object_rotationAngle?.value,
                 },
@@ -81,6 +82,9 @@ export const transformWheelData = (dataOriginal) => {
                         name: item?.name,
                         imgPrize: item?.image,
                         color: item?.color,
+                        strokeStyle: item?.strokeStyle,
+                        textFillStyle: item?.textFillStyle,
+                        textFontSize: item?.textFontSize,
                         percent: _findProxyAttr?.percent,
                         quantity: _findProxyAttr?.quantity,
                         hidden: _findProxyAttr?.hidden

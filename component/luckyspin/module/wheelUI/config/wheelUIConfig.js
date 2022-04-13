@@ -92,6 +92,10 @@ export const wheelConfig = {
             label: "Độ dày văn bản",
             value: 5
         },
+        object_lineWidth: {
+            label: "Độ dày đường kẻ",
+            value: 1
+        },
         object_textFillStyle: {
             label: "Màu chữ",
             value: 'red'

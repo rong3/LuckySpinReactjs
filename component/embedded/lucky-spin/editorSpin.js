@@ -246,16 +246,22 @@ const EditorSpinComponent = (props) => {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-md-4">
                                     <span>Text orientation</span>
                                     <input className="inputstyle" value={object_copy?.object?.textOrientation} onChange={(e) => {
                                         updateKeyObject('object.textOrientation', e.target?.value)
                                     }} type="text"></input>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-md-4">
                                     <span>Text Alignment</span>
                                     <input className="inputstyle" value={object_copy?.object?.textAlignment} onChange={(e) => {
                                         updateKeyObject('object.textAlignment', e.target?.value)
+                                    }} type="text"></input>
+                                </div>
+                                <div className="col-md-4">
+                                    <span>Line width</span>
+                                    <input className="inputstyle" value={object_copy?.object?.lineWidth} onChange={(e) => {
+                                        updateKeyObject('object.lineWidth', e.target?.value)
                                     }} type="text"></input>
                                 </div>
                             </div>
@@ -354,6 +360,9 @@ const EditorSpinComponent = (props) => {
                                     <th>Name</th>
                                     <th>Image Prize</th>
                                     <th>Color</th>
+                                    <th>Stroke Color</th>
+                                    <th>Text Color</th>
+                                    <th>Text Font Size</th>
                                     {/* <th>Allow prize</th>
                                     <th>Percent</th>
                                     <th>Quantity</th> */}
@@ -381,6 +390,21 @@ const EditorSpinComponent = (props) => {
                                                 <td>
                                                     <input className="inputstyle" value={item?.color} onChange={(e) => {
                                                         updatePrizeObject(index, "color", e.target?.value)
+                                                    }} type="text"></input>
+                                                </td>
+                                                <td>
+                                                    <input className="inputstyle" value={item?.strokeStyle} onChange={(e) => {
+                                                        updatePrizeObject(index, "strokeStyle", e.target?.value)
+                                                    }} type="text"></input>
+                                                </td>
+                                                <td>
+                                                    <input className="inputstyle" value={item?.textFillStyle} onChange={(e) => {
+                                                        updatePrizeObject(index, "textFillStyle", e.target?.value)
+                                                    }} type="text"></input>
+                                                </td>
+                                                <td>
+                                                    <input className="inputstyle" value={item?.textFontSize} onChange={(e) => {
+                                                        updatePrizeObject(index, "textFontSize", e.target?.value)
                                                     }} type="text"></input>
                                                 </td>
                                                 {/* <td>
