@@ -243,3 +243,12 @@ strong {
 .react-datepicker-popper {
     z-index: 1046 !important;
 }
+
+.modal-content {
+    display: block !important;
+}
+
+.modal-dialog-scrollable .modal-content {
+    max-height: 100%;
+    overflow: scroll !important;
+}
