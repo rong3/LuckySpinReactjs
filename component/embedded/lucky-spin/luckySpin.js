@@ -289,6 +289,7 @@ const LuckySpinComponent = (props) => {
                     applause_audio.pause();
                     applause_audio.currentTime = 0;
                     wheel_audio.play();
+                    wheelInstance.rotationAngle = 0;
                     wheelInstance.startAnimation();
                 }
                 else {
@@ -338,7 +339,7 @@ const LuckySpinComponent = (props) => {
     function resetWheel() {
         wheelInstance.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
         wheelInstance.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
-        wheelInstance.draw();                // Call draw to render changes to the wheel.
+        // wheelInstance.draw();                // Call draw to render changes to the wheel.
         setWheelSpinning(false);        // Reset to false to power buttons and spin can be clicked again.
     }
 
