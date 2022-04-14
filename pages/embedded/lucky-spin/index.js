@@ -16,9 +16,13 @@ export default function LuckySpin(props) {
             return <meta name="viewport"
                 content="width=device-width; initial-scale=0.65; user-scalable=no" />
         }
+        if (size > 768 && size <1300) {
+            return <meta name="viewport"
+                content="width=device-width; initial-scale=0.85; user-scalable=no" />
+        }
         else {
             return <meta name="viewport"
-                content="width=device-width; initial-scale=1.3; user-scalable=no" />
+                content="width=device-width; initial-scale=1; user-scalable=no" />
         }
     }
 
@@ -27,16 +31,11 @@ export default function LuckySpin(props) {
         window.resizedFinished = setTimeout(function () {
             const changeSize = window.innerWidth;
             if (sizeBrowserCache.current !== changeSize) {
+                setCurrentSize(changeSize)
                 sizeBrowserCache.current = window.innerWidth
             }
         }, 0);
     };
-
-    useEffect(() => {
-        if (sizeBrowserCache.current) {
-            setCurrentSize(sizeBrowserCache.current)
-        }
-    }, [sizeBrowserCache.current])
 
     useEffect(() => {
         async function fetchMyAPI() {
