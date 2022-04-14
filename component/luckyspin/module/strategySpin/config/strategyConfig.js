@@ -3,6 +3,10 @@ export const strategyConfig = {
         quantity: {
             label: "Số lượt quay",
             value: 0
+        },
+        disabled: {
+            label: "Vô hiệu hoá",
+            value: false
         }
     }
 }

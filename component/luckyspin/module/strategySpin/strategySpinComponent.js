@@ -12,6 +12,7 @@ import withPermission from "../../../../shared/packages/hocs/permission/permissi
 import DataGridControl from '../../../../shared/packages/control/grid/datagrid';
 import { loadDataTable } from "../../../../redux/actions/strategyActions"
 import { loadDataTableGroupAllocation } from "../../../../redux/actions/groupAllocationActions"
+import { loadDataTableMasterObj } from "../../../../redux/actions/masterObjectAllocationActions"
 import { loadDataTableWheel } from "../../../../redux/actions/wheelInstanceAction"
 import { loadDataTableThemeSpin } from "../../../../redux/actions/themeAction"
 import Modal from "../../../../shared/packages/control/modal/index";
@@ -58,12 +59,19 @@ function StrategySpinComponent(props) {
     const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
     const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
     const { themeInstanceList } = useSelector((state) => state.themeInstance);
+    const { masterObjectAllocationList } = useSelector((state) => state.masterObjectAllocation);
 
     const { classes } = props;
     const { t } = useTranslation('common');
 
     useEffect(() => {
         dispatch(loadDataTable());
+        dispatch(loadDataTableMasterObj({
+            header: {
+                pageNumber: 1,
+                pageSize: 999
+            }
+        }))
         dispatch(loadDataTableGroupAllocation({
             header: {
                 pageNumber: 1,
@@ -97,6 +105,8 @@ function StrategySpinComponent(props) {
             return params.row?.wheelInstance?.name;
         if (params.field === 'themeInstanceNamne')
             return params.row?.themeInstance?.name;
+        if (params.field === 'masterAllocationName')
+            return params.row?.masterObjectAllocation?.objectName;
         else
             return ""
     }
@@ -117,6 +127,14 @@ function StrategySpinComponent(props) {
         {
             field: 'groupAllocationName',
             headerName: 'Nhóm phân bổ',
+            headerClassName: 'headerColumn',
+            flex: 1,
+            valueGetter: getAttribute,
+            editable: false,
+        },
+        {
+            field: 'masterAllocationName',
+            headerName: 'Loại phân bổ',
             headerClassName: 'headerColumn',
             flex: 1,
             valueGetter: getAttribute,
@@ -395,7 +413,7 @@ function StrategySpinComponent(props) {
                                     showOverlay={true}
                                     onClose={() => resetModal()}
                                     title="Chiến lược"
-                                    size="md"
+                                    size="xl"
                                     centered
                                 >
                                     <Modal.Body>
@@ -421,6 +439,19 @@ function StrategySpinComponent(props) {
                                                                 value={modalCustom.data?.groupAllocationId}
                                                                 isPortal
                                                                 options={groupAllocationsList ?? []}
+                                                            />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Loại phân bổ</span>
+                                                            <SelectBox id="selectbox"
+                                                                optionLabel="objectName"
+                                                                optionValue="id"
+                                                                onChange={(data) => {
+                                                                    overwriteDataModal('masterObjectAllocationId', data)
+                                                                }}
+                                                                value={modalCustom.data?.masterObjectAllocationId}
+                                                                isPortal
+                                                                options={masterObjectAllocationList ?? []}
                                                             />
                                                         </div>
                                                         <div className="col-md-12">

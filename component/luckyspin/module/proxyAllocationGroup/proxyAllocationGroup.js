@@ -13,7 +13,6 @@ import ListBoxComponent from "../../../../shared/packages/control/listBox/listBo
 import SelectBox from "../../../../shared/packages/control/selectBox/selectBox"
 import { InputControl } from "../../../../shared/packages/control/input/inputControl"
 import { loadDataTableGroupAllocation } from "../../../../redux/actions/groupAllocationActions"
-import { loadDataTableMasterObj } from "../../../../redux/actions/masterObjectAllocationActions"
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import GroupAllocationComponent from "./subComponent/groupAllocation"
 import 'react-tabs/style/react-tabs.css';
@@ -33,12 +32,6 @@ function ProxyAllocationComponent(props) {
     const [selectedGroup, setSelectedGroup] = useState(null);
 
     useEffect(() => {
-        dispatch(loadDataTableMasterObj({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
         dispatch(loadDataTableGroupAllocation({
             header: {
                 pageNumber: 1,

@@ -60,6 +60,24 @@ function GroupAllocationAttributeModal(props) {
             <Modal.Body>
                 <div class="accordion" id="myAccordion">
                     <div className='row'>
+                    <div className='col-md-3'>
+                            <button className='btn btn-danger' id="btnExpand" onClick={(e) => {
+                                var listCollapse = document.getElementsByClassName("accordion-button") ?? [];
+                                for (var i = 0; i < listCollapse?.length; i++) {
+                                    listCollapse[i]?.click()
+                                }
+                                var btnEx = $("#btnExpand")[0];
+                                if (btnEx && btnEx.innerText === "Expand")
+                                    btnEx.innerText = "Collapse";
+                                else
+                                    btnEx.innerText = "Expand";
+                            }}>
+                                {`Expand`}
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div className='row'>
                         {
                             groupAllocationEditModel?.map((item, index) => {
                                 return (

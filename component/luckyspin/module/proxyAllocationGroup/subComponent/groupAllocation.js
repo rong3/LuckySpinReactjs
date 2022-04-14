@@ -30,7 +30,6 @@ function GroupAllocationComponent(props) {
     const { classes } = props;
     const { t } = useTranslation('common');
     const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
-    const { masterObjectAllocationList } = useSelector((state) => state.masterObjectAllocation);
     const [selectedGroupAllocation, setSelectedGroupAllocation] = useState(null);
 
     useEffect(() => {
@@ -265,19 +264,6 @@ function GroupAllocationComponent(props) {
                                                         const value = e.target.value ?? '';
                                                         overwriteDataGroupAllocationModal('name', value)
                                                     }} defaultValue={modalCustomGroupAllocation.data?.name} />
-                                                </div>
-                                                <div className="col-md-12">
-                                                    <span>Loại phân bổ</span>
-                                                    <SelectBox id="selectbox"
-                                                        optionLabel="objectName"
-                                                        optionValue="id"
-                                                        onChange={(data) => {
-                                                            overwriteDataGroupAllocationModal('masterObjectAllocationId', data)
-                                                        }}
-                                                        value={modalCustomGroupAllocation.data?.masterObjectAllocationId}
-                                                        isPortal
-                                                        options={masterObjectAllocationList ?? []}
-                                                    />
                                                 </div>
                                             </div>
                                         </>

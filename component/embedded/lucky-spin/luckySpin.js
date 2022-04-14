@@ -97,7 +97,7 @@ const LuckySpinComponent = (props) => {
             const wheel_instance = import_config?.wheel_config?.spin_config;
             initPrizes(wheel_instance);
             //auth Check
-            const typeAuth = import_config?.allocation?.object?.objectKey;
+            const typeAuth = import_config?.allocation?.type;
             authRequire.type = typeAuth
             if (['in-system', 'out-system'].includes(typeAuth)) {
                 authRequire.enabled = true;
@@ -437,7 +437,7 @@ const LuckySpinComponent = (props) => {
             else {
                 swal(
                     "Lỗi",
-                    "Mã không hợp lệ",
+                    res?.data?.message ?? "Mã không hợp lệ",
                     "error"
                 );
             }

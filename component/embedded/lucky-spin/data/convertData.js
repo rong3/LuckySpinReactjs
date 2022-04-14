@@ -19,8 +19,8 @@ export const transformWheelData = (dataOriginal) => {
         },
         allocation: {
             id: dataOriginal?.groupAllocationId,
-            object: dataOriginal?.groupAllocation?.masterObjectAllocation,
-            type: dataOriginal?.groupAllocation?.name,
+            object: dataOriginal?.masterObjectAllocation,
+            type: dataOriginal?.masterObjectAllocation?.objectKey,
             data: dataOriginal?.groupAllocation?.masterAllocationSelecteds
         },
         wheel_config: {
