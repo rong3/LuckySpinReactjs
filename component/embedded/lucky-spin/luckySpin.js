@@ -255,6 +255,7 @@ const LuckySpinComponent = (props) => {
         if (master_config_data.canvas?.pointerExtenal?.isUse) {
             // Set onload of the image to anonymous function to draw on the canvas once the image has loaded.
             handImage.onload = function () {
+                handImage.src = instance.url;
                 drawPointerCanvas(canvas, instance)
             };
             // Set source of the image. Once loaded the onload callback above will be triggered.
@@ -510,7 +511,6 @@ const LuckySpinComponent = (props) => {
                                             </table>
                                         </div>
                                         <div className="row" style={{ width: '100vw' }}>
-
                                             {
                                                 (props?.id === null || authRequire.type === "non-system") &&
                                                 <div className="col-md-12" align="center">
