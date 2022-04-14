@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 
 export default function LuckySpin(props) {
     const sizeBrowserCache = useRef(typeof window !== "undefined" && window.innerWidth)
+    const [currentSize, setCurrentSize] = useState(sizeBrowserCache.current);
     const router = useRouter()
     const [data, setData] = useState(null);
     const detectMetaViewPort = (size) => {
@@ -30,6 +31,12 @@ export default function LuckySpin(props) {
             }
         }, 0);
     };
+
+    useEffect(() => {
+        if (sizeBrowserCache.current) {
+            setCurrentSize(sizeBrowserCache.current)
+        }
+    }, [sizeBrowserCache.current])
 
     useEffect(() => {
         async function fetchMyAPI() {
@@ -56,7 +63,7 @@ export default function LuckySpin(props) {
         <React.Fragment>
             <head>
                 {
-                    detectMetaViewPort(sizeBrowserCache.current)
+                    detectMetaViewPort(currentSize)
                 }
                 <title>HDBank Lucky Spin</title>
                 <link rel="stylesheet" type="text/css" href="/asset/images/luckyspin/theme/HDbank/css/hdbank_wheel.min.css" />
