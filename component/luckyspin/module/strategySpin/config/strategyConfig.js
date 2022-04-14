@@ -21,7 +21,7 @@ export const prizeConfig = {
         value: true
     },
     "percent": {
-        label: "Tỷ lệ trúng",
+        label: "Tỷ lệ trúng(%)",
         value: 0
     },
     "quantity": {

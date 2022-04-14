@@ -47,7 +47,6 @@ function GroupAllocationAttributeModal(props) {
     }
 
     return (
-
         <Modal
             isOpen={modalAllocationAttribute.isOpen}
             modalName="role-modal"
@@ -60,19 +59,14 @@ function GroupAllocationAttributeModal(props) {
             <Modal.Body>
                 <div class="accordion" id="myAccordion">
                     <div className='row'>
-                    <div className='col-md-3'>
-                            <button className='btn btn-danger' id="btnExpand" onClick={(e) => {
+                        <div className='col-md-3'>
+                            <button className='btn btn-light' id="btnExpand" onClick={(e) => {
                                 var listCollapse = document.getElementsByClassName("accordion-button") ?? [];
                                 for (var i = 0; i < listCollapse?.length; i++) {
                                     listCollapse[i]?.click()
                                 }
-                                var btnEx = $("#btnExpand")[0];
-                                if (btnEx && btnEx.innerText === "Expand")
-                                    btnEx.innerText = "Collapse";
-                                else
-                                    btnEx.innerText = "Expand";
                             }}>
-                                {`Expand`}
+                                {`Expand/Collapse`}
                             </button>
                         </div>
                     </div>
