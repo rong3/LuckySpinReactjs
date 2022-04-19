@@ -84,7 +84,7 @@ const ConfigSpinComponent = (props) => {
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <div className="title_box"><b>Chọn nhóm phân bổ</b></div>
+                        <div className="title_box"><b>Chọn tập khách hàng</b></div>
                         <div className="boxform">
                             <Select
                                 key={'currency2'}
@@ -150,7 +150,7 @@ const ConfigSpinComponent = (props) => {
                 </div>
                 <div className="row">
                     <div className="col-md-6">
-                        <div className="title_box"><b>Chọn kiểu vòng quay</b></div>
+                        <div className="title_box"><b>Chọn giao diện vòng quay</b></div>
                         <div className="boxform">
                             <Select
                                 key={'currency2'}

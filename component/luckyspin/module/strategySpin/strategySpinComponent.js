@@ -15,13 +15,14 @@ import { loadDataTableGroupAllocation } from "../../../../redux/actions/groupAll
 import { loadDataTableMasterObj } from "../../../../redux/actions/masterObjectAllocationActions"
 import { loadDataTableWheel } from "../../../../redux/actions/wheelInstanceAction"
 import { loadDataTableThemeSpin } from "../../../../redux/actions/themeAction"
+import { loadDataTableGroupChannelPrize } from "../../../../redux/actions/groupChannelPrizeAction"
 import Modal from "../../../../shared/packages/control/modal/index";
 import SelectBox from "../../../../shared/packages/control/selectBox/selectBox"
 import DateTimeInput from "../../../../shared/packages/control/input/datetime"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../services/strategySpin.service"
 import { getGroupAllocationById } from "../../../../services/groupAllocation.service"
 import { getProxyAllocationStrategy } from "../../../../services/proxyAllocationStrategy.service"
-import { getChannelPrizeByWheelId } from "../../../../services/channelPrize.service"
+import { getChannelPrizeByGroupChannelId } from "../../../../services/channelPrize.service"
 import { getProxyPrizeAdmin } from "../../../../services/proxyPrize.service"
 import showConfirm from "../../../../shared/packages/control/dialog/confirmation"
 import { strategyConfig, prizeConfig } from "./config/strategyConfig"
@@ -60,6 +61,7 @@ function StrategySpinComponent(props) {
     const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
     const { themeInstanceList } = useSelector((state) => state.themeInstance);
     const { masterObjectAllocationList } = useSelector((state) => state.masterObjectAllocation);
+    const { groupChannelPrizeList } = useSelector((state) => state.groupChannelPrize);
 
     const { classes } = props;
     const { t } = useTranslation('common');
@@ -90,13 +92,13 @@ function StrategySpinComponent(props) {
                 pageSize: 999
             }
         }))
+        dispatch(loadDataTableGroupChannelPrize({
+            header: {
+                pageNumber: 1,
+                pageSize: 999
+            }
+        }))
     }, [])
-
-
-
-    // useEffect(() => {
-    //     console.log({ groupAllocationEditModel });
-    // }, [groupAllocationEditModel])
 
     function getAttribute(params) {
         if (params.field === 'groupAllocationName')
@@ -107,6 +109,8 @@ function StrategySpinComponent(props) {
             return params.row?.themeInstance?.name;
         if (params.field === 'masterAllocationName')
             return params.row?.masterObjectAllocation?.objectName;
+        if (params.field === 'groupChannelPrize')
+            return params.row?.groupChannelPrize?.name;
         else
             return ""
     }
@@ -126,8 +130,8 @@ function StrategySpinComponent(props) {
             }
         },
         {
-            field: 'groupAllocationName',
-            headerName: 'Nhóm phân bổ',
+            field: 'masterAllocationName',
+            headerName: 'Loại chiến lược',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
@@ -135,8 +139,17 @@ function StrategySpinComponent(props) {
             editable: false,
         },
         {
-            field: 'masterAllocationName',
-            headerName: 'Loại phân bổ',
+            field: 'groupAllocationName',
+            headerName: 'Tập khách hàng',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            valueGetter: getAttribute,
+            editable: false,
+        },
+        {
+            field: 'groupChannelPrize',
+            headerName: 'Tập giải thưởng',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
@@ -145,7 +158,7 @@ function StrategySpinComponent(props) {
         },
         {
             field: 'wheelInstanceName',
-            headerName: 'Loại vòng quay',
+            headerName: 'Giao diện vòng quay',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
@@ -154,7 +167,7 @@ function StrategySpinComponent(props) {
         },
         {
             field: 'themeInstanceNamne',
-            headerName: 'Theme',
+            headerName: 'Backdrop vòng quay',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
@@ -165,7 +178,15 @@ function StrategySpinComponent(props) {
             field: 'disabled',
             headerName: 'Vô hiệu lực',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
+            flex: 1,
+            editable: false,
+        },
+        {
+            field: 'freeMode',
+            headerName: 'Chế độ tự do',
+            headerClassName: 'headerColumn',
+            minWidth: 100,
             flex: 1,
             editable: false,
         },
@@ -222,8 +243,8 @@ function StrategySpinComponent(props) {
 
     const checkShowPrizeAllocation = (data) => {
         return {
-            wheelInstanceId: data?.wheelInstanceId,
-            show: data?.wheelInstanceId !== null
+            groupChannelPrizeId: data?.groupChannelPrizeId,
+            show: data?.groupChannelPrizeId !== null
         };
     }
 
@@ -287,9 +308,9 @@ function StrategySpinComponent(props) {
     }
 
     const openPrizeLayer = (params) => {
-        const wheelId = params?.wheelInstanceId;
-        if (wheelId) {
-            getChannelPrizeByWheelId(wheelId).then((res) => {
+        const groupChannelPrizeId = params?.groupChannelPrizeId;
+        if (groupChannelPrizeId) {
+            getChannelPrizeByGroupChannelId(groupChannelPrizeId).then((res) => {
                 const strategyID = params?.id;
                 const channelIds = res?.data?.data?.map(x => x.id) ?? [];
                 //from list master selected, we put on proxy to get attributes data
@@ -438,20 +459,7 @@ function StrategySpinComponent(props) {
                                                             }} defaultValue={modalCustom.data?.name} />
                                                         </div>
                                                         <div className="col-md-12">
-                                                            <span>Nhóm phân bổ</span>
-                                                            <SelectBox id="selectbox"
-                                                                optionLabel="name"
-                                                                optionValue="id"
-                                                                onChange={(data) => {
-                                                                    overwriteDataModal('groupAllocationId', data)
-                                                                }}
-                                                                value={modalCustom.data?.groupAllocationId}
-                                                                isPortal
-                                                                options={groupAllocationsList ?? []}
-                                                            />
-                                                        </div>
-                                                        <div className="col-md-12">
-                                                            <span>Loại phân bổ</span>
+                                                            <span>Loại chiến lược</span>
                                                             <SelectBox id="selectbox"
                                                                 optionLabel="objectName"
                                                                 optionValue="id"
@@ -464,7 +472,33 @@ function StrategySpinComponent(props) {
                                                             />
                                                         </div>
                                                         <div className="col-md-12">
-                                                            <span>Loại vòng quay</span>
+                                                            <span>Nhóm khách hàng</span>
+                                                            <SelectBox id="selectbox"
+                                                                optionLabel="name"
+                                                                optionValue="id"
+                                                                onChange={(data) => {
+                                                                    overwriteDataModal('groupAllocationId', data)
+                                                                }}
+                                                                value={modalCustom.data?.groupAllocationId}
+                                                                isPortal
+                                                                options={groupAllocationsList ?? []}
+                                                            />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Nhóm giải thưởng</span>
+                                                            <SelectBox id="selectbox"
+                                                                optionLabel="name"
+                                                                optionValue="id"
+                                                                onChange={(data) => {
+                                                                    overwriteDataModal('groupChannelPrizeId', data)
+                                                                }}
+                                                                value={modalCustom.data?.groupChannelPrizeId}
+                                                                isPortal
+                                                                options={groupChannelPrizeList ?? []}
+                                                            />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Giao diện vòng quay</span>
                                                             <SelectBox id="selectbox"
                                                                 optionLabel="name"
                                                                 optionValue="value"
@@ -477,7 +511,7 @@ function StrategySpinComponent(props) {
                                                             />
                                                         </div>
                                                         <div className="col-md-12">
-                                                            <span>Theme vòng quay</span>
+                                                            <span>Backdrop vòng quay</span>
                                                             <SelectBox id="selectbox"
                                                                 optionLabel="name"
                                                                 optionValue="value"
@@ -506,7 +540,20 @@ function StrategySpinComponent(props) {
                                                                     overwriteDataModal('endDate', data)
                                                                 }} />
                                                         </div>
-                                                        <div className="col-md-12">
+                                                        <div className="col-md-6">
+                                                            <span>Chế độ tự do</span>
+                                                            &nbsp;
+                                                            <input class="form-check-input"
+                                                                type="checkbox"
+                                                                id="disabeldWheel"
+                                                                name="disabeldWheel"
+                                                                onChange={(e) => {
+                                                                    const checked = e.target?.checked;
+                                                                    overwriteDataModal('freeMode', checked);
+                                                                }}
+                                                                checked={modalCustom?.data?.freeMode} />
+                                                        </div>
+                                                        <div className="col-md-6">
                                                             <span>Vô hiệu vòng quay</span>
                                                             &nbsp;
                                                             <input class="form-check-input"
@@ -519,7 +566,6 @@ function StrategySpinComponent(props) {
                                                                 }}
                                                                 checked={modalCustom?.data?.disabled} />
                                                         </div>
-
                                                     </div>
                                                 </>
                                                 :

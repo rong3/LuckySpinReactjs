@@ -707,7 +707,6 @@ export const category_wheel = [
         id: 0,
         name: 'Vòng quay kiểu 1',
         spin_config: {
-            "random_prize": false,
             "imageRender": false,
             "drawText": true,
             "wheel_bg": "/asset/images/luckyspin/theme/HDbank/wheel/circle_2.gif",

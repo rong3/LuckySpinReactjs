@@ -100,10 +100,6 @@ export const wheelConfig = {
             label: "Màu chữ",
             value: 'red'
         },
-        random_prize: {
-            label: "Giải thưởng random",
-            value: true
-        },
         imageRender: {
             label: "Giải thưởng là ảnh?",
             value: false

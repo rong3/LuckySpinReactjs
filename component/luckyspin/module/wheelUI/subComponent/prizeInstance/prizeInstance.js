@@ -6,13 +6,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { useToasts } from "react-toast-notifications";
-import { loadDataTableWheel } from "../../../../../../redux/actions/wheelInstanceAction"
+import { loadDataTableGroupChannelPrize } from "../../../../../../redux/actions/groupChannelPrizeAction"
 import DataGridControl from '../../../../../../shared/packages/control/grid/datagrid';
 import Modal from "../../../../../../shared/packages/control/modal/index";
 import { createChannelPrize, updateChannelPrize, removeChannelPrize } from "../../../../../../services/channelPrize.service"
+import { createGroupChannelPrize, updateGroupChannelPrize, removeGroupChannelPrize } from "../../../../../../services/groupChannelPrize.service"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
-import UIBuilder from "../../../../../../shared/packages/control/uiBuilder/uiBuilder"
-import { wheelConfig } from "../../config/wheelUIConfig"
 import ListBoxComponent from "../../../../../../shared/packages/control/listBox/listBox"
 
 function PrizeInstanceComponent(props) {
@@ -23,16 +22,31 @@ function PrizeInstanceComponent(props) {
         data: null,
         type: null
     })
+
+    const [modalCustomGroupPrize, setModalCustomGroupPrize] = useState({
+        isOpen: false,
+        data: null,
+        type: null
+    })
     const { t } = useTranslation('common');
-    const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
-    const [selectedWheelInstance, setSelectedWheelInstance] = useState(null);
+    const { groupChannelPrizeList } = useSelector((state) => state.groupChannelPrize);
+    const [selectedGroupPrize, setSelectedGroupPrize] = useState(null);
 
     useEffect(() => {
-        const find = wheelInstanceList?.find(x => x.id === selectedWheelInstance?.id)
+        dispatch(loadDataTableGroupChannelPrize({
+            header: {
+                pageNumber: 1,
+                pageSize: 999
+            }
+        }))
+    }, [])
+
+    useEffect(() => {
+        const find = groupChannelPrizeList?.find(x => x.id === selectedGroupPrize?.id)
         if (find) {
-            setSelectedWheelInstance({ ...find })
+            setSelectedGroupPrize({ ...find })
         }
-    }, [wheelInstanceList])
+    }, [groupChannelPrizeList])
 
     const columns = [
         {
@@ -122,7 +136,7 @@ function PrizeInstanceComponent(props) {
 
     const updatePrizeCommand = (data) => {
         updateChannelPrize(data).then((res) => {
-            dispatch(loadDataTableWheel());
+            dispatch(loadDataTableGroupChannelPrize());
             addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
@@ -131,7 +145,7 @@ function PrizeInstanceComponent(props) {
 
     const createPrizeCommand = (data) => {
         createChannelPrize(data).then((res) => {
-            dispatch(loadDataTableWheel());
+            dispatch(loadDataTableGroupChannelPrize());
             addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
@@ -140,7 +154,7 @@ function PrizeInstanceComponent(props) {
 
     const removePrizeCommand = (data) => {
         removeChannelPrize(data).then((res) => {
-            dispatch(loadDataTableWheel());
+            dispatch(loadDataTableGroupChannelPrize());
             addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
@@ -152,21 +166,156 @@ function PrizeInstanceComponent(props) {
         setModalCustom({ ...modalCustom });
     }
 
+    //quan ly nhom KH
+
+    const createGroupPrizeCommand = (data) => {
+        createGroupChannelPrize(data).then((res) => {
+            dispatch(loadDataTableGroupChannelPrize({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const updateGroupPrizeCommand = (data) => {
+        updateGroupChannelPrize(data).then((res) => {
+            dispatch(loadDataTableGroupChannelPrize({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const overwriteDataGroupPrizeModal = (prefix, value) => {
+        modalCustomGroupPrize.data[prefix] = value;
+        setModalCustomGroupPrize({ ...modalCustomGroupPrize });
+    }
+    const resetModalGroupPrize = () => {
+        setModalCustomGroupPrize({ ...modalCustomGroupPrize, isOpen: false, data: null, type: null })
+    }
+
+    const removeGroupPrizeCommand = (data) => {
+        removeGroupChannelPrize(data).then((res) => {
+            if (res?.data?.succeeded) {
+                dispatch(loadDataTableGroupChannelPrize({
+                    header: {
+                        pageNumber: 1,
+                        pageSize: 999
+                    }
+                }))
+                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            }
+            else {
+                addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+            }
+        }).catch((err) => {
+            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const sendUpdateGroupPrizeCommand = (data) => {
+        setModalCustomGroupPrize({ ...modalCustomGroupPrize, type: 'edit', data: data, isOpen: true })
+    }
+
+    const sendRemoveGroupPrizeCommand = async (data) => {
+        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${data?.name} ?`, "Xoá", "Trở về");
+        if (confirm && data?.id) {
+            removeGroupPrizeCommand(data?.id);
+        }
+    }
+
 
     return (
         <div className='content'>
             <div className="row">
                 <div className='col-md-2'>
                     <ListBoxComponent
-                        title={"Danh sách vòng quay"}
+                        title={"Nhóm giải thưởng"}
                         onClickItem={(e) => {
-                            setSelectedWheelInstance(e);
+                            setSelectedGroupPrize(e);
                         }}
-                        options={wheelInstanceList?.map(x => ({ ...x, label: x?.name, value: x?.id }))} />
+                        onAddNew={() => {
+                            setModalCustomGroupPrize({ ...modalCustomGroupPrize, type: 'new', data: {}, isOpen: true })
+                        }}
+                        onUpdate={(data) => sendUpdateGroupPrizeCommand(data)}
+                        onDelete={async (data) => await sendRemoveGroupPrizeCommand(data)}
+                        options={groupChannelPrizeList?.map(x => ({ ...x, label: x?.name, value: x?.id }))} />
+                    {
+                        <Modal
+                            isOpen={modalCustomGroupPrize.isOpen}
+                            modalName="role-modal"
+                            showOverlay={true}
+                            onClose={() => resetModalGroupPrize()}
+                            title="Nhóm khách hàng"
+                            size="md"
+                            centered
+                        >
+                            <Modal.Body>
+                                {
+                                    ['edit', 'new'].includes(modalCustomGroupPrize.type) ?
+                                        <>
+                                            <div className="row">
+                                                <div className="col-md-12">
+                                                    <span>Tên nhóm khách hàng</span>
+                                                    <InputControl type="text" id="name" onChange={(e) => {
+                                                        const value = e.target.value ?? '';
+                                                        overwriteDataGroupPrizeModal('name', value)
+                                                    }} defaultValue={modalCustomGroupPrize.data?.name} />
+                                                </div>
+                                                <div className="col-md-12">
+                                                    <span>Mô tả</span>
+                                                    <InputControl type="text" id="name" onChange={(e) => {
+                                                        const value = e.target.value ?? '';
+                                                        overwriteDataGroupPrizeModal('desc', value)
+                                                    }} defaultValue={modalCustomGroupPrize.data?.desc} />
+                                                </div>
+                                            </div>
+                                        </>
+                                        :
+                                        <>
+                                            data
+                                        </>
+                                }
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <button className="btn btn-outline-danger mr-25" onClick={() => {
+                                    resetModalGroupPrize()
+                                }}>Đóng</button>
 
+                                <button className="btn btn-outline-primary mr-25" onClick={() => {
+                                    if (modalCustomGroupPrize.type === 'new') {
+                                        createGroupPrizeCommand(modalCustomGroupPrize.data)
+                                    }
+                                    if (modalCustomGroupPrize.type === 'edit') {
+                                        updateGroupPrizeCommand(modalCustomGroupPrize.data)
+                                    }
+                                    resetModalGroupPrize();
+                                }}>
+                                    {(() => {
+                                        if (modalCustomGroupPrize.type === 'new') {
+                                            return "Tạo mới"
+                                        }
+                                        if (modalCustomGroupPrize.type === 'edit') {
+                                            return "Cập nhật"
+                                        }
+                                    })()}
+                                </button>
+                            </Modal.Footer>
+                        </Modal>
+                    }
                 </div>
                 {
-                    selectedWheelInstance &&
+                    selectedGroupPrize &&
                     <div className="col-md-10">
                         <div className="row">
                             <i className='fa fa-list'>
@@ -178,7 +327,7 @@ function PrizeInstanceComponent(props) {
                                 <i className='fa fa-plus'
                                     title='Thêm mới'
                                     onClick={(e) => {
-                                        setModalCustom({ ...modalCustom, type: 'new', data: { wheelInstanceId: selectedWheelInstance?.id }, isOpen: true })
+                                        setModalCustom({ ...modalCustom, type: 'new', data: { groupChannelPrizeId: selectedGroupPrize?.id }, isOpen: true })
                                     }}>
                                     Thêm mới
                                 </i>
@@ -187,9 +336,9 @@ function PrizeInstanceComponent(props) {
                         <div className="row">
                             <div className="col-md-12">
                                 <DataGridControl
-                                    rows={selectedWheelInstance?.channelPrizes}
+                                    rows={selectedGroupPrize?.channelPrizes}
                                     columns={columns}
-                                    count={selectedWheelInstance?.channelPrizes?.length}
+                                    count={selectedGroupPrize?.channelPrizes?.length}
                                     disableSelectionOnClick
                                 />
                                 <Modal
@@ -197,7 +346,7 @@ function PrizeInstanceComponent(props) {
                                     modalName="role-modal"
                                     showOverlay={true}
                                     onClose={() => resetModal()}
-                                    title="Nhóm phân bổ"
+                                    title="Tập khách hàng"
                                     size="md"
                                     centered
                                 >

@@ -26,7 +26,7 @@ export const removeChannelPrize = (id) => {
     );
 };
 
-export const getChannelPrizeByWheelId=(id)=>{
+export const getChannelPrizeByGroupChannelId=(id)=>{
     return request(
         'GET',
         `ChannelPrize/${id}`,

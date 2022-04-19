@@ -12,6 +12,7 @@ import wheelInstanceReducer from "./wheelInstanceReducer"
 import themeInstanceReducer from "./themeInstanceReducer"
 import groupAllocationReducer from "./groupAllocationReducer"
 import masterObjectAllocationReducer from "./masterObjectAllocationReducer"
+import groupChannelPrizeReducer from "./groupChannelPrizeReducer"
 
 export const rootReducer = combineReducers({
     app: appReducer,
@@ -21,5 +22,6 @@ export const rootReducer = combineReducers({
     wheelInstance: wheelInstanceReducer,
     themeInstance: themeInstanceReducer,
     groupAllocation: groupAllocationReducer,
-    masterObjectAllocation: masterObjectAllocationReducer
+    masterObjectAllocation: masterObjectAllocationReducer,
+    groupChannelPrize: groupChannelPrizeReducer
 })

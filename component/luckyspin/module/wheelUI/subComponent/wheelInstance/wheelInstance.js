@@ -51,15 +51,6 @@ function WheelInstanceComponent(props) {
             editable: false,
         },
         {
-            field: 'quantityPrize',
-            headerName: 'Số giải thưởng hiện có',
-            headerClassName: 'headerColumn',
-            minWidth: 200,
-            flex: 1,
-            editable: false,
-            valueGetter: getAttribute,
-        },
-        {
             field: 'created',
             headerName: 'Ngày tạo',
             headerClassName: 'headerColumn',
@@ -132,13 +123,6 @@ function WheelInstanceComponent(props) {
     //update strategy command
     const resetModal = () => {
         setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
-    }
-
-    function getAttribute(params) {
-        if (params.field === 'quantityPrize')
-            return params.row?.channelPrizes?.length ?? 0;
-        else
-            return ""
     }
 
     const overwriteDataModal = (prefix, value) => {
@@ -215,7 +199,7 @@ function WheelInstanceComponent(props) {
                                 modalName="role-modal"
                                 showOverlay={true}
                                 onClose={() => resetModal()}
-                                title="Đại diện vòng quay"
+                                title="Giao diện vòng quay"
                                 size="xl"
                                 centered
                             >
@@ -225,7 +209,7 @@ function WheelInstanceComponent(props) {
                                             <>
                                                 <div className="row">
                                                     <div className="col-md-12">
-                                                        <span>Tên vòng quay</span>
+                                                        <span>Tên giao diện</span>
                                                         <InputControl type="text" id="name" onChange={(e) => {
                                                             const value = e.target.value ?? '';
                                                             overwriteDataModal('name', value)

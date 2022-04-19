@@ -37,25 +37,25 @@ export const masterConfig = {
         // },
         {
             icon: <IconCustomize code={ICON_CODE.DASHBOARD} />,
-            title: "Lucky Spin",
+            title: "Quản lý vòng quay",
             items: [
                 {
                     icon: <IconCustomize code={ICON_CODE.LOGIN} />,
-                    title: "Quản lý chiến lược",
+                    title: "Chiến lược",
                     menuLevel: 2,
                     auth: true,
                     to: STRATEGY_SPIN
                 },
                 {
                     icon: <IconCustomize code={ICON_CODE.LOGIN} />,
-                    title: "Quản lý nhóm phân bổ",
+                    title: "Tập khách hàng",
                     menuLevel: 2,
                     auth: true,
                     to: PROXY_ALLOCATION_GROUP
                 },
                 {
                     icon: <IconCustomize code={ICON_CODE.LOGIN} />,
-                    title: "Quản lý giao diện vòng quay",
+                    title: "Giao diện & giải thưởng",
                     menuLevel: 2,
                     auth: true,
                     to: WHEEL_SPIN

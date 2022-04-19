@@ -287,16 +287,6 @@ const EditorSpinComponent = (props) => {
                             </div>
                             <hr />
                             <div className="row">
-                                {/* <div className="col-md-4">
-                                    <span>Random giải thưởng</span>
-                                    <div class="form-check">
-                                        <input type="checkbox" className="checkbox_spin" checked={object_copy?.random_prize}
-                                            onClick={(e) => {
-                                                updateKeyObject('random_prize', e.target.checked)
-                                            }}
-                                        />
-                                    </div>
-                                </div> */}
                                 <div className="col-md-4">
                                     <span>Ảnh giải thưởng</span>
                                     <div class="form-check">

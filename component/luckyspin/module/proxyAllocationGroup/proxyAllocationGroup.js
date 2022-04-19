@@ -49,7 +49,7 @@ function ProxyAllocationComponent(props) {
                         <div className='wrapper-tab'>
                             <Tabs>
                                 <TabList>
-                                    <Tab>Quản lý Nhóm phân bổ</Tab>
+                                    <Tab>Quản lý tập khách hàng</Tab>
                                 </TabList>
                                 <TabPanel>
                                     <GroupAllocationComponent selectedGroup={selectedGroup}

@@ -27,7 +27,6 @@ export const transformWheelData = (dataOriginal) => {
             id: wheelInstance?.id,
             name: wheelInstance?.name,
             spin_config: {
-                random_prize: wheelInstance?.configJson?.random_prize?.value,
                 imageRender: wheelInstance?.configJson?.imageRender?.value,
                 drawText: wheelInstance?.configJson?.drawText?.value,
                 wheel_bg: wheelInstance?.configJson?.wheel_bg?.value,
@@ -73,7 +72,7 @@ export const transformWheelData = (dataOriginal) => {
                         bottom: wheelInstance?.configJson?.canvas_margin_bottom?.value,
                     },
                 },
-                prizes: wheelInstance?.channelPrizes?.map(item => {
+                prizes: dataOriginal?.groupChannelPrize?.channelPrizes?.map(item => {
                     const _findProxyAttr = dataOriginal?.proxyPrizeAtribute?.find(x => x.channelPrizeId === item?.id) ?? {};
                     return {
                         id: item?.id,

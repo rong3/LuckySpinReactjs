@@ -27,17 +27,17 @@ function WheelUIComponent(props) {
                 <Tabs>
                     <TabList>
                         <Tab>Quản lý giao diện vòng quay</Tab>
+                        <Tab>Quản lý backdrop vòng quay</Tab>
                         <Tab>Quản lý giải thưởng</Tab>
-                        <Tab>Quản lý chủ đề vòng quay</Tab>
                     </TabList>
                     <TabPanel>
                         <WheelInstanceComponent />
                     </TabPanel>
                     <TabPanel>
-                        <PrizeInstanceComponent />
+                        <ThemeInstanceComponent />
                     </TabPanel>
                     <TabPanel>
-                        <ThemeInstanceComponent />
+                        <PrizeInstanceComponent />
                     </TabPanel>
                 </Tabs>
             </div>

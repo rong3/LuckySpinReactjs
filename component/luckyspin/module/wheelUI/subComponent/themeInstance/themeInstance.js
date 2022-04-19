@@ -204,7 +204,7 @@ function ThemeInstanceComponent(props) {
                                 modalName="role-modal"
                                 showOverlay={true}
                                 onClose={() => resetModal()}
-                                title="Theme vòng quay"
+                                title="Backdrop vòng quay"
                                 size="xl"
                                 centered
                             >
@@ -214,7 +214,7 @@ function ThemeInstanceComponent(props) {
                                             <>
                                                 <div className="row">
                                                     <div className="col-md-12">
-                                                        <span>Tên theme vòng quay</span>
+                                                        <span>Tên backdrop vòng quay</span>
                                                         <InputControl type="text" id="name" onChange={(e) => {
                                                             const value = e.target.value ?? '';
                                                             overwriteDataModal('name', value)

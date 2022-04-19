@@ -238,12 +238,12 @@ function GroupAllocationComponent(props) {
             <div className="row">
                 <div className='col-md-2'>
                     <ListBoxComponent
-                        title={"Nhóm phân bổ"}
-                        onAddNew={()=>{
-                            setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'new', data: { disabled: false }, isOpen: true })
-                        }}
+                        title={"Tập khách hàng"}
                         onClickItem={(e) => {
                             setSelectedGroupAllocation(e);
+                        }}
+                        onAddNew={()=>{
+                            setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'new', data: { disabled: false }, isOpen: true })
                         }}
                         onUpdate={(data) => sendUpdateGroupAllocationCommand(data)}
                         onDelete={async (data) => await sendRemoveGroupAllocationCommand(data)}
@@ -254,7 +254,7 @@ function GroupAllocationComponent(props) {
                             modalName="role-modal"
                             showOverlay={true}
                             onClose={() => resetModalGroupAllocation()}
-                            title="Nhóm phân bổ"
+                            title="Tập khách hàng"
                             size="md"
                             centered
                         >
@@ -264,7 +264,7 @@ function GroupAllocationComponent(props) {
                                         <>
                                             <div className="row">
                                                 <div className="col-md-12">
-                                                    <span>Tên nhóm phân bổ</span>
+                                                    <span>Tên tập khách hàng</span>
                                                     <InputControl type="text" id="name" onChange={(e) => {
                                                         const value = e.target.value ?? '';
                                                         overwriteDataGroupAllocationModal('name', value)

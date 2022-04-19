@@ -9,21 +9,29 @@
 }
 .accordion-item {
     margin-top: 10px;
-    border-radius: 10px !important;
+    border: none;
     .accordion-header {
         button {
             color: #fff;
             font-size: 15px;
-            background: radial-gradient(58.36% 71.65% at 76.69% 0,#f9f7eb 0,#c9b87d 100%),radial-gradient(55.79% 83.93% at 78.78% 0,#72eedf 0,#13d2bb 100%);
-            border-radius: 10px !important;
+            background: radial-gradient(58.36% 71.65% at 76.69% 0, #f9f7eb 0, #c9b87d 100%),
+                radial-gradient(55.79% 83.93% at 78.78% 0, #72eedf 0, #13d2bb 100%);
+        }
+        button:hover {
+            background: radial-gradient(58.36% 71.65% at 76.69% 0, #f9f7eb 0, #726b4f 100%),
+                radial-gradient(55.79% 83.93% at 78.78% 0, #72eedf 0, #13d2bb 100%);
+            opacity: 0.8;
+            transform: scale(1.03);
+            -webkit-transition: 0.5s ease-in-out;
+            transition: 0.5s ease-in-out;
         }
     }
-    .accordion-collapse{
+    .accordion-collapse {
+        border: 1px solid #eee;
         transition: 0.3s all ease;
     }
 
     .accordion-button::after {
-       color: #fff !important;
+        color: #fff !important;
     }
 }
-
