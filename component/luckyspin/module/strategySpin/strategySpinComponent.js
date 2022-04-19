@@ -120,7 +120,7 @@ function StrategySpinComponent(props) {
             field: 'name',
             headerName: 'Tên chiến lược',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             editable: false,
             renderCell: (cell) => {
@@ -133,7 +133,7 @@ function StrategySpinComponent(props) {
             field: 'masterAllocationName',
             headerName: 'Loại chiến lược',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             valueGetter: getAttribute,
             editable: false,
@@ -142,7 +142,7 @@ function StrategySpinComponent(props) {
             field: 'groupAllocationName',
             headerName: 'Tập khách hàng',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             valueGetter: getAttribute,
             editable: false,
@@ -151,7 +151,7 @@ function StrategySpinComponent(props) {
             field: 'groupChannelPrize',
             headerName: 'Tập giải thưởng',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             valueGetter: getAttribute,
             editable: false,
@@ -160,7 +160,7 @@ function StrategySpinComponent(props) {
             field: 'wheelInstanceName',
             headerName: 'Giao diện vòng quay',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             valueGetter: getAttribute,
             editable: false,
@@ -169,7 +169,7 @@ function StrategySpinComponent(props) {
             field: 'themeInstanceNamne',
             headerName: 'Backdrop vòng quay',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             valueGetter: getAttribute,
             editable: false,
@@ -183,18 +183,10 @@ function StrategySpinComponent(props) {
             editable: false,
         },
         {
-            field: 'freeMode',
-            headerName: 'Chế độ tự do',
-            headerClassName: 'headerColumn',
-            minWidth: 100,
-            flex: 1,
-            editable: false,
-        },
-        {
             field: 'created',
             headerName: 'Ngày tạo',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             editable: false,
         },
@@ -202,7 +194,7 @@ function StrategySpinComponent(props) {
             field: 'lastModified',
             headerName: 'Ngày sửa lần cuối',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             editable: false,
         },
@@ -421,7 +413,7 @@ function StrategySpinComponent(props) {
                             <i className='fa fa-plus'
                                 title='Thêm mới'
                                 onClick={(e) => {
-                                    setModalCustom({ ...modalCustom, type: 'new', data: { disabled: false }, isOpen: true })
+                                    setModalCustom({ ...modalCustom, type: 'new', data: { disabled: false, freeMode: true }, isOpen: true })
                                 }}>
                                 Thêm mới
                             </i>
@@ -498,6 +490,19 @@ function StrategySpinComponent(props) {
                                                             />
                                                         </div>
                                                         <div className="col-md-12">
+                                                            <span>Tỷ lệ trúng chia đều</span>
+                                                            &nbsp;
+                                                            <input class="form-check-input"
+                                                                type="checkbox"
+                                                                id="disabeldWheel"
+                                                                name="disabeldWheel"
+                                                                onChange={(e) => {
+                                                                    const checked = e.target?.checked;
+                                                                    overwriteDataModal('freeMode', checked);
+                                                                }}
+                                                                checked={modalCustom?.data?.freeMode} />
+                                                        </div>
+                                                        <div className="col-md-12">
                                                             <span>Giao diện vòng quay</span>
                                                             <SelectBox id="selectbox"
                                                                 optionLabel="name"
@@ -540,19 +545,7 @@ function StrategySpinComponent(props) {
                                                                     overwriteDataModal('endDate', data)
                                                                 }} />
                                                         </div>
-                                                        <div className="col-md-6">
-                                                            <span>Chế độ tự do</span>
-                                                            &nbsp;
-                                                            <input class="form-check-input"
-                                                                type="checkbox"
-                                                                id="disabeldWheel"
-                                                                name="disabeldWheel"
-                                                                onChange={(e) => {
-                                                                    const checked = e.target?.checked;
-                                                                    overwriteDataModal('freeMode', checked);
-                                                                }}
-                                                                checked={modalCustom?.data?.freeMode} />
-                                                        </div>
+                                                       
                                                         <div className="col-md-6">
                                                             <span>Vô hiệu vòng quay</span>
                                                             &nbsp;
