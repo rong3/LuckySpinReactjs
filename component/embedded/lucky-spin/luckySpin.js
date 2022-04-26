@@ -491,7 +491,7 @@ const LuckySpinComponent = (props) => {
                     <>
                         <header>
                             <nav class="navbar d-flex align-items-center justify-content-between">
-                                <div class="navbar-brand"> <a href=""> <img src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt="" /></a></div>
+                                <div class="navbar-brand"> <a href=""> <img src="/asset/images/luckyspin/theme/HDBank_OPT2/background/logo2.png" alt="" /></a></div>
                                 <div class="navbar-right">
                                     <div class="dropdown"><a class="navbar-avatar" href="#">
                                         <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
