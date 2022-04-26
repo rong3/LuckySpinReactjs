@@ -16,7 +16,7 @@ export default function LuckySpin(props) {
             return <meta name="viewport"
                 content="width=device-width; initial-scale=0.65; user-scalable=no" />
         }
-        if (size > 768 && size <1300) {
+        if (size > 768 && size < 1300) {
             return <meta name="viewport"
                 content="width=device-width; initial-scale=0.85; user-scalable=no" />
         }
@@ -47,8 +47,11 @@ export default function LuckySpin(props) {
                 "channelPrizeIds": getchannelPrizesIds
             })
             if (getProxyPrizeAttribute) {
-                const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
-                setData(_mergeData)
+                try {
+                    const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
+                    setData(_mergeData)
+                }
+                catch { }
             }
         }
 

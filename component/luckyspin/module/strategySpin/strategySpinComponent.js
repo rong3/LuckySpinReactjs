@@ -545,7 +545,13 @@ function StrategySpinComponent(props) {
                                                                     overwriteDataModal('endDate', data)
                                                                 }} />
                                                         </div>
-                                                       
+                                                        <div className="col-md-6">
+                                                            <span>Cấu hình url</span>
+                                                            <InputControl type="text" id="urlPublic" onChange={(e) => {
+                                                                const value = e.target.value ?? '';
+                                                                overwriteDataModal('urlPublic', value)
+                                                            }} defaultValue={modalCustom.data?.urlPublic} />
+                                                        </div>
                                                         <div className="col-md-6">
                                                             <span>Vô hiệu vòng quay</span>
                                                             &nbsp;
