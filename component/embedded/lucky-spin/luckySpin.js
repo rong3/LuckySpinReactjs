@@ -460,6 +460,15 @@ const LuckySpinComponent = (props) => {
         }
     }
 
+    const renderName = () => {
+        if (['in-system'].includes(authRequire.type)) {
+            return authRequire.credential.id  ?? "Khách"
+        }
+        else {
+            return authRequire.credential.id ?? 'Khách'
+        }
+    }
+
     return (
         <>
             <ConfigSpinComponent export={importData} devMode={changeDevMode} />
@@ -486,7 +495,7 @@ const LuckySpinComponent = (props) => {
                                 <div class="navbar-right">
                                     <div class="dropdown"><a class="navbar-avatar" href="#">
                                         <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
-                                        <p>&nbsp; Xin chào, {`${authRequire.credential.id ?? 'khách'}`}</p></a>
+                                        <p>&nbsp; Xin chào, {renderName()}</p></a>
                                     </div>
                                 </div>
                             </nav>

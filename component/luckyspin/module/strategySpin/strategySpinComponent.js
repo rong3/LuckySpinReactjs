@@ -530,7 +530,7 @@ function StrategySpinComponent(props) {
                                                         </div>
                                                         <div className="col-md-6">
                                                             <span>Ngày hiệu lực</span>
-                                                            <DateTimeInput selected={modalCustom.data?.startDate && new Date(modalCustom.data?.startDate)}
+                                                            <DateTimeInput selected={modalCustom.data?.startDate ? new Date(modalCustom.data?.startDate): new Date()}
                                                                 isDefaultEmpty
                                                                 isPortal
                                                                 id="startDate" isOnlyDate={false} onChange={(data) => {
@@ -539,7 +539,7 @@ function StrategySpinComponent(props) {
                                                         </div>
                                                         <div className="col-md-6">
                                                             <span>Ngày kết thúc hiệu lực</span>
-                                                            <DateTimeInput selected={modalCustom.data?.endDate && new Date(modalCustom.data?.endDate)} id="endDate"
+                                                            <DateTimeInput selected={modalCustom.data?.endDate ? new Date(modalCustom.data?.endDate): new Date()} id="endDate"
                                                                 isDefaultEmpty
                                                                 isOnlyDate={false} onChange={(data) => {
                                                                     overwriteDataModal('endDate', data)
