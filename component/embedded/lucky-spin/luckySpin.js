@@ -495,7 +495,7 @@ const LuckySpinComponent = (props) => {
                                 <div class="navbar-right">
                                     <div class="dropdown"><a class="navbar-avatar" href="#">
                                         <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
-                                        <p>&nbsp; Xin chào, {renderName()}</p></a>
+                                        <p style={{color: "#000"}}>&nbsp; Xin chào, {renderName()}</p></a>
                                     </div>
                                 </div>
                             </nav>
