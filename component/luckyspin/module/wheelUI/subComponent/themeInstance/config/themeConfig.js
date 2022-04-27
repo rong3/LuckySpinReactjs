@@ -7,6 +7,10 @@ export const themeConfig = {
         label: "Nền backdrop",
         value: ""
     },
+    main_bg_mb: {
+        label: "Nền backdrop mobile",
+        value: ""
+    },
     style: {
         label: "Css style",
         value: "linear-gradient(to bottom, #a3b9d0, #8644db)"

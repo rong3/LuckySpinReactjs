@@ -97,6 +97,7 @@ export const transformWheelData = (dataOriginal) => {
             config_json: {
                 key: themeInstance?.configJson?.key?.value,
                 main_bg: themeInstance?.configJson?.main_bg?.value,
+                main_bg_mb: themeInstance?.configJson?.main_bg_mb?.value,
                 style: themeInstance?.configJson?.style?.value,
                 audio: {
                     spinStart: themeInstance?.configJson?.audio_spinStart?.value,

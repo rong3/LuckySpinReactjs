@@ -136,11 +136,11 @@ const LuckySpinComponent = (props) => {
         const theme_instance = import_config?.theme?.config_json;
         var wrapper = document.getElementById('luckyspin-wrapper');
         if (wrapper)
-            wrapper.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
+            wrapper.style.backgroundImage = `url(${props?.isMobile ? theme_instance?.main_bg_mb : theme_instance?.main_bg}),${theme_instance?.style}`;
 
         var wrapperLogin = document.getElementById('login-wrapper');
         if (wrapperLogin)
-            wrapperLogin.style.backgroundImage = `url(${theme_instance?.main_bg}),${theme_instance?.style}`;
+            wrapperLogin.style.backgroundImage = `url(${props?.isMobile ? theme_instance?.main_bg_mb : theme_instance?.main_bg}),${theme_instance?.style}`;
     }
 
     const initPrizes = (wheel_instance) => {
@@ -462,7 +462,7 @@ const LuckySpinComponent = (props) => {
 
     const renderName = () => {
         if (['in-system'].includes(authRequire.type)) {
-            return authRequire.credential.id  ?? "Khách"
+            return authRequire.credential.id ?? "Khách"
         }
         else {
             return authRequire.credential.id ?? 'Khách'
@@ -495,7 +495,7 @@ const LuckySpinComponent = (props) => {
                                 <div class="navbar-right">
                                     <div class="dropdown"><a class="navbar-avatar" href="#">
                                         <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
-                                        <p style={{color: "#000"}}>&nbsp; Xin chào, {renderName()}</p></a>
+                                        <p style={{ color: "#000" }}>&nbsp; Xin chào, {renderName()}</p></a>
                                     </div>
                                 </div>
                             </nav>
