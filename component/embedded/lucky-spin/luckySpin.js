@@ -7,6 +7,8 @@ import mobileDetectHOC from "../../../shared/packages/hocs/mobileDetect"
 import { transformWheelData } from "./data/convertData"
 import { authGateWayMasterSelected } from "../../../services/masterAllocationSelected.service"
 import { spinService } from "../../../services/logSpin.service"
+import { CookieHelper } from "../../../shared/packages/utils/cookie"
+import { authenticationConstant } from "../../../shared/packages/globalConstant/authenticationConstant"
 
 const LuckySpinComponent = (props) => {
     let handImage = null;
@@ -425,17 +427,19 @@ const LuckySpinComponent = (props) => {
             "masterCode": authRequire.credential.pass,
             "masterProps": {}
         }).then((res) => {
-            const response = res?.data;
-            if (response?.succeeded) {
-                authRequire.masterSelectedId = response?.data;
+            const response = res?.data?.data;
+            if (response?.success) {
+                authRequire.masterSelectedId = response?.masterId;
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
+                CookieHelper.setCookie(authenticationConstant.tokenKey, response?.access_Token);
                 setAuthRequire({ ...authRequire })
                 setTimeout(() => {
                     editor_config_apply(master_config_data)
                 }, 0);
             }
             else {
+                CookieHelper.removeCookie(authenticationConstant.tokenKey);
                 swal(
                     "Lỗi",
                     res?.data?.message ?? "Mã không hợp lệ",
