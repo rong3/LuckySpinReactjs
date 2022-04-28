@@ -1,13 +1,14 @@
 import { ROOT, LOGIN, ROLEPAGE, DASHBOARD, LOGSPIN, WHEEL_SPIN, PROXY_ALLOCATION_GROUP, CHANNEL_SPIN, EXAMPLE_PAGE, STRATEGY_SPIN } from "../utils/constant"
-import NavBarMain from "../shared/packages/layout/nav/style_HDBank/nav-main"
-import NavBarMainOtherStyle from "../shared/packages/layout/nav/other_Style/nav-main"
+// import NavBarMain from "../shared/packages/layout/nav/style_HDBank/nav-main"
+// import NavBarMainOtherStyle from "../shared/packages/layout/nav/other_Style/nav-main"
+import NavBarStyle360 from "../shared/packages/layout/nav/styleHDBank_otp/nav-main"
 import IconCustomize, { ICON_CODE } from "../shared/packages/control/icon"
 import { TYPELAYOUT } from "../shared/packages/globalConstant/common"
 
 export const masterConfig = {
     type: TYPELAYOUT.WEB_APP,
     logo: 'https://hdbank.com.vn/asset/images/logo-en.svg',
-    themeNavbar: <NavBarMain />,
+    themeNavbar: <NavBarStyle360 />,
     menu: [
         {
             icon: <IconCustomize code={ICON_CODE.HOME} />,
