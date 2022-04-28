@@ -4,17 +4,22 @@ import { map } from "jquery";
 
 function DashBoardComponent(props) {
     const router = useRouter()
-
-
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
+
     return (
         <section class="home-1">
             <div class="wrapper-container d-flex align-items">
                 <div class="wrap-left">
                     <div class="wrap-left_header d-flex align-items justify-content-between">
-                        <h1 class="section-title"><img src="/asset/images/icons/side-2.svg" alt="" />&nbsp; Chiến lược</h1><a class="btn-add" href="tao-chien-luoc.html"> <em class="material-icons">add &nbsp;</em><span>Thêm mới</span></a>
+                        <h1 class="section-title"><img src="/asset/images/icons/side-2.svg" alt="" />&nbsp; Chiến lược</h1>
+                        <a class="btn-add" onClick={() => {
+                            changeRoute('/strategySpin/container')
+                        }}>
+                            <em class="material-icons">add &nbsp;</em>
+                            <span>Thêm mới</span>
+                        </a>
                     </div>
                     <div class="wrap-left_body">
                         <ul>

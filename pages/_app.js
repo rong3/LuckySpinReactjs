@@ -11,9 +11,9 @@ import { ThemeProvider, Button, createMuiTheme } from "@material-ui/core";
 // import { ThemeSwitch } from "components/ThemeSwitch";
 import { dark, light } from "../styles/muiTheme";
 import 'bootstrap/dist/css/bootstrap.min.css';
- import "../shared/style/scss/style.scss"
- import "../styles/custom.scss"
- import '@fortawesome/fontawesome-free/css/all.min.css';
+import "../shared/style/scss/style.scss"
+import "../styles/custom.scss"
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { ProvideAuth } from "../shared/packages/provider/authBase"
 import { AccessControlProvider } from "../shared/packages/provider/accessGateway"
 // Redux
@@ -43,11 +43,8 @@ function Default({ Component, pageProps }) {
   }
 
   useEffect(() => {
-    // loadLazyCSS('/asset/css/core.css');
-    // loadLazyCSS('/asset/css/linearicons.css');
-    // loadLazyCSS('/asset/css/material.css');
-    // loadLazyCSS('/asset/css/font-be-vietnam.css');
-    loadLazyCSS('/asset/css/main.min.css');
+    // loadLazyCSS('/asset/css/main.min.css');
+    loadLazyCSS('/asset/css/core.css');
     loadLazyCSS('/asset/fonts/all.css');
   }, [])
 

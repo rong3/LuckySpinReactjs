@@ -1,0 +1,112 @@
+.step-section {
+    padding: 45px 0;
+}
+.step-section .progress-wrap {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1406px;
+}
+.step-section .progress-wrap .step {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    background: #ababab;
+    width: 25%;
+    height: 4px;
+    color: #ababab;
+}
+.step-section .progress-wrap .step .icon {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    border-radius: 50%;
+    // background: url();
+    background-position: 50%;
+    background-repeat: no-repeat;
+    width: 60px;
+    height: 60px;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    content: "";
+}
+.step-section .progress-wrap .step .icon.created,
+.step-section .progress-wrap .step .icon.finished {
+    display: none;
+}
+.step-section .progress-wrap .step .content {
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+}
+.step-section .progress-wrap .step .content p {
+    white-space: nowrap;
+}
+.step-section .progress-wrap .step.active {
+    background: #ffc20e;
+    color: #464646;
+}
+.step-section .progress-wrap .step.active > .disable {
+    display: none;
+}
+.step-section .progress-wrap .step.active > .created {
+    display: block;
+}
+@media screen and (max-width: 600.98px) {
+    .step-section .wrapper-container {
+        margin-top: 20px;
+    }
+    .step-section .wrapper-container .progress-wrap .step .icon {
+        width: 50px;
+        height: 50px;
+    }
+    .step-section .wrapper-container .progress-wrap .step .content {
+        width: 100%;
+    }
+    .step-section .wrapper-container .progress-wrap .step .content p {
+        font-size: 14px;
+        text-align: center;
+    }
+    .step-section .wrapper-container .progress-wrap .step .content p:last-child {
+        padding: 0 8px;
+        font-size: 10px;
+        white-space: normal;
+    }
+}
