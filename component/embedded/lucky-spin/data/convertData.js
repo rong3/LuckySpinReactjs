@@ -98,10 +98,10 @@ export const transformWheelData = (dataOriginal) => {
                 key: themeInstance?.configJson?.key?.value,
                 main_bg: themeInstance?.configJson?.main_bg?.value,
                 main_bg_mb: themeInstance?.configJson?.main_bg_mb?.value,
-                style: themeInstance?.configJson?.style?.value,
+                style: themeInstance?.configJson?.style?.value??"",
                 audio: {
-                    spinStart: themeInstance?.configJson?.audio_spinStart?.value,
-                    spinEnd: themeInstance?.configJson?.audio_spinEnd?.value,
+                    spinStart: wheelInstance?.configJson?.audio_spinStart?.value,
+                    spinEnd: wheelInstance?.configJson?.audio_spinEnd?.value,
                 }
             }
         }

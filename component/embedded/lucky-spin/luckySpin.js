@@ -138,11 +138,11 @@ const LuckySpinComponent = (props) => {
         const theme_instance = import_config?.theme?.config_json;
         var wrapper = document.getElementById('luckyspin-wrapper');
         if (wrapper)
-            wrapper.style.backgroundImage = `url(${props?.isMobile ? theme_instance?.main_bg_mb : theme_instance?.main_bg}),${theme_instance?.style}`;
+            wrapper.style.backgroundImage = `url(${props?.isMobile ? theme_instance?.main_bg_mb : theme_instance?.main_bg})`;
 
         var wrapperLogin = document.getElementById('login-wrapper');
         if (wrapperLogin)
-            wrapperLogin.style.backgroundImage = `url(${props?.isMobile ? theme_instance?.main_bg_mb : theme_instance?.main_bg}),${theme_instance?.style}`;
+            wrapperLogin.style.backgroundImage = `url(${props?.isMobile ? theme_instance?.main_bg_mb : theme_instance?.main_bg})`;
     }
 
     const initPrizes = (wheel_instance) => {

@@ -15,8 +15,8 @@ export const theme_area = (index, data) => {
             historyTable: historyStyleDefault(data)
         }
         default: return {
-            login: style_login_default(data),
-            spinBtn: buttonDefaultStyle(data),
+            login: style_login_HDBank(data),
+            spinBtn: buttonHDBankStyle(data),
             historyTable: historyStyleDefault(data)
         }
     }
