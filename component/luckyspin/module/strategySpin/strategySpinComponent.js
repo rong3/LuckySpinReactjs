@@ -40,6 +40,23 @@ function StrategySpinComponent(props) {
     const { addToast } = useToasts();
     const dispatch = useDispatch();
 
+    const [masterData,setMasterData]=useState({
+        quantitySpin: [
+            {
+                id: 'OnePlay',
+                name: '1 lần / người'
+            },
+            {
+                id: 'Config',
+                name: 'Theo thiết lập'
+            },
+            {
+                id: 'Free',
+                name: 'Tự do'
+            }
+        ]
+    })
+
     const [modalCustom, setModalCustom] = useState({
         isOpen: false,
         data: null,
@@ -487,6 +504,19 @@ function StrategySpinComponent(props) {
                                                                 value={modalCustom.data?.groupChannelPrizeId}
                                                                 isPortal
                                                                 options={groupChannelPrizeList ?? []}
+                                                            />
+                                                        </div>
+                                                        <div className="col-md-12">
+                                                            <span>Cấu hình lượt quay</span>
+                                                            <SelectBox id="selectbox"
+                                                                optionLabel="name"
+                                                                optionValue="id"
+                                                                onChange={(data) => {
+                                                                    overwriteDataModal('quantitySpinEnum', data)
+                                                                }}
+                                                                value={modalCustom.data?.quantitySpinEnum}
+                                                                isPortal
+                                                                options={masterData.quantitySpin}
                                                             />
                                                         </div>
                                                         <div className="col-md-12">
