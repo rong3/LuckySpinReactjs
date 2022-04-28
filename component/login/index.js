@@ -56,46 +56,55 @@ const Login = () => {
     };
 
     return (
-        <>
-            {
-                auth.isAuthenticated ||
-                <section className="row flexbox-container">
-                    <div className="col-12 d-flex align-items-center justify-content-center">
-                        <div className="row">
-                            <div className="col-md-12">
-                                <span>Email</span>
-                                <input className="form-control" type="text" onChange={(e) => {
+        <section class="login-section">
+            <div class="wrapper-container d-flex align-items-center justify-content-center">
+                <div class="wrap-login d-flex align-items-center justify-content-center">
+                    <div class="wrap-left">
+                        <figure>
+                            <img src="/asset/images/login-bg.png" alt="" />
+                            <figcaption>
+                                <p class="desc">Amet minim mollit non deserunt ullamco <br />est sit aliqua dolor do amet sint.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <div class="wrap-right">
+                        <form class="wrap-form">
+                            <div class="caption">
+                                <h1>Chào mừng đến &nbsp;<span>Admin panel</span></h1>
+                                <p>Nhập thông tin đăng nhập</p>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" placeholder="User name" onChange={(e) => {
                                     const value = e?.target?.value;
                                     credential.email = value;
                                     setCredential({ ...credential });
                                 }} />
-
                             </div>
-                            <div className="col-md-12">
-                                <span>Pass</span>
-                                <input className="form-control" type="password" onChange={(e) => {
-                                    const value = e?.target?.value;
-                                    credential.password = value;
-                                    setCredential({ ...credential });
-                                }} />
+                            <div class="form-group">
+                                <input class="form-control" id="core" type="password" placeholder="Password"
+                                    onChange={(e) => {
+                                        const value = e?.target?.value;
+                                        credential.password = value;
+                                        setCredential({ ...credential });
+                                    }}
+                                />
+                                <img class="show-pass" src="/asset/images/icons/eye.svg" alt="" />
                             </div>
-                            <div className="col-md-12">
-                                <br />
-                                <LoadingButton className="btn btn-info" isLoading={isLoading} onClick={login}>Log in</LoadingButton>
+                            <div class="form-group">
+                                <input id="remember" type="checkbox" />
+                                <label class="label-remember" for="remember">Nhớ trạng thái đăng nhập</label>
                             </div>
-                        </div>
+                            <button type="button" class="btn btn-submit" onClick={login}> <span>Đăng nhập</span></button>
+                        </form>
                     </div>
-                </section>
-            }
-            {
-                auth.isAuthenticated &&
-                <section className="row flexbox-container">
-                    <div className="col-12 d-flex align-items-center justify-content-center">
-                        <span>Đang đăng nhập...</span>
-                    </div>
-                </section>
-            }
-        </>
+                </div>
+            </div>
+            <div class="footer-section">
+                <div class="footer-content">
+                    <div class="flower"> <img src="/asset/images/flower.png" alt="" /></div>
+                </div>
+            </div>
+        </section>
     );
 }
 
