@@ -30,7 +30,17 @@ function LogSpinComponent(props) {
     useEffect(() => {
         getLogSpin({ keySearch: 'all' }).then((res) => {
             const data = res?.data?.data ?? [];
-            setListLogSpin([...data]);
+            var remapData = data?.map(x => (
+                {
+                    strategySpinName: x?.proxyStrategyPrize?.strategySpin?.name,
+                    spinDate: x?.spinDate,
+                    masterName: x?.masterAllocationSelected?.masterId,
+                    channelPrizeName: x?.proxyStrategyPrize?.channelPrize?.name,
+                }
+            )).sort(function (a, b) {
+                return b?.prizeName?.localeCompare(a?.prizeName);
+            })
+            setListLogSpin([...remapData]);
         })
     }, [])
 
@@ -41,14 +51,14 @@ function LogSpinComponent(props) {
     }, [listLogSpin])
 
     function getProxyName(params) {
-        if (params.field === 'masterName')
-            return `${params?.row?.masterAllocationSelected?.masterId || ''}`;
-        if (params.field === 'channelPrizeName')
-            return `${params?.row?.proxyStrategyPrize?.channelPrize?.name || ''}`;
-        if (params.field === 'strategySpinName')
-            return `${params?.row?.proxyStrategyPrize?.strategySpin?.name || ''}`;
-        else
-            return '';
+        // if (params.field === 'masterName')
+        //     return `${params?.row?.masterAllocationSelected?.masterId || ''}`;
+        // if (params.field === 'channelPrizeName')
+        //     return `${params?.row?.proxyStrategyPrize?.channelPrize?.name || ''}`;
+        // if (params.field === 'strategySpinName')
+        //     return `${params?.row?.proxyStrategyPrize?.strategySpin?.name || ''}`;
+        // else
+        return '';
     }
 
     const columns = [
@@ -59,7 +69,7 @@ function LogSpinComponent(props) {
             minWidth: 200,
             flex: 1,
             editable: false,
-            valueGetter: getProxyName,
+            // valueGetter: getProxyName,
         },
         {
             field: 'masterName',
@@ -68,7 +78,7 @@ function LogSpinComponent(props) {
             minWidth: 200,
             flex: 1,
             editable: false,
-            valueGetter: getProxyName,
+            // valueGetter: getProxyName,
         },
         {
             field: 'channelPrizeName',
@@ -77,7 +87,7 @@ function LogSpinComponent(props) {
             minWidth: 200,
             flex: 1,
             editable: false,
-            valueGetter: getProxyName,
+            // valueGetter: getProxyName,
         },
 
         {
@@ -163,6 +173,9 @@ function LogSpinComponent(props) {
                                 <table>
                                     <thead>
                                         <th>
+                                            <p>Tên chiến lược</p>
+                                        </th>
+                                        <th>
                                             <p>Tên Khách hàng</p>
                                         </th>
                                         <th>
@@ -178,12 +191,15 @@ function LogSpinComponent(props) {
                                             return (
                                                 <tr>
                                                     <td>
-                                                        <p>{item?.masterAllocationSelected?.masterId}</p>
+                                                        <p>{item?.strategySpinName}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>{item?.masterName}</p>
                                                     </td>
                                                     <td>
                                                         <p>
                                                             <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
-                                                            {item?.proxyStrategyPrize?.channelPrize?.name}
+                                                            {item?.channelPrizeName}
                                                         </p>
                                                     </td>
                                                     <td>
