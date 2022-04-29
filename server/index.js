@@ -3,7 +3,7 @@ var serveStatic = require('serve-static');
 var path = require('path');
 const next = require('next'); // Include module next
 const compression = require('compression');
-const port = parseInt(process.env.PORT, 10) || 3000; // Port để chạy app Nextjs, cũng là server nodejs
+const port = parseInt(process.env.PORT, 10) || 3001; // Port để chạy app Nextjs, cũng là server nodejs
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const router = require('./router');

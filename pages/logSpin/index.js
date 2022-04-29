@@ -31,6 +31,6 @@ export async function getServerSideProps(router) {
     }
 }
 
-LogSpinPage.Layout = CommonLayout;
+// LogSpinPage.Layout = CommonLayout;
 LogSpinPage.Title = "Chiến lược";
 LogSpinPage.Href = LOGSPIN;
