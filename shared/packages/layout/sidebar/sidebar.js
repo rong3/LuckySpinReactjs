@@ -23,8 +23,8 @@ const SideBarComponent = (props) => {
             name: 'Giao diện & giải thưởng'
         },
         {
-            href: "/",
-            as: '/',
+            href: "/logSpin",
+            as: '/logSpin',
             icon: '/asset/images/icons/side-5.svg',
             name: 'Lịch sử Chiến lược'
         },

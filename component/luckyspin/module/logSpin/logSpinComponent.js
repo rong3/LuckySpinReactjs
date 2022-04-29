@@ -34,6 +34,12 @@ function LogSpinComponent(props) {
         })
     }, [])
 
+    useEffect(() => {
+        if (listLogSpin?.length > 0) {
+            var a = listLogSpin;
+        }
+    }, [listLogSpin])
+
     function getProxyName(params) {
         if (params.field === 'masterName')
             return `${params?.row?.masterAllocationSelected?.masterId || ''}`;
