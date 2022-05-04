@@ -63,6 +63,9 @@
     border-radius: 8px;
     background: #f6f7f8;
     padding: 20px;
+    &.active {
+        background: #fff0e5;
+    }
 }
 .home-1 .wrapper-container .wrap-left_body ul li .title-item .title {
     -webkit-transition: all 0.3s ease-in-out;
@@ -75,6 +78,7 @@
 .home-1 .wrapper-container .wrap-left_body ul li .action-item a {
     margin-left: 15px;
 }
+
 .home-1 .wrapper-container .wrap-left_body ul li:hover {
     background: #fff0e5;
 }

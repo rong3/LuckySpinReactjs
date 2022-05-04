@@ -239,14 +239,14 @@ const SelectBox = ({ defaultValue, value, onChange: onChangeCallback, onBlur: on
             height: '33px',
         }),
         menuPortal: provided => ({ ...provided, zIndex: 2000, position: 'absolute' }),
-        groupHeading: base => ({
-            ...base,
-            flex: '1 1',
-            color: 'white',
-            marginTop: 0,
-            paddingTop: 10,
-            paddingBottom: 10,
-        }),
+        // groupHeading: base => ({
+        //     ...base,
+        //     flex: '1 1',
+        //     color: 'white',
+        //     marginTop: 0,
+        //     paddingTop: 10,
+        //     paddingBottom: 10,
+        // }),
         ...props?.customStyles
     };
 
