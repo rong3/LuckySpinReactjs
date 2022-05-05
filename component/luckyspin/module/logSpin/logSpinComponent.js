@@ -124,7 +124,7 @@ function LogSpinComponent(props) {
                                                 width: "100%",
                                                 padding: '5px',
                                                 boxShadow: 'none',
-                                                marginBottom: "20px",
+                                                marginBottom: "5px",
                                             }}>
                                                 <AccordionSummary
                                                     expandIcon={
