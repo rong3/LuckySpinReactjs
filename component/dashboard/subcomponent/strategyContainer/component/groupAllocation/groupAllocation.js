@@ -11,6 +11,8 @@ import Modal from "../../../../../../shared/packages/control/modal/index";
 import { InputControl } from "../../../../../../shared/packages/control/input/inputControl"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
 import { createMasterAllocationSelected, updateMasterAllocationSelected, removeMasterAllocationSelected } from "../../../../../../services/masterAllocationSelected.service"
+import { createGroupAllocation, updateGroupAllocation, removeGroupAllocation } from "../../../../../../services/groupAllocation.service"
+import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
 import { updateProxyStrategy } from "../../../../../../services/proxyAllocationStrategy.service"
 
@@ -22,15 +24,30 @@ const GroupAllocation = (props) => {
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
+    const [modalCustomGroupAllocation, setModalCustomGroupAllocation] = useState({
+        isOpen: false,
+        data: null,
+        type: null
+    })
+
     const [modalCustomAllocationSelected, setModalCustomAllocationSelected] = useState({
         isOpen: false,
         data: null,
         type: null
     })
 
+    const sendUpdateGroupAllocationCommand = (data) => {
+        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'edit', data: data, isOpen: true })
+    }
+
     const resetModalAllocationSelected = () => {
         setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, isOpen: false, data: null, type: null })
     }
+
+    const resetModalGroupAllocation = () => {
+        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, isOpen: false, data: null, type: null })
+    }
+
     const overwriteDataAllocationSelectedModal = (prefix, value) => {
         if (!["quantity", "disabled"].includes(prefix)) {
             modalCustomAllocationSelected.data[prefix] = value;
@@ -39,6 +56,12 @@ const GroupAllocation = (props) => {
             modalCustomAllocationSelected.data.attributes[prefix].value = value;
         }
         setModalCustomAllocationSelected({ ...modalCustomAllocationSelected });
+    }
+
+
+    const overwriteDataGroupAllocationModal = (prefix, value) => {
+        modalCustomGroupAllocation.data[prefix] = value;
+        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation });
     }
 
     const convertEditAttributeUI = (data) => {
@@ -180,6 +203,47 @@ const GroupAllocation = (props) => {
             setSelectedGroupAllocation(null)
     }
 
+    //func allocation selected
+    const createAllocationSelectedCommand = (data) => {
+        if (selectedGroupAllocation?.id) {
+            createMasterAllocationSelected({ ...data, groupAllocationId: selectedGroupAllocation?.id }).then((res) => {
+                addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+                const convert = ({
+                    "id": data?.idProxy,
+                    "strategySpinId": material?.strategySSR?.id,
+                    "masterAllocationSelectedId": data?.id,
+                    "attributes": JSON.stringify(data?.attributes)
+                });
+                updateProxyStrategy(convert).then((res) => {
+                    dispatch(loadDataTableGroupAllocation({
+                        header: {
+                            pageNumber: 1,
+                            pageSize: 999
+                        }
+                    }))
+                }).catch((err) => {
+                })
+            }).catch((err) => {
+                addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
+            })
+        }
+    }
+
+    const removeAllocationSelectedCommand = (data) => {
+        removeMasterAllocationSelected(data).then((res) => {
+            dispatch(loadDataTableGroupAllocation({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+
     const updateAllocationSelectedCommand = (data) => {
         updateMasterAllocationSelected(data).then((res) => {
             addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
@@ -202,6 +266,68 @@ const GroupAllocation = (props) => {
             addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
         })
     }
+    //end
+
+    //
+    const updateGroupAllocationCommand = (data) => {
+        updateGroupAllocation(data).then((res) => {
+            dispatch(loadDataTableGroupAllocation({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const createGroupAllocationCommand = (data) => {
+        createGroupAllocation(data).then((res) => {
+            dispatch(loadDataTableGroupAllocation({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const removeGroupAllocationCommand = (data) => {
+        removeGroupAllocation(data).then((res) => {
+            if (res?.data?.succeeded) {
+                dispatch(loadDataTableGroupAllocation({
+                    header: {
+                        pageNumber: 1,
+                        pageSize: 999
+                    }
+                }))
+                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            }
+            else {
+                addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+            }
+        }).catch((err) => {
+            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+        })
+    }
+    //
+    //
+    const updateStrategyCommand = (data) => {
+        updateStrategySpin(data).then((res) => {
+            addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
+            material?.refreshStrategyData().then((res2) => {
+                material?.updateStepValue(2);
+            })
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
+        })
+    }
+    //
 
 
     return (
@@ -220,8 +346,21 @@ const GroupAllocation = (props) => {
                         value={selectedGroupAllocation?.id}
                         options={groupAllocationsList ?? []}
                     />
-                    <a class="edit ms-3" href=""> <img src="/asset/images/icons/pencle.svg" alt="" /></a>
-                    <a class="save ms-3" href=""> <img src="/asset/images/icons/save.svg" alt="" style={{ display: "none" }} /></a>
+                    {
+                        selectedGroupAllocation &&
+                        <>
+                            <a class="edit"
+                                onClick={() => {
+                                    sendUpdateGroupAllocationCommand(selectedGroupAllocation)
+                                }}
+                                style={{ marginLeft: "-25px", cursor: "pointer" }}> <img src="/asset/images/icons/pencle.svg" alt="" /></a>
+                        </>
+                    }
+                    <button class="edit ms-3 btn btn-add" onClick={() => {
+                        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'new', data: { disabled: false }, isOpen: true })
+                    }}>
+                        <img src="/asset/images/icons/add.svg" alt="" />
+                    </button>
                 </div>
                 <div class="wrap-body">
                     {
@@ -229,10 +368,15 @@ const GroupAllocation = (props) => {
                         <div class="wrap-body_header d-flex align-items-center justify-content-between">
                             <h1 class="title-small">Danh sách Khách hàng</h1>
                             <div class="wrap-button d-flex align-items-center">
-                                <button class="btn btn-search"> <img src="/asset/images/icons/search.svg" alt="" /></button>
-                                <button class="btn btn-add"><img src="/asset/images/icons/add.svg" alt="" /><span>&nbsp;Thêm mới</span></button>
-                                <button class="btn btn-upload" type="submit"> <img src="/asset/images/icons/cloud-upload.svg" alt="" /><span>&nbsp;Tải lên</span></button>
-                                <button class="btn btn-setting" type="submit" data-fancybox="" data-src="#dialog-content"> <img src="/asset/images/icons/setting.svg" alt="" /><span>&nbsp;Cấu hình chung</span></button>
+                                {/* <button class="btn btn-search"> <img src="/asset/images/icons/search.svg" alt="" /></button> */}
+                                <button class="btn btn-add" onClick={() => {
+                                    setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, type: 'new', data: { disabled: false, attributes: strategyConfig.maskEditModel }, isOpen: true })
+                                }}>
+                                    <img src="/asset/images/icons/add.svg" alt="" />
+                                    <span>&nbsp;Thêm mới</span>
+                                </button>
+                                {/* <button class="btn btn-upload" type="submit"> <img src="/asset/images/icons/cloud-upload.svg" alt="" /><span>&nbsp;Tải lên</span></button>
+                                <button class="btn btn-setting" type="submit" data-fancybox="" data-src="#dialog-content"> <img src="/asset/images/icons/setting.svg" alt="" /><span>&nbsp;Cấu hình chung</span></button> */}
                             </div>
                         </div>
                     }
@@ -262,13 +406,23 @@ const GroupAllocation = (props) => {
                                 material?.updateStepValue(1);
                             }} type="button">
                                 <img src="/asset/images/icons/back.svg" alt="" /><span>Quay lại</span></button>
-                            <button class="btn btn-submit" type="button"> <span>Tiếp tục tạo chiến lược</span><em class="material-icons">arrow_forward</em></button>
+                            <button class="btn btn-submit" type="button"
+                                onClick={() => {
+                                    if (material?.strategySSR) {
+                                        const groupSelectedId = selectedGroupAllocation?.id;
+                                        var clone = { ...material?.strategySSR }
+                                        clone.groupAllocationId = groupSelectedId;
+                                        updateStrategyCommand(clone)
+                                    }
+                                }}
+                            > <span>Tiếp tục tạo chiến lược</span><em class="material-icons">arrow_forward</em></button>
                         </div>
                     </div>
 
                 </div>
 
             </div>
+            {/* //modal danh sacsh khach hang */}
             {
                 <Modal
                     isOpen={modalCustomAllocationSelected.isOpen}
@@ -344,6 +498,64 @@ const GroupAllocation = (props) => {
                                     return "Tạo mới"
                                 }
                                 if (modalCustomAllocationSelected.type === 'edit') {
+                                    return "Cập nhật"
+                                }
+                            })()}
+                        </button>
+                    </Modal.Footer>
+                </Modal>
+            }
+
+            {/* //modal nhom khach hang */}
+            {
+                <Modal
+                    isOpen={modalCustomGroupAllocation.isOpen}
+                    modalName="role-modal"
+                    showOverlay={true}
+                    onClose={() => resetModalGroupAllocation()}
+                    title="Nhóm khách hàng"
+                    size="md"
+                    centered
+                >
+                    <Modal.Body>
+                        {
+                            ['edit', 'new'].includes(modalCustomGroupAllocation.type) ?
+                                <>
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <span>Tên nhóm khách hàng</span>
+                                            <InputControl type="text" id="name" onChange={(e) => {
+                                                const value = e.target.value ?? '';
+                                                overwriteDataGroupAllocationModal('name', value)
+                                            }} defaultValue={modalCustomGroupAllocation.data?.name} />
+                                        </div>
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    data
+                                </>
+                        }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button className="btn btn-outline-danger mr-25" onClick={() => {
+                            resetModalGroupAllocation()
+                        }}>Đóng</button>
+
+                        <button className="btn btn-outline-primary mr-25" onClick={() => {
+                            if (modalCustomGroupAllocation.type === 'new') {
+                                createGroupAllocationCommand(modalCustomGroupAllocation.data)
+                            }
+                            if (modalCustomGroupAllocation.type === 'edit') {
+                                updateGroupAllocationCommand(modalCustomGroupAllocation.data)
+                            }
+                            resetModalGroupAllocation();
+                        }}>
+                            {(() => {
+                                if (modalCustomGroupAllocation.type === 'new') {
+                                    return "Tạo mới"
+                                }
+                                if (modalCustomGroupAllocation.type === 'edit') {
                                     return "Cập nhật"
                                 }
                             })()}

@@ -52,8 +52,10 @@ const CreateStrategy = (props) => {
 
     const updateStrategyCommand = (data) => {
         updateStrategySpin(data).then((res) => {
-            material?.updateStepValue(2);
             addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
+            material?.refreshStrategyData().then((res2) => {
+                material?.updateStepValue(2);
+            })
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
         })
