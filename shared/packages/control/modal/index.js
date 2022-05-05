@@ -90,14 +90,14 @@ Modal.defaultProps = {
 
 Modal.Body = function ModalBody({ children }) {
   return (
-    <PerfectScrollbar options={{
-      useBothWheelAxes: false,
-      suppressScrollX: false
-    }} className="modal-body">
-      <div className='col-md-12'>
+    // <PerfectScrollbar options={{
+    //   useBothWheelAxes: false,
+    //   suppressScrollX: false
+    // }} className="modal-body">
+      <div className='modal-body col-md-12'>
         {children}
       </div>
-    </PerfectScrollbar>
+    // </PerfectScrollbar>
   );
 };
 

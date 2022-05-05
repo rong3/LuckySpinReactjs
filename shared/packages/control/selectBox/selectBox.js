@@ -217,12 +217,12 @@ const SelectBox = ({ defaultValue, value, onChange: onChangeCallback, onBlur: on
             border: (props.error && !props.isLoading) ? '1px solid #ff7588' : '1px solid #ccd6e6',
             background: '#fff',
             borderColor: '#9e9e9e',
-            minHeight: '33px',
-            height: '33px',
+            minHeight: '38px',
+            height: '38px',
         }),
         valueContainer: (provided, state) => ({
             ...provided,
-            height: '33px',
+            height: '38px',
             padding: '0 6px',
             fontSize: '13px'
         }),

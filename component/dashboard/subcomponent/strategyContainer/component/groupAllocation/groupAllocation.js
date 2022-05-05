@@ -10,6 +10,8 @@ import { strategyConfig, prizeConfig } from "../../../../../luckyspin/module/str
 import Modal from "../../../../../../shared/packages/control/modal/index";
 import { InputControl } from "../../../../../../shared/packages/control/input/inputControl"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
+import { createMasterAllocationSelected, updateMasterAllocationSelected, removeMasterAllocationSelected } from "../../../../../../services/masterAllocationSelected.service"
+import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
 
 const GroupAllocation = (props) => {
     const { material } = props
@@ -172,6 +174,20 @@ const GroupAllocation = (props) => {
             setSelectedGroupAllocation(null)
     }
 
+    const updateAllocationSelectedCommand = (data) => {
+        updateMasterAllocationSelected(data).then((res) => {
+            dispatch(loadDataTableGroupAllocation({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+        })
+    }
+
 
     return (
         <section class="choice-customer">
@@ -270,15 +286,21 @@ const GroupAllocation = (props) => {
                                         <span>Số lượt quay</span>
                                         <InputControl type="text" id="name" onChange={(e) => {
                                             const value = e.target.value ?? '';
-                                            overwriteDataAllocationSelectedModal('quantity', value)
+                                            overwriteDataAllocationSelectedModal('quantity', Number.parseInt(value))
                                         }} defaultValue={modalCustomAllocationSelected.data?.attributes?.quantity?.value} />
                                     </div>
                                     <div className="col-md-6">
                                         <span>Vô hiệu hoá</span>
-                                        <InputControl type="text" id="name" onChange={(e) => {
-                                            const value = e.target.value ?? '';
-                                            overwriteDataAllocationSelectedModal('disabled', value)
-                                        }} defaultValue={modalCustomAllocationSelected.data?.attributes?.disabled?.value} />
+                                        <SelectBox id="selectbox"
+                                            optionLabel="label"
+                                            optionValue="value"
+                                            onChange={(data) => {
+                                                overwriteDataAllocationSelectedModal('disabled', data)
+                                            }}
+                                            value={modalCustomAllocationSelected.data?.attributes?.disabled?.value}
+                                            isPortal
+                                            options={[{ label: "True", value: true }, { label: "False", value: false }]}
+                                        />
                                     </div>
                                 </div>
                                 :
@@ -297,7 +319,8 @@ const GroupAllocation = (props) => {
                                 createAllocationSelectedCommand(modalCustomAllocationSelected.data)
                             }
                             if (modalCustomAllocationSelected.type === 'edit') {
-                                updateAllocationSelectedCommand(modalCustomAllocationSelected.data)
+                                // updateAllocationSelectedCommand(modalCustomAllocationSelected.data)
+                                console.log({ data: modalCustomAllocationSelected.data });
                             }
                             resetModalAllocationSelected();
                         }}>
