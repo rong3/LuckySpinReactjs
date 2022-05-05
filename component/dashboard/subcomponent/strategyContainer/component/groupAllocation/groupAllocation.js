@@ -12,6 +12,7 @@ import { InputControl } from "../../../../../../shared/packages/control/input/in
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
 import { createMasterAllocationSelected, updateMasterAllocationSelected, removeMasterAllocationSelected } from "../../../../../../services/masterAllocationSelected.service"
 import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
+import { updateProxyStrategy } from "../../../../../../services/proxyAllocationStrategy.service"
 
 const GroupAllocation = (props) => {
     const { material } = props
@@ -31,7 +32,12 @@ const GroupAllocation = (props) => {
         setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, isOpen: false, data: null, type: null })
     }
     const overwriteDataAllocationSelectedModal = (prefix, value) => {
-        modalCustomAllocationSelected.data[prefix] = value;
+        if (!["quantity", "disabled"].includes(prefix)) {
+            modalCustomAllocationSelected.data[prefix] = value;
+        }
+        else {
+            modalCustomAllocationSelected.data.attributes[prefix].value = value;
+        }
         setModalCustomAllocationSelected({ ...modalCustomAllocationSelected });
     }
 
@@ -129,7 +135,7 @@ const GroupAllocation = (props) => {
         )
     }
 
-    const [selectedGroupAllocation, setSelectedGroupAllocation] = useState(null);
+    const [selectedGroupAllocation, setSelectedGroupAllocation] = useState(material?.strategySSR?.groupAllocation);
 
     const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
 
@@ -143,10 +149,10 @@ const GroupAllocation = (props) => {
     }, [])
 
     useEffect(() => {
-        if (material?.strategySSR) {
-            findSelectedGroupAllocation(material?.strategySSR?.groupAllocationId)
+        if (selectedGroupAllocation) {
+            findSelectedGroupAllocation(selectedGroupAllocation?.id)
         }
-    }, [material?.strategySSR])
+    }, [groupAllocationsList])
 
     const findSelectedGroupAllocation = (id) => {
         const find = groupAllocationsList?.find(x => x.id === id)
@@ -176,13 +182,22 @@ const GroupAllocation = (props) => {
 
     const updateAllocationSelectedCommand = (data) => {
         updateMasterAllocationSelected(data).then((res) => {
-            dispatch(loadDataTableGroupAllocation({
-                header: {
-                    pageNumber: 1,
-                    pageSize: 999
-                }
-            }))
             addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+            const convert = ({
+                "id": data?.idProxy,
+                "strategySpinId": material?.strategySSR?.id,
+                "masterAllocationSelectedId": data?.id,
+                "attributes": JSON.stringify(data?.attributes)
+            });
+            updateProxyStrategy(convert).then((res) => {
+                dispatch(loadDataTableGroupAllocation({
+                    header: {
+                        pageNumber: 1,
+                        pageSize: 999
+                    }
+                }))
+            }).catch((err) => {
+            })
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
         })
@@ -202,7 +217,7 @@ const GroupAllocation = (props) => {
                         onChange={(data) => {
                             findSelectedGroupAllocation(data)
                         }}
-                        value={material?.strategySSR?.groupAllocationId}
+                        value={selectedGroupAllocation?.id}
                         options={groupAllocationsList ?? []}
                     />
                     <a class="edit ms-3" href=""> <img src="/asset/images/icons/pencle.svg" alt="" /></a>
@@ -319,7 +334,7 @@ const GroupAllocation = (props) => {
                                 createAllocationSelectedCommand(modalCustomAllocationSelected.data)
                             }
                             if (modalCustomAllocationSelected.type === 'edit') {
-                                // updateAllocationSelectedCommand(modalCustomAllocationSelected.data)
+                                updateAllocationSelectedCommand(modalCustomAllocationSelected.data)
                                 console.log({ data: modalCustomAllocationSelected.data });
                             }
                             resetModalAllocationSelected();
