@@ -8,6 +8,13 @@ export const getListStrategySpin = () => {
     );
 };
 
+export const getListLiteStrategySpin = (header) => {
+    return request(
+        'GET',
+        `StrategySpin/data/all`, 'vi', header
+    );
+};
+
 export const getListStrategySpinbyId = (id) => {
     return request(
         'GET',

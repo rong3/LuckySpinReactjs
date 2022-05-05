@@ -11,6 +11,14 @@ import { usePermission } from "../../../../shared/packages/provider/accessGatewa
 import withPermission from "../../../../shared/packages/hocs/permission/permissionHOC"
 import DataGridControl from '../../../../shared/packages/control/grid/datagrid';
 import { getLogSpin } from "../../../../services/logSpin.service"
+import { loadDataTable } from "../../../../redux/actions/strategyActions"
+import { getListLiteStrategySpin } from "../../../../services/strategySpin.service"
+
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+
 
 const styles = theme => ({
     root: {
@@ -19,111 +27,54 @@ const styles = theme => ({
 });
 
 function LogSpinComponent(props) {
-    const [allows] = usePermission();
     const { addToast } = useToasts();
     const dispatch = useDispatch();
-    const [listLogSpin, setListLogSpin] = useState(null);
-
-    const { classes } = props;
+    const [listLogSpin, setListLogSpin] = useState([]);
     const { t } = useTranslation('common');
+    const [selectedStrategy, setSelectedStrategy] = useState(null);
+    const [strategyList, setStrategyList] = useState([])
 
     useEffect(() => {
-        getLogSpin({ keySearch: 'all' }).then((res) => {
+        getListLiteStrategySpin({
+            pageNumber: 1,
+            pageSize: 999
+        }).then((res) => {
             const data = res?.data?.data ?? [];
-            var remapData = data?.map(x => (
-                {
-                    strategySpinName: x?.proxyStrategyPrize?.strategySpin?.name,
-                    spinDate: x?.spinDate,
-                    masterName: x?.masterAllocationSelected?.masterId,
-                    channelPrizeName: x?.proxyStrategyPrize?.channelPrize?.name,
-                }
-            )).sort(function (a, b) {
-                return b?.prizeName?.localeCompare(a?.prizeName);
-            })
-            setListLogSpin([...remapData]);
+            setStrategyList([...data]);
         })
     }, [])
 
     useEffect(() => {
-        if (listLogSpin?.length > 0) {
-            var a = listLogSpin;
+        if (selectedStrategy?.id) {
+            getLogSpin({ keySearch: 'strategyId', keyValue: selectedStrategy?.id }).then((res) => {
+                const data = res?.data?.data ?? [];
+                var remapData = data?.map(x => (
+                    {
+                        strategySpinName: x?.proxyStrategyPrize?.strategySpin?.name,
+                        spinDate: x?.spinDate,
+                        masterName: x?.masterAllocationSelected?.masterId,
+                        channelPrizeName: x?.proxyStrategyPrize?.channelPrize?.name,
+                    }
+                )).sort(function (a, b) {
+                    return b?.prizeName?.localeCompare(a?.prizeName);
+                })
+                var groupKey = remapData.reduce(function (r, a) {
+                    r[a.channelPrizeName] = r[a.channelPrizeName] || [];
+                    r[a.channelPrizeName].push(a);
+                    return r;
+                }, Object.create(null));
+                setListLogSpin(groupKey);
+            })
         }
+    }, [selectedStrategy])
+
+    useEffect(() => {
+        console.log({ listLogSpin });
     }, [listLogSpin])
 
-    function getProxyName(params) {
-        // if (params.field === 'masterName')
-        //     return `${params?.row?.masterAllocationSelected?.masterId || ''}`;
-        // if (params.field === 'channelPrizeName')
-        //     return `${params?.row?.proxyStrategyPrize?.channelPrize?.name || ''}`;
-        // if (params.field === 'strategySpinName')
-        //     return `${params?.row?.proxyStrategyPrize?.strategySpin?.name || ''}`;
-        // else
-        return '';
-    }
-
-    const columns = [
-        {
-            field: 'strategySpinName',
-            headerName: 'Tên chiến lược',
-            headerClassName: 'headerColumn',
-            minWidth: 200,
-            flex: 1,
-            editable: false,
-            // valueGetter: getProxyName,
-        },
-        {
-            field: 'masterName',
-            headerName: 'Người trúng',
-            headerClassName: 'headerColumn',
-            minWidth: 200,
-            flex: 1,
-            editable: false,
-            // valueGetter: getProxyName,
-        },
-        {
-            field: 'channelPrizeName',
-            headerName: 'Tên giải thưởng',
-            headerClassName: 'headerColumn',
-            minWidth: 200,
-            flex: 1,
-            editable: false,
-            // valueGetter: getProxyName,
-        },
-
-        {
-            field: 'spinDate',
-            headerName: 'Ngày trúng giải',
-            headerClassName: 'headerColumn',
-            minWidth: 200,
-            flex: 1,
-            editable: false,
-        },
-    ]
-
-
     return (
-        // <div className={classes.root}>
-        //     <div className="content">
-        //         <div className="block-content">
-        //             <div className="row row-title mt-1">
-        //                 <div className="col-md-12 table-height">
-        //                     {
-        //                         listLogSpin?.length &&
-        //                         <DataGridControl
-        //                             rows={listLogSpin}
-        //                             columns={columns}
-        //                             count={listLogSpin.length}
-        //                             disableSelectionOnClick
-        //                         />
-        //                     }
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
         <body class="history">
             <header>
-
             </header>
             <main>
                 <section class="history-section">
@@ -135,83 +86,104 @@ function LogSpinComponent(props) {
                             </div>
                             <div class="wrap-left_body">
                                 <ul>
-                                    <li>
-                                        <div class="title-item"> <a class="title" href="">Chiến lược Test</a></div>
-                                    </li>
+                                    {
+                                        strategyList?.map((item, i) => {
+                                            return (
+                                                <li onClick={() => {
+                                                    setSelectedStrategy(item)
+                                                }} className={item?.id === selectedStrategy?.id ? 'active' : ''}>
+                                                    <div class="title-item">
+                                                        <a class="title">
+                                                            {item?.name}
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })
+                                    }
+
                                 </ul>
                             </div>
                         </div>
                         <div class="wrap-right">
                             <div class="wrap-right_header d-flex align-items-center justify-content-between">
                                 <div class="wrap-right_header--title d-flex align-items-center"><img class="icon" src="/asset/images/icons/list.svg" alt="" />
-                                    <h2>&nbsp; Danh sách trúng giải</h2>
+                                    <h2>&nbsp; Danh sách trúng giải {selectedStrategy?.name}</h2>
                                 </div>
                                 <div class="wrap-right_header--sort wrap-tabs d-flex align-items-center">
                                     <div class="tab-content">
-                                        <div class="b-tab active" id="year">
-                                            <select>
-                                                <option value="hide">Năm</option>
-                                                <option value="2022">2022</option>
-                                                <option value="2021">2021</option>
-                                            </select>
-                                        </div>
-                                        <div class="b-tab" id="mounth">
-                                            <select>
-                                                <option value="hide">Tháng</option>
-                                                <option value="january">Tháng 1</option>
-                                                <option value="february">Tháng 2 </option>
-                                            </select>
-                                        </div>
                                     </div>
-                                    <ul class="tab-list d-flex align-items-center">
-                                        <li> <a class="b-nav-tab" href="javascript:;" data-tab="mounth">Tháng</a></li>
-                                        <li> <a class="b-nav-tab active" href="javascript:;" data-tab="year">Năm</a></li>
-                                    </ul>
                                 </div>
                             </div>
                             <div class="wrap-right_body">
-                                <table>
-                                    <thead>
-                                        <th>
-                                            <p>Tên chiến lược</p>
-                                        </th>
-                                        <th>
-                                            <p>Tên Khách hàng</p>
-                                        </th>
-                                        <th>
-                                            <p>Tên giải thưởng</p>
-                                        </th>
-                                        <th>
-                                            <p>Ngày quay</p>
-                                        </th>
+                                {
+                                    Object.keys(listLogSpin)?.map((itemOutside, i) => {
+                                        const dataItem = listLogSpin[itemOutside];
+                                        return (
+                                            <Accordion style={{
+                                                width: "100%",
+                                                padding: '5px',
+                                                boxShadow: 'none',
+                                                marginBottom: "20px",
+                                            }}>
+                                                <AccordionSummary
+                                                    expandIcon={
+                                                        <>
+                                                            <ExpandMoreIcon />
+                                                        </>
+                                                    }
+                                                    aria-controls="panel1a-content"
+                                                    IconButtonProps={{
+                                                    }}
+                                                >
+                                                    <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
+                                                    &nbsp;
+                                                    <b>{itemOutside}</b>
+                                                    &nbsp;
+                                                    {`(${dataItem?.length} khách hàng trúng giải)`}
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                    <table>
+                                                        <thead>
+                                                            <th>
+                                                                <p>Tên Khách hàng</p>
+                                                            </th>
+                                                            <th>
+                                                                <p>Tên giải thưởng</p>
+                                                            </th>
+                                                            <th>
+                                                                <p>Ngày quay</p>
+                                                            </th>
 
-                                    </thead>
-                                    {
-                                        listLogSpin?.map((item, index) => {
-                                            return (
-                                                <tr>
-                                                    <td>
-                                                        <p>{item?.strategySpinName}</p>
-                                                    </td>
-                                                    <td>
-                                                        <p>{item?.masterName}</p>
-                                                    </td>
-                                                    <td>
-                                                        <p>
-                                                            <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
-                                                            {item?.channelPrizeName}
-                                                        </p>
-                                                    </td>
-                                                    <td>
-                                                        <p>
-                                                            {item?.spinDate}
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                    }
-                                </table>
+                                                        </thead>
+                                                        {
+                                                            dataItem?.map((item, index) => {
+                                                                return (
+                                                                    <tr>
+                                                                        <td>
+                                                                            <p>{item?.masterName}</p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p>
+                                                                                <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
+                                                                                {item?.channelPrizeName}
+                                                                            </p>
+                                                                        </td>
+                                                                        <td>
+                                                                            <p>
+                                                                                {item?.spinDate}
+                                                                            </p>
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                            })
+                                                        }
+                                                    </table>
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
