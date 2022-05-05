@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import DynamicLink from "../../../common/DynamicLink/DynamicLink";
 import StepBar from "../../../common/StepBar/StepBar"
 import { useRouter } from 'next/router'
-import CreateStrategy from "./component/createStrategy"
+import CreateStrategy from "./component/createStrategy/createStrategy"
+import GroupAllocation from "./component/groupAllocation/groupAllocation"
 import { masterData } from "../../masterData";
 
 const StrategyContainer = (props) => {
+    const { id, strategySSR } = props;
     const router = useRouter()
     const changeRoute = (route) => {
         router.replace(route ?? "/")
@@ -21,10 +23,17 @@ const StrategyContainer = (props) => {
     }
 
 
-    const stepDirectComponent = (step) => {
+    const stepDirectComponent = (step,extensionData=null) => {
         switch (step) {
             case 1: return <CreateStrategy material={{
                 masterData: masterData,
+                strategySSR: strategySSR,
+                containerData: containerData,
+                updateStepValue: updateStepValue
+            }} />
+            case 2: return <GroupAllocation material={{
+                masterData: masterData,
+                strategySSR: strategySSR,
                 containerData: containerData,
                 updateStepValue: updateStepValue
             }} />

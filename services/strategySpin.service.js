@@ -15,6 +15,13 @@ export const getListStrategySpinbyId = (id) => {
     );
 };
 
+export const getListStrategySpinAdminbyId = (id) => {
+    return request(
+        'GET',
+        `StrategySpin/${id}`
+    );
+};
+
 export const updateStrategySpin = (data) => {
     return request(
         'POST',

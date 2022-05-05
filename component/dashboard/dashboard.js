@@ -28,12 +28,6 @@ function DashBoardComponent(props) {
 
     useEffect(() => {
         dispatch(loadDataTable());
-        dispatch(loadDataTableMasterObj({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
         dispatch(loadDataTableGroupAllocation({
             header: {
                 pageNumber: 1,
@@ -90,8 +84,12 @@ function DashBoardComponent(props) {
                                                     {item?.name}
                                                 </a>
                                             </div>
-                                            <div class="action-item"> <a class="edit">
-                                                <img src="/asset/images/icons/edit.svg" alt="" /></a>
+                                            <div class="action-item">
+                                                <a class="edit" onClick={()=>{
+                                                      changeRoute(`/strategySpin/container?id=${item?.id}`)
+                                                }}>
+                                                    <img src="/asset/images/icons/edit.svg" alt="" />
+                                                </a>
                                                 <a class="delete">
                                                     <img src="/asset/images/icons/trash.svg" alt="" />
                                                 </a>

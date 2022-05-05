@@ -20,7 +20,6 @@ export default function StrategySpinPage(props) {
 export async function getServerSideProps(router) {
     try {
         const { id } = router.query;
-        console.log("SSR Example-Page id: " + id);
         return {
             props: {
                 id: id ?? null,

@@ -10,7 +10,7 @@ const SelectBoxv2 = ({ optionLabel, optionValue, value, options, onChange, ...pr
             }
         }} {...props}>
             {
-                options?.map((item, i) => {
+                [{ [optionValue]: null, [optionLabel]: "Lựa chọn" }, ...options]?.map((item, i) => {
                     return (
                         <option selected={item[optionValue] === value} value={item[optionValue]}>{item[optionLabel]}</option>
                     )
