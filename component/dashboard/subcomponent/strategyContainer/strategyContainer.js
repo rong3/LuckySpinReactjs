@@ -23,7 +23,7 @@ const StrategyContainer = (props) => {
     }
 
 
-    const stepDirectComponent = (step,extensionData=null) => {
+    const stepDirectComponent = (step, extensionData = null) => {
         switch (step) {
             case 1: return <CreateStrategy material={{
                 masterData: masterData,
@@ -43,7 +43,7 @@ const StrategyContainer = (props) => {
 
     return (
         <>
-            <StepBar {...props} />
+            <StepBar containerData={containerData} {...props} />
             {
                 stepDirectComponent(containerData.step)
             }

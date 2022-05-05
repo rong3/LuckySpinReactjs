@@ -45,7 +45,7 @@ function GroupAllocationComponent(props) {
     const columns = [
         {
             field: 'masterId',
-            headerName: 'Master Id',
+            headerName: 'Tên khách hàng',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
@@ -53,7 +53,7 @@ function GroupAllocationComponent(props) {
         },
         {
             field: 'masterCode',
-            headerName: 'Master Code',
+            headerName: 'Mã khách hàng',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,

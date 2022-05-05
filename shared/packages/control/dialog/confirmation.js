@@ -24,7 +24,7 @@ function DialogConfirmation(props) {
                 onClick={ () => props.close(false) }>
           <span className="">{ props.cancelButtonLabel || t('common.button.cancel') }</span>
         </button>
-        <button type="button" className="btn btn-primary" data-dismiss="modal"
+        <button type="button" className="btn btn-outline-danger" data-dismiss="modal"
                 onClick={ () => props.close(true) }>
           <span className="">{ props.confirmButtonLabel || t('common.button.clear') }</span>
         </button>
