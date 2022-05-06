@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import "../utils/dropConsole";
 // Styles
 import "fontsource-roboto";
+// import 'swiper/css/pagination';
+// import 'swiper/css/effect-fade'
 // ROUTER
 import { useRouter } from "next/router";
 // MUI Theme & SASS
@@ -46,6 +48,7 @@ function Default({ Component, pageProps }) {
     // loadLazyCSS('/asset/css/main.min.css');
     loadLazyCSS('/asset/css/core.css');
     loadLazyCSS('/asset/fonts/all.css');
+    loadLazyCSS('/asset/css/plugin.min.css');
   }, [])
 
 

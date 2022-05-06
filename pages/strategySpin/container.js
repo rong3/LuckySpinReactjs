@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import CommonLayout from "../../shared/packages/layout/root-layout.package";
 import StrategyContainer from "../../component/dashboard/subcomponent/strategyContainer/strategyContainer"
 import { useRouter } from 'next/router'
+import Script from 'next/script'
 
 export default function StrategySpinPage(props) {
     const { t } = useTranslation('common');
@@ -11,6 +12,7 @@ export default function StrategySpinPage(props) {
 
     return (
         <React.Fragment>
+               <Script src="/asset/js/_plugin.min.js" strategy="beforeInteractive" type="text/javascript" />
             <Head>
                 <title>{t('mainMenu.dashboard')}</title>
             </Head>

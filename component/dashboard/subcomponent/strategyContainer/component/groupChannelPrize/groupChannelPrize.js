@@ -105,6 +105,16 @@ const GroupChannelPrize = (props) => {
             minWidth: 200,
             flex: 1,
             editable: false,
+            renderCell: (cell) => {
+                return <>
+                    <button class="edit ms-3 btn" style={{
+                        height: '25px',
+                        background: cell?.row?.color
+                    }}>
+                    </button>
+                    <p>&nbsp;{cell?.row?.color}</p>
+                </>
+            }
         },
         {
             field: 'position',
@@ -340,7 +350,7 @@ const GroupChannelPrize = (props) => {
         updateStrategySpin(data).then((res) => {
             addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
             material?.refreshStrategyData().then((res2) => {
-                material?.updateStepValue(2);
+                material?.updateStepValue(4);
             })
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
@@ -430,9 +440,9 @@ const GroupChannelPrize = (props) => {
                             <button class="btn btn-submit" type="button"
                                 onClick={() => {
                                     if (material?.strategySSR) {
-                                        const groupSelectedId = selectedGroupAllocation?.id;
+                                        const groupSelectedId = selectedGroupPrize?.id;
                                         var clone = { ...material?.strategySSR }
-                                        clone.groupAllocationId = groupSelectedId;
+                                        clone.groupChannelPrizeId = groupSelectedId;
                                         updateStrategyCommand(clone)
                                     }
                                 }}
