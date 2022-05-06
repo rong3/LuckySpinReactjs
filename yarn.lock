@@ -1435,6 +1435,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@fancyapps/ui@^4.0.26":
+  version "4.0.26"
+  resolved "https://registry.yarnpkg.com/@fancyapps/ui/-/ui-4.0.26.tgz#3e3307f1c739241eb6f4ac84a2263c5312ef1862"
+  integrity sha512-BcqK/lOMQ0IbR7DUcNK6olUCaOWlEqW7Oi3qdltur87zs6doFnno5fyKv9cDMRnuH4IxudU7Cz1zRzSUfsDWJA==
+
 "@fortawesome/fontawesome-free@^5.15.4":
   version "5.15.4"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.4.tgz#ecda5712b61ac852c760d8b3c79c96adca5554e5"

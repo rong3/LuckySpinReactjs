@@ -64,7 +64,8 @@ function Default({ Component, pageProps }) {
 
   return (
     <ProvideAuth>
-      <Script src="/asset/js/plugins.min.js" strategy='beforeInteractive' />
+      <Script src="/asset/js/_plugin.min.js" strategy="beforeInteractive" type="text/javascript" />
+      {/* <Script src="/asset/js/plugins.min.js" strategy='beforeInteractive' /> */}
       <Script src="/asset/js/main.min.js" strategy='lazyOnload' />
       <Script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" />
       <Script src="/asset/images/luckyspin/js/core_wheel.js" strategy='beforeInteractive' />

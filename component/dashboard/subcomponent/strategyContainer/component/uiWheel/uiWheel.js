@@ -29,27 +29,6 @@ const UIWheel = (props) => {
     })
 
     useEffect(() => {
-        new Swiper(".layout-circle", {
-            slidesPerView: 5,
-            spaceBetween: 16,
-            loop: false,
-            loopFillGroupWithBlank: false,
-            navigation: {
-                nextEl: ".layout-circle .swiper-header .swiper__arrows .swiper-button-next",
-                prevEl: ".layout-circle .swiper-header .swiper__arrows .swiper-button-prev"
-            },
-            breakpoints: {
-                640: {
-                    slidesPerView: 2
-                },
-                768: {
-                    slidesPerView: 4
-                },
-                1281: {
-                    slidesPerView: 5
-                }
-            }
-        });
         new Swiper(".layout-bg", {
             slidesPerView: 5,
             spaceBetween: 16,

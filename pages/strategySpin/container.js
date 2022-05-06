@@ -12,7 +12,6 @@ export default function StrategySpinPage(props) {
 
     return (
         <React.Fragment>
-               <Script src="/asset/js/_plugin.min.js" strategy="beforeInteractive" type="text/javascript" />
             <Head>
                 <title>{t('mainMenu.dashboard')}</title>
             </Head>

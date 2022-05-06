@@ -15,12 +15,48 @@ const WheelUI = (props) => {
     const { material, func } = props;
     const router = useRouter();
     const { addToast } = useToasts();
+    const [refresh, setRefresh] = useState(false)
     const dispatch = useDispatch();
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
     const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
     const [convertData, setConvertData] = useState(null);
+    const [modalCustom, setModalCustom] = useState({
+        isOpen: false,
+        data: null,
+        type: null
+    })
+
+    const resetModal = () => {
+        setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
+    }
+
+    useEffect(() => {
+        if (!refresh) {
+            new Swiper(".layout-circle", {
+                slidesPerView: 5,
+                spaceBetween: 16,
+                loop: false,
+                loopFillGroupWithBlank: false,
+                navigation: {
+                    nextEl: ".layout-circle .swiper-header .swiper__arrows .swiper-button-next",
+                    prevEl: ".layout-circle .swiper-header .swiper__arrows .swiper-button-prev"
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2
+                    },
+                    768: {
+                        slidesPerView: 4
+                    },
+                    1281: {
+                        slidesPerView: 5
+                    }
+                }
+            });
+        }
+    }, [refresh])
 
     const convertEditAttributeUI = (data) => {
         let maskCopyEdit = _.cloneDeep(attributesConfig);
@@ -47,6 +83,80 @@ const WheelUI = (props) => {
         func.setTabData({ ...func.tabData });
     }
 
+    const createWheelCommand = (data) => {
+        let maskCopyEdit = _.cloneDeep(attributesConfig);
+        maskCopyEdit.wheel_bg.value = data?.wheelbg;
+
+        const copyData = {
+            name: data?.name,
+            desc: data?.desc,
+            configJson: JSON.stringify(maskCopyEdit)
+        };
+        createWheelSpin(copyData).then((res) => {
+            dispatch(loadDataTableWheel({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            setRefresh(true)
+            setTimeout(() => {
+                setRefresh(false)
+            }, 0);
+            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const updateWheelCommand = (data) => {
+        const copyData = {
+            id: data?.id,
+            name: data?.name,
+            desc: data?.desc,
+            configJson: JSON.stringify(data?.configJson)
+        };
+
+        updateWheelSpin(copyData).then((res) => {
+            addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const removeWheelCommand = (data) => {
+        removeWheelSpin(data).then((res) => {
+            dispatch(loadDataTableWheel({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    //for only modal
+    const updateWheelLiteCommand = (data) => {
+        func.tabData.wheelUI.data.id = data?.id;
+        func.tabData.wheelUI.data.name = data?.name;
+        func.tabData.wheelUI.data.desc = data?.desc;
+        func.tabData.wheelUI.data.configJson['wheel_bg'].value = data?.wheelbg;
+        const copyData = {
+            id: data?.id,
+            name: data?.name,
+            desc: data?.desc,
+            configJson: JSON.stringify(func.tabData.wheelUI.data.configJson)
+        };
+        updateWheelSpin(copyData).then((res) => {
+            addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+        })
+    }
+
 
     useEffect(() => {
         dispatch(loadDataTableWheel({
@@ -58,7 +168,6 @@ const WheelUI = (props) => {
     }, [])
 
     useEffect(() => {
-        console.log({ wheelInstanceList });
         if (wheelInstanceList) {
             const convert = wheelInstanceList?.map(item => ({
                 ...item,
@@ -71,39 +180,157 @@ const WheelUI = (props) => {
         }
     }, [wheelInstanceList, material?.strategySSR])
 
+    const overwriteDataModal = (prefix, value) => {
+        modalCustom.data[prefix] = value;
+        setModalCustom({ ...modalCustom });
+    }
+
     return (
         <div class="tab-container">
-            <div class="swiper mySwiper layout-circle">
-                <div class="swiper-header d-flex align-items-center">
-                    <h1>Chọn hình ảnh vòng quay</h1>
-                    <button class="btn btn-default" type="submit" data-fancybox="" data-src="#popup-bg"> <img src="/asset/images/icons/cloud-upload-2.svg" alt="" /><span>Tải lên</span></button>
-                    <div class="swiper__arrows">
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
+            {
+                refresh ||
+                <div class="swiper mySwiper layout-circle">
+                    <div class="swiper-header d-flex align-items-center">
+                        <h1>Chọn hình ảnh vòng quay</h1>
+                        <button class="btn btn-default" type="button" onClick={() =>
+                            setModalCustom({ ...modalCustom, isOpen: true, type: 'new', data: {} })}
+                        >
+                            <img src="/asset/images/icons/cloud-upload-2.svg" alt="" />
+                            <span>Tải lên</span>
+                        </button>
+                        <div class="swiper__arrows">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-wrapper">
+                        {
+                            convertData?.map((item, i) => {
+                                return (
+                                    <div class="swiper-slide">
+                                        <div onClick={() => {
+                                            func.tabData.wheelUI.data = item;
+                                            func.setTabData({ ...func.tabData });
+                                        }} class={`slide-inner ${func?.tabData?.wheelUI?.data?.id === item?.id ? 'swiper-slide-active' : ''}`}>
+                                            <a>
+                                                <img src={item?.configJson?.wheel_bg?.value} alt="" />
+                                            </a>
+                                            <div class="action-block">
+                                                <ul>
+                                                    <li><a><img src="/asset/images/icons/eye2.svg" alt="" /></a></li>
+                                                    <li onClick={() => {
+                                                        setModalCustom({
+                                                            ...modalCustom, isOpen: true, type: 'edit', data: {
+                                                                id: item?.id,
+                                                                name: item?.name,
+                                                                desc: item?.desc,
+                                                                wheelbg: item?.configJson?.wheel_bg?.value
+                                                            }
+                                                        })
+                                                    }
+                                                    }>
+                                                        <a><img src="/asset/images/icons/edit2.svg" alt="" /></a>
+                                                    </li>
+                                                    <li onClick={async () => {
+                                                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${item?.name} ?`, "Xoá", "Trở về");
+                                                        if (confirm && item?.id) {
+                                                            removeWheelCommand(item?.id);
+                                                        }
+                                                    }}>
+                                                        <a><img src="/asset/images/icons/delete.svg" alt="" /></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
-                <div class="swiper-wrapper">
-                    {
-                        convertData?.map((item, i) => {
-                            return (
-                                <div class="swiper-slide">
-                                    <div onClick={() => {
-                                        func.tabData.wheelUI.data = item;
-                                        func.setTabData({ ...func.tabData });
-                                    }} class={`slide-inner ${func?.tabData?.wheelUI?.data?.id === item?.id ? 'swiper-slide-active' : ''}`}>
-                                        <a>
-                                            <img src={item?.configJson?.wheel_bg?.value} alt="" />
-                                        </a>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-            </div>
-            {
-                <UIBuilderv2 modelChange={updateAttributes} section={sectionId} attribute={func?.tabData?.wheelUI?.data?.configJson} />
             }
+
+            {
+                func.tabData.wheelUI.data &&
+                <>
+                    <UIBuilderv2 modelChange={updateAttributes} section={sectionId} attribute={func?.tabData?.wheelUI?.data?.configJson} />
+                    <button class="btn btn-add" style={{ margin: 'auto' }} onClick={() => {
+                        console.log({ data: func.tabData.wheelUI.data });
+                        updateWheelCommand(func.tabData.wheelUI.data)
+                    }}>
+                        <img src="/asset/images/icons/save.svg" alt="" />
+                        <span style={{ color: "#454f5b" }}>&nbsp;Lưu thông số vòng quay</span>
+                    </button>
+                </>
+            }
+
+            {/* popup */}
+            <Modal
+                isOpen={modalCustom.isOpen}
+                modalName="role-modal"
+                showOverlay={true}
+                onClose={() => resetModal()}
+                title={modalCustom?.type === 'new' ? "Tạo mới giao diện vòng quay" : "Sửa thông tin giao diện vòng quay"}
+                size="xl"
+                centered
+            >
+                <Modal.Body>
+                    <div class="popup-detail" id="popup-bg">
+                        <div class="popup-main">
+                            <div class="popup-body">
+                                <ul class="d-flex align-items-center justify-content-center">
+                                    <li>
+                                        <a>
+                                            <figure> <img src="/asset/images/icons/photo-upload.svg" alt="" />
+                                                <figcaption>
+                                                    <p>Tải ảnh vòng quay</p>
+                                                </figcaption>
+                                            </figure>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                                <form class="wrap-form">
+                                    <div class="form-group">
+                                        <label for="">Tên giao diện vòng quay</label>
+                                        <InputControl type="text" id="name" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('name', value)
+                                        }} defaultValue={modalCustom.data?.name} placeholder="Nhập tên giao diện" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Mô tả</label>
+                                        <InputControl type="text" id="desc" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('desc', value)
+                                        }} defaultValue={modalCustom.data?.desc} />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Url ảnh vòng quay</label>
+                                        <InputControl type="text" id="wheelbg" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('wheelbg', value)
+                                        }} defaultValue={modalCustom.data?.wheelbg} />
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-submit" type="button" onClick={() => {
+                                            if (modalCustom.type === 'new') {
+                                                createWheelCommand(modalCustom.data)
+                                            }
+                                            if (modalCustom.type === 'edit') {
+                                                updateWheelLiteCommand(modalCustom.data)
+                                            }
+                                            resetModal();
+                                        }}>
+                                            <span>{modalCustom?.type === "new" ? "Tạo mới" : "Cập nhật"}</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
+
             {/* <form class="wrap-form">
                 <div class="form-row row">
                     <p class="title">Kích thước vòng quay</p>

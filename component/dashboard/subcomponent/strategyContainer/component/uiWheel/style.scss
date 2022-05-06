@@ -277,6 +277,101 @@
 .choice-layout .wrapper-container .wrap-left.wrap-tabs .tab-content .tab-container .layout-circle .slide-inner a img {
     width: 100px;
 }
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-bg
+    .slide-inner
+    .action-block,
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-circle
+    .slide-inner
+    .action-block {
+    cursor: pointer;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border-radius: 4px;
+    background: #eaeef2;
+}
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-bg
+    .slide-inner
+    .action-block
+    ul,
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-circle
+    .slide-inner
+    .action-block
+    ul {
+    padding: 5px 6px;
+}
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-bg
+    .slide-inner
+    .action-block
+    ul
+    li
+    a,
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-circle
+    .slide-inner
+    .action-block
+    ul
+    li
+    a {
+    display: block;
+    padding-top: 0;
+}
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-bg
+    .slide-inner
+    .action-block
+    ul
+    li
+    a
+    img,
+.choice-layout
+    .wrapper-container
+    .wrap-left.wrap-tabs
+    .tab-content
+    .tab-container
+    .layout-circle
+    .slide-inner
+    .action-block
+    ul
+    li
+    a
+    img {
+    position: static;
+    width: 20px;
+}
 .swiper {
     position: relative;
     z-index: 1;
