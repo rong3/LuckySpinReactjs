@@ -19,6 +19,14 @@ const UIWheel = (props) => {
         router.replace(route ?? "/")
     }
     const [selectTab, setSelectTab] = useState(0)
+    const [tabData, setTabData] = useState({
+        wheelUI: {
+            data: null
+        },
+        backgroundUI: {
+            data: null
+        }
+    })
 
     useEffect(() => {
         new Swiper(".layout-circle", {
@@ -75,25 +83,34 @@ const UIWheel = (props) => {
                     </ul>
                     <div class="tab-content">
                         <div class={`b-tab ${selectTab === 0 ? 'active' : ''}`} id="tab-1">
-                            <WheelUI {...props} />
+                            <WheelUI {...props} func={{
+                                tabData: tabData,
+                                setTabData: setTabData
+                            }} />
                         </div>
                         <div class={`b-tab ${selectTab === 1 ? 'active' : ''}`} id="tab-2">
-                            <BackGroundUI {...props} />
+                            <BackGroundUI {...props} func={{
+                                tabData: tabData,
+                                setTabData: setTabData
+                            }} />
                         </div>
                     </div>
                 </div>
                 <div class="wrap-right">
                     <div class="wrap-right_img">
-                        <figure> <img src="/asset/images/gd-1.png" alt="" /></figure>
+                        <figure>
+                            <img style={{ width: '250px', height: '250px' }}
+                                src={tabData?.wheelUI?.data?.configJson?.wheel_bg?.value} alt="" />
+                        </figure>
                         <figcaption>
                             <ul>
                                 <li>
                                     <h2>Tên giao diện</h2>
-                                    <p>Giao diện default</p>
+                                    <p>{tabData?.wheelUI?.data?.name}</p>
                                 </li>
                                 <li>
                                     <h2>Mô tả</h2>
-                                    <p>Tặng lượt quay</p>
+                                    <p>{tabData?.wheelUI?.data?.desc}</p>
                                 </li>
                             </ul>
                         </figcaption>
