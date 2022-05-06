@@ -5,45 +5,156 @@ import { InputControl } from "../../../../../../../../shared/packages/control/in
 import showConfirm from "../../../../../../../../shared/packages/control/dialog/confirmation"
 import { useToasts } from "react-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
+import { loadDataTableThemeSpin } from "../../../../../../../../redux/actions/themeAction"
+import { createTheme, updateTheme, removeTheme } from "../../../../../../../../services/themeInstance.service"
+import { themeConfig } from "./attributeConfig"
 
 const BackGroundUI = (props) => {
-    const { material } = props
+    const { material, func } = props
     const router = useRouter();
     const { addToast } = useToasts();
     const dispatch = useDispatch();
+    const [refresh, setRefresh] = useState(false)
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
 
+    const { themeInstanceList } = useSelector((state) => state.themeInstance);
+    const [convertData, setConvertData] = useState(null);
+    const [modalCustom, setModalCustom] = useState({
+        isOpen: false,
+        data: null,
+        type: null
+    })
+    const resetModal = () => {
+        setModalCustom({ ...modalCustom, isOpen: false, data: null, type: null })
+    }
+
+    const convertEditAttributeUI = (data) => {
+        let maskCopyEdit = _.cloneDeep(themeConfig);
+        if (data === null) {
+            return maskCopyEdit;
+        }
+        else {
+            try {
+                const parse = JSON.parse(data);
+                Object.keys(maskCopyEdit)?.map(x => {
+                    maskCopyEdit[x].value = parse[x]?.value
+                })
+                return maskCopyEdit;
+            }
+            catch {
+                return {}
+            }
+        }
+    }
+
+    useEffect(() => {
+        if (!refresh) {
+            new Swiper(".layout-bg", {
+                slidesPerView: 5,
+                spaceBetween: 16,
+                loop: false,
+                loopFillGroupWithBlank: false,
+                navigation: {
+                    nextEl: ".layout-bg .swiper-header .swiper__arrows .swiper-button-next",
+                    prevEl: ".layout-bg .swiper-header .swiper__arrows .swiper-button-prev"
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2
+                    },
+                    768: {
+                        slidesPerView: 4
+                    },
+                    1281: {
+                        slidesPerView: 5
+                    }
+                }
+            });
+        }
+    }, [refresh])
+
+    useEffect(() => {
+        dispatch(loadDataTableThemeSpin({
+            header: {
+                pageNumber: 1,
+                pageSize: 999
+            }
+        }))
+    }, [])
+
+    useEffect(() => {
+        if (themeInstanceList) {
+            const convert = themeInstanceList?.map(item => ({
+                ...item,
+                configJson: convertEditAttributeUI(item?.configJson)
+            }))
+            //select default value
+            func.tabData.backgroundUI.data = convert?.find(x => x.id === material?.strategySSR?.themeInstanceId) ?? null;
+            func.setTabData({ ...func.tabData });
+            setConvertData(convert);
+        }
+    }, [themeInstanceList, material?.strategySSR])
+
     return (
         <div class="tab-container">
-            <div class="swiper mySwiper layout-bg">
-                <div class="swiper-header d-flex align-items-center">
-                    <h1>Chọn hình ảnh vòng quay</h1>
-                    <button class="btn btn-default" type="submit"> <img src="/asset/images/icons/cloud-upload-2.svg" alt="" /><span>Tải lên</span></button>
-                    <div class="swiper__arrows">
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
+            {
+                refresh ||
+                <div class="swiper mySwiper layout-bg">
+                    <div class="swiper-header d-flex align-items-center">
+                        <h1>Chọn hình ảnh vòng quay</h1>
+                        <button class="btn btn-default" type="submit"> <img src="/asset/images/icons/cloud-upload-2.svg" alt="" /><span>Tải lên</span></button>
+                        <div class="swiper__arrows">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-wrapper">
+                        {
+                            convertData?.map((item, i) => {
+                                return (
+                                    <div class="swiper-slide">
+                                        <div onClick={() => {
+                                            func.tabData.backgroundUI.data = item;
+                                            func.setTabData({ ...func.tabData });
+                                        }} class={`slide-inner ${func?.tabData?.backgroundUI?.data?.id === item?.id ? 'swiper-slide-active' : ''}`}>
+                                            <a>
+                                                <img src={item?.configJson?.main_bg?.value} alt="" />
+                                            </a>
+                                            <div class="action-block">
+                                                <ul>
+                                                    <li><a><img src="/asset/images/icons/eye2.svg" alt="" /></a></li>
+                                                    <li onClick={() => {
+                                                        setModalCustom({
+                                                            ...modalCustom, isOpen: true, type: 'edit', data: {
+                                                                id: item?.id,
+                                                                name: item?.name,
+                                                                desc: item?.desc,
+                                                                main_bg: item?.configJson?.main_bg?.value
+                                                            }
+                                                        })
+                                                    }
+                                                    }>
+                                                        <a><img src="/asset/images/icons/edit2.svg" alt="" /></a>
+                                                    </li>
+                                                    <li onClick={async () => {
+                                                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${item?.name} ?`, "Xoá", "Trở về");
+                                                        if (confirm && item?.id) {
+                                                            removeWheelCommand(item?.id);
+                                                        }
+                                                    }}>
+                                                        <a><img src="/asset/images/icons/delete.svg" alt="" /></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
                     </div>
                 </div>
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="slide-inner"> <a data-fancybox-trigger="gallery"> <img src="/asset/images/bg-review-1.jpg" alt="" /></a></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="slide-inner"> <a> <img src="/asset/images/bg-review-2.jpg" alt="" /></a></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="slide-inner"> <a> <img src="/asset/images/bg-review-3.jpg" alt="" /></a></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="slide-inner"> <a> <img src="/asset/images/bg-review-4.jpg" alt="" /></a></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="slide-inner"> <a> <img src="/asset/images/bg-review-5.jpg" alt="" /></a></div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
         // /* <div style="display: none;"><a href="/asset/images/bg-review-1.jpg" data-fancybox="gallery" data-thumb="/asset/images/bg-review-1.jpg"></a><a href="/asset/images/bg-review-2.jpg" data-fancybox="gallery" data-thumb="/asset/images/bg-review-2.jpg"></a><a href="/asset/images/bg-review-3.jpg" data-fancybox="gallery" data-thumb="/asset/images/bg-review-3.jpg"></a></div> */}
     )

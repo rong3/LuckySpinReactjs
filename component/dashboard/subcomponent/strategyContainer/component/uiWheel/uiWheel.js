@@ -28,30 +28,6 @@ const UIWheel = (props) => {
         }
     })
 
-    useEffect(() => {
-        new Swiper(".layout-bg", {
-            slidesPerView: 5,
-            spaceBetween: 16,
-            loop: false,
-            loopFillGroupWithBlank: false,
-            navigation: {
-                nextEl: ".layout-bg .swiper-header .swiper__arrows .swiper-button-next",
-                prevEl: ".layout-bg .swiper-header .swiper__arrows .swiper-button-prev"
-            },
-            breakpoints: {
-                640: {
-                    slidesPerView: 2
-                },
-                768: {
-                    slidesPerView: 4
-                },
-                1281: {
-                    slidesPerView: 5
-                }
-            }
-        });
-    }, [])
-
     return (
         <section class="choice-layout">
             <div class="wrapper-container d-flex">
@@ -77,7 +53,7 @@ const UIWheel = (props) => {
                 </div>
                 <div class="wrap-right">
                     <div class="wrap-right_img">
-                        <figure>
+                        <figure style={{ backgroundSize: 'cover', backgroundImage: `url(${tabData?.backgroundUI?.data?.configJson?.main_bg?.value})` }}>
                             <img style={{ width: '250px', height: '250px' }}
                                 src={tabData?.wheelUI?.data?.configJson?.wheel_bg?.value} alt="" />
                         </figure>

@@ -6,7 +6,6 @@ import showConfirm from "../../../../../../../../shared/packages/control/dialog/
 import { useToasts } from "react-toast-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { createWheelSpin, updateWheelSpin, removeWheelSpin } from "../../../../../../../../services/wheelInstance.service"
-import { wheelConfig } from "../../../../../../../luckyspin/module/wheelUI/config/wheelUIConfig"
 import { loadDataTableWheel } from "../../../../../../../../redux/actions/wheelInstanceAction"
 import { attributesConfig, sectionId } from "./attributeConfig"
 import UIBuilderv2 from "../../../../../../../../shared/packages/control/uiBuilderv2/uiBuilderv2"
