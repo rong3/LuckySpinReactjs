@@ -28,8 +28,12 @@ const styles = theme => ({
 
 function LogSpinComponent(props) {
     const { addToast } = useToasts();
+    const [selectedStyleView, setSelectedStyleView] = useState(0);
     const dispatch = useDispatch();
-    const [listLogSpin, setListLogSpin] = useState([]);
+    const [listLogSpin, setListLogSpin] = useState({
+        list: [],
+        group: {}
+    });
     const { t } = useTranslation('common');
     const [selectedStrategy, setSelectedStrategy] = useState(null);
     const [strategyList, setStrategyList] = useState([])
@@ -50,6 +54,7 @@ function LogSpinComponent(props) {
                 const data = res?.data?.data ?? [];
                 var remapData = data?.map(x => (
                     {
+                        id: x?.id,
                         strategySpinName: x?.proxyStrategyPrize?.strategySpin?.name,
                         spinDate: x?.spinDate,
                         masterName: x?.masterAllocationSelected?.masterId,
@@ -63,7 +68,11 @@ function LogSpinComponent(props) {
                     r[a.channelPrizeName].push(a);
                     return r;
                 }, Object.create(null));
-                setListLogSpin(groupKey);
+
+                setListLogSpin({
+                    list: remapData,
+                    group: groupKey
+                });
             })
         }
     }, [selectedStrategy])
@@ -71,6 +80,40 @@ function LogSpinComponent(props) {
     useEffect(() => {
         console.log({ listLogSpin });
     }, [listLogSpin])
+
+    const columns = [
+        {
+            field: 'masterName',
+            headerName: 'Tên Khách hàng',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+        },
+        {
+            field: 'channelPrizeName',
+            headerName: 'Tên giải thưởng',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+            renderCell: (cell) => {
+                return <p>
+                    <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
+                    &nbsp;{cell?.row?.channelPrizeName}
+                </p>
+            }
+        },
+        {
+            field: 'spinDate',
+            headerName: 'Ngày quay',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+        },
+
+    ]
 
     return (
         <body class="history">
@@ -113,12 +156,17 @@ function LogSpinComponent(props) {
                                 <div class="wrap-right_header--sort wrap-tabs d-flex align-items-center">
                                     <div class="tab-content">
                                     </div>
+                                    <ul class="tab-list d-flex align-items-center" style={{ cursor: 'pointer' }}>
+                                        <li onClick={() => setSelectedStyleView(0)}> <a class={`b-nav-tab ${selectedStyleView === 0 ? 'active' : ''}`}>Xem kiểu nhóm</a></li>
+                                        <li onClick={() => setSelectedStyleView(1)}> <a class={`b-nav-tab ${selectedStyleView === 1 ? 'active' : ''}`}>Xem kiểu danh sách</a></li>
+                                    </ul>
                                 </div>
                             </div>
                             <div class="wrap-right_body">
                                 {
-                                    Object.keys(listLogSpin)?.map((itemOutside, i) => {
-                                        const dataItem = listLogSpin[itemOutside];
+                                    selectedStyleView === 0 &&
+                                    Object.keys(listLogSpin?.group)?.map((itemOutside, i) => {
+                                        const dataItem = listLogSpin?.group[itemOutside];
                                         return (
                                             <Accordion style={{
                                                 width: "100%",
@@ -143,46 +191,26 @@ function LogSpinComponent(props) {
                                                     {`(${dataItem?.length} khách hàng trúng giải)`}
                                                 </AccordionSummary>
                                                 <AccordionDetails>
-                                                    <table>
-                                                        <thead>
-                                                            <th>
-                                                                <p>Tên Khách hàng</p>
-                                                            </th>
-                                                            <th>
-                                                                <p>Tên giải thưởng</p>
-                                                            </th>
-                                                            <th>
-                                                                <p>Ngày quay</p>
-                                                            </th>
-
-                                                        </thead>
-                                                        {
-                                                            dataItem?.map((item, index) => {
-                                                                return (
-                                                                    <tr>
-                                                                        <td>
-                                                                            <p>{item?.masterName}</p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <p>
-                                                                                <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
-                                                                                {item?.channelPrizeName}
-                                                                            </p>
-                                                                        </td>
-                                                                        <td>
-                                                                            <p>
-                                                                                {item?.spinDate}
-                                                                            </p>
-                                                                        </td>
-                                                                    </tr>
-                                                                )
-                                                            })
-                                                        }
-                                                    </table>
+                                                    <DataGridControl
+                                                        rows={dataItem}
+                                                        columns={columns}
+                                                        count={dataItem?.length}
+                                                        disableSelectionOnClick
+                                                    />
+                                                   
                                                 </AccordionDetails>
                                             </Accordion>
                                         )
                                     })
+                                }
+                                {
+                                    selectedStyleView === 1 &&
+                                    <DataGridControl
+                                        rows={listLogSpin?.list}
+                                        columns={columns}
+                                        count={listLogSpin?.list?.length}
+                                        disableSelectionOnClick
+                                    />
                                 }
                             </div>
                         </div>
