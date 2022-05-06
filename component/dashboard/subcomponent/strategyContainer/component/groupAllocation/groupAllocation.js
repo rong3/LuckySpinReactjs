@@ -70,9 +70,14 @@ const GroupAllocation = (props) => {
             return maskCopyEdit;
         }
         else {
-            const parse = JSON.parse(data);
-            const patch = { ...maskCopyEdit, ...parse }
-            return patch;
+            try {
+                const parse = JSON.parse(data);
+                const patch = { ...maskCopyEdit, ...parse }
+                return patch;
+            }
+            catch {
+                return {}
+            }
         }
     }
 

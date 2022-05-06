@@ -85,8 +85,8 @@ function DashBoardComponent(props) {
                                                 </a>
                                             </div>
                                             <div class="action-item">
-                                                <a class="edit" onClick={()=>{
-                                                      changeRoute(`/strategySpin/container?id=${item?.id}`)
+                                                <a class="edit" onClick={() => {
+                                                    changeRoute(`/strategySpin/container?id=${item?.id}`)
                                                 }}>
                                                     <img src="/asset/images/icons/edit.svg" alt="" />
                                                 </a>
@@ -104,7 +104,7 @@ function DashBoardComponent(props) {
                 {
                     <div class="wrap-right">
                         <div class="wrap-right_header">
-                            <a href="">
+                            <a href={`/embedded/lucky-spin?id=${selectedStrategy?.id}`} target={"_blank"}>
                                 {
                                     selectedStrategy ?
                                         <img src="/asset/images/circle-review.jpg" alt="" /> :
