@@ -4,6 +4,7 @@ import StepBar from "../../../common/StepBar/StepBar"
 import { useRouter } from 'next/router'
 import CreateStrategy from "./component/createStrategy/createStrategy"
 import GroupAllocation from "./component/groupAllocation/groupAllocation"
+import GroupChannelPrize from "./component/groupChannelPrize/groupChannelPrize"
 import { masterData } from "../../masterData";
 import { getListStrategySpinAdminbyId } from "../../../../services/strategySpin.service"
 
@@ -38,21 +39,17 @@ const StrategyContainer = (props) => {
     }, [])
 
     const stepDirectComponent = (step, extensionData = null) => {
+        const genericProps = {
+            masterData: masterData,
+            strategySSR: data,
+            containerData: containerData,
+            updateStepValue: updateStepValue,
+            refreshStrategyData: loadDataStrategy
+        }
         switch (step) {
-            case 1: return <CreateStrategy material={{
-                masterData: masterData,
-                strategySSR: data,
-                containerData: containerData,
-                updateStepValue: updateStepValue,
-                refreshStrategyData: loadDataStrategy
-            }} />
-            case 2: return <GroupAllocation material={{
-                masterData: masterData,
-                strategySSR: data,
-                containerData: containerData,
-                updateStepValue: updateStepValue,
-                refreshStrategyData: loadDataStrategy
-            }} />
+            case 1: return <CreateStrategy material={{...genericProps}} />
+            case 2: return <GroupAllocation material={{...genericProps}} />
+            case 3: return <GroupChannelPrize material={{...genericProps}} />
             default: return <></>
         }
     }

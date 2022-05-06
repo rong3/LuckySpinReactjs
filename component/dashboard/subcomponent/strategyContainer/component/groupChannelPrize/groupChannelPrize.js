@@ -5,18 +5,20 @@ import { useDispatch, useSelector } from "react-redux";
 import SelectBoxv2 from "../../../../../../shared/packages/control/selectBoxv2/selectBoxv2"
 import DataGridControl from '../../../../../../shared/packages/control/grid/datagrid';
 import { loadDataTableGroupAllocation } from "../../../../../../redux/actions/groupAllocationActions"
-import { getProxyAllocationStrategy } from "../../../../../../services/proxyAllocationStrategy.service"
+import { loadDataTableGroupChannelPrize } from "../../../../../../redux/actions/groupChannelPrizeAction"
+import { getProxyPrizeAdmin } from "../../../../../../services/proxyPrize.service"
 import { strategyConfig, prizeConfig } from "../../../../../luckyspin/module/strategySpin/config/strategyConfig"
 import Modal from "../../../../../../shared/packages/control/modal/index";
 import { InputControl } from "../../../../../../shared/packages/control/input/inputControl"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
-import { createMasterAllocationSelected, updateMasterAllocationSelected, removeMasterAllocationSelected } from "../../../../../../services/masterAllocationSelected.service"
+import { createGroupChannelPrize, updateGroupChannelPrize, removeGroupChannelPrize } from "../../../../../../services/groupChannelPrize.service"
 import { createGroupAllocation, updateGroupAllocation, removeGroupAllocation } from "../../../../../../services/groupAllocation.service"
+import { createChannelPrize, updateChannelPrize, removeChannelPrize } from "../../../../../../services/channelPrize.service"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
-import { updateProxyStrategy } from "../../../../../../services/proxyAllocationStrategy.service"
+import { updateProxyPrize } from "../../../../../../services/proxyPrize.service"
 
-const GroupAllocation = (props) => {
+const GroupChannelPrize = (props) => {
     const { material } = props
     const router = useRouter();
     const { addToast } = useToasts();
@@ -24,110 +26,134 @@ const GroupAllocation = (props) => {
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
-    const [modalCustomGroupAllocation, setModalCustomGroupAllocation] = useState({
+    const [modalCustomGroupPrize, setModalCustomGroupPrize] = useState({
         isOpen: false,
         data: null,
         type: null
     })
 
-    const [modalCustomAllocationSelected, setModalCustomAllocationSelected] = useState({
+    const [modalCustomPrizeSelected, setModalCustomPrizeSelected] = useState({
         isOpen: false,
         data: null,
         type: null
     })
 
-    const sendUpdateGroupAllocationCommand = (data) => {
-        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'edit', data: data, isOpen: true })
+    const sendUpdateGroupPrizeCommand = (data) => {
+        setModalCustomGroupPrize({ ...modalCustomGroupPrize, type: 'edit', data: data, isOpen: true })
     }
 
-    const resetModalAllocationSelected = () => {
-        setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, isOpen: false, data: null, type: null })
+    const resetModalPrizeSelected = () => {
+        setModalCustomPrizeSelected({ ...modalCustomPrizeSelected, isOpen: false, data: null, type: null })
     }
 
-    const resetModalGroupAllocation = () => {
-        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, isOpen: false, data: null, type: null })
+    const resetModalGroupPrize = () => {
+        setModalCustomGroupPrize({ ...modalCustomGroupPrize, isOpen: false, data: null, type: null })
     }
 
     const overwriteDataAllocationSelectedModal = (prefix, value) => {
-        if (!["quantity", "disabled"].includes(prefix)) {
-            modalCustomAllocationSelected.data[prefix] = value;
+        if (!["quantity", "postion", "allowPrize", "percent", "hidden"].includes(prefix)) {
+            modalCustomPrizeSelected.data[prefix] = value;
         }
         else {
-            modalCustomAllocationSelected.data.attributes[prefix].value = value;
+            modalCustomPrizeSelected.data.attributes[prefix] = value;
         }
-        setModalCustomAllocationSelected({ ...modalCustomAllocationSelected });
+        setModalCustomPrizeSelected({ ...modalCustomPrizeSelected });
     }
 
 
     const overwriteDataGroupAllocationModal = (prefix, value) => {
-        modalCustomGroupAllocation.data[prefix] = value;
-        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation });
-    }
-
-    const convertEditAttributeUI = (data) => {
-        let maskCopyEdit = _.cloneDeep(strategyConfig.maskEditModel);
-        if (data === null) {
-            return maskCopyEdit;
-        }
-        else {
-            try {
-                const parse = JSON.parse(data);
-                const patch = { ...maskCopyEdit, ...parse }
-                return patch;
-            }
-            catch {
-                return {}
-            }
-        }
+        modalCustomGroupPrize.data[prefix] = value;
+        setModalCustomGroupPrize({ ...modalCustomGroupPrize });
     }
 
     function getAttribute(params) {
+        if (params.field === 'position')
+            return params.row?.attributes?.position;
+        if (params.field === 'allowPrize')
+            return params.row?.attributes?.allowPrizing;
+        if (params.field === 'percent')
+            return params.row?.attributes?.percent;
         if (params.field === 'quantity')
-            return params.row?.attributes?.quantity?.value;
-        if (params.field === 'disabled')
-            return params.row?.attributes?.disabled?.value;
+            return params.row?.attributes?.quantity;
+        if (params.field === 'hidden')
+            return params.row?.attributes?.hidden;
         else
             return ""
     }
 
     const columns = [
         {
-            field: 'masterId',
-            headerName: 'Tên khách hàng',
+            field: 'name',
+            headerName: 'Tên giải thưởng',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
             editable: false,
         },
         {
-            field: 'masterCode',
-            headerName: 'Mã khách hàng',
+            field: 'image',
+            headerName: 'Hình ảnh',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
             editable: false,
+        },
+        {
+            field: 'color',
+            headerName: 'Màu sắc',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+        },
+        {
+            field: 'position',
+            headerName: 'Vị trí giải thưởng',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+            valueGetter: getAttribute,
+        },
+        {
+            field: 'allowPrize',
+            headerName: 'Cho phép trúng',
+            headerClassName: 'headerColumn',
+            minWidth: 100,
+            flex: 1,
+            editable: false,
+            valueGetter: getAttribute,
+        },
+        {
+            field: 'percent',
+            headerName: 'Tỷ lệ trúng (%)',
+            headerClassName: 'headerColumn',
+            minWidth: 100,
+            flex: 1,
+            editable: false,
+            valueGetter: getAttribute,
         },
         {
             field: 'quantity',
-            headerName: 'Số lượt quay',
+            headerName: 'Số lượng giải',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
             editable: false,
             valueGetter: getAttribute,
         },
         {
-            field: 'disabled',
-            headerName: 'Vô hiệu hoá',
+            field: 'hidden',
+            headerName: 'Ẩn giải',
             headerClassName: 'headerColumn',
-            minWidth: 200,
+            minWidth: 100,
             flex: 1,
-            valueGetter: getAttribute,
             editable: false,
+            valueGetter: getAttribute,
         },
         {
             field: 'action',
-            headerName: 'Thao tác',
+            headerName: 'Action',
             sortable: false,
             headerClassName: 'headerColumn',
             headerAlign: 'center',
@@ -147,15 +173,15 @@ const GroupAllocation = (props) => {
                 <div>
                     <img src="/asset/images/icons/pencle.svg"
                         onClick={() => {
-                            setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, type: 'edit', data: { ...params?.row }, isOpen: true })
+                            setModalCustomPrizeSelected({ ...modalCustomPrizeSelected, type: 'edit', data: { ...params?.row }, isOpen: true })
                         }}
                         alt="" />
                 </div>
                 <div>
                     <i className="fas fa-trash text-danger" onClick={async (e) => {
-                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${params?.row?.masterId} ?`, "Xoá", "Trở về");
+                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${params?.row?.name} ?`, "Xoá", "Trở về");
                         if (confirm && params?.row?.id) {
-                            removeAllocationSelectedCommand(params?.row?.id);
+                            removePrizeCommand(params?.row?.id);
                         }
                     }}></i>
                 </div>
@@ -163,12 +189,11 @@ const GroupAllocation = (props) => {
         )
     }
 
-    const [selectedGroupAllocation, setSelectedGroupAllocation] = useState(material?.strategySSR?.groupAllocation);
-
-    const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
+    const { groupChannelPrizeList } = useSelector((state) => state.groupChannelPrize);
+    const [selectedGroupPrize, setSelectedGroupPrize] = useState(material?.strategySSR?.groupChannelPrize);
 
     useEffect(() => {
-        dispatch(loadDataTableGroupAllocation({
+        dispatch(loadDataTableGroupChannelPrize({
             header: {
                 pageNumber: 1,
                 pageSize: 999
@@ -177,50 +202,55 @@ const GroupAllocation = (props) => {
     }, [])
 
     useEffect(() => {
-        if (selectedGroupAllocation) {
-            findSelectedGroupAllocation(selectedGroupAllocation?.id)
+        if (selectedGroupPrize) {
+            findSelectedGroupPrize(selectedGroupPrize?.id)
         }
-    }, [groupAllocationsList])
+    }, [groupChannelPrizeList])
 
-    const findSelectedGroupAllocation = (id) => {
-        const find = groupAllocationsList?.find(x => x.id === id)
+    const findSelectedGroupPrize = (id) => {
+        const find = groupChannelPrizeList?.find(x => x.id === id)
         if (find) {
-            const masterIds = find?.masterAllocationSelecteds?.map(x => x.id) ?? [];
-            getProxyAllocationStrategy({
+            const channelIDs = find?.channelPrizes?.map(x => x.id) ?? [];
+            getProxyPrizeAdmin({
                 "strategySpinId": material?.strategySSR?.id,
-                "masterAllocationSelectedIds": masterIds
+                "channelPrizeIds": channelIDs
             }).then((res) => {
                 console.log({ res });
                 const resData = res?.data?.data;
                 const mergeData = {
                     ...find,
-                    masterAllocationSelecteds: find.masterAllocationSelecteds?.map((item) => ({
+                    channelPrizes: find.channelPrizes?.map((item) => ({
                         ...item,
-                        idProxy: resData?.find(x => x?.masterAllocationSelectedId === item?.id)?.id,
-                        attributes: convertEditAttributeUI(resData?.find(x => x?.masterAllocationSelectedId === item?.id)?.attributes)
+                        idProxy: resData?.find(x => x?.channelPrizeId === item?.id)?.id,
+                        attributes: { ...resData?.find(x => x?.channelPrizeId === item?.id) }
                     }))
                 }
-                setSelectedGroupAllocation({ ...mergeData })
+                console.log({ mergeData });
+                setSelectedGroupPrize({ ...mergeData })
             });
-
         }
         else
-            setSelectedGroupAllocation(null)
+            setSelectedGroupPrize(null)
     }
 
-    //func allocation selected
-    const createAllocationSelectedCommand = (data) => {
-        if (selectedGroupAllocation?.id) {
-            createMasterAllocationSelected({ ...data, groupAllocationId: selectedGroupAllocation?.id }).then((res) => {
-                addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+    //func channelPrize selected
+
+    const createPrizeCommand = (data) => {
+        if (selectedGroupPrize?.id) {
+            createChannelPrize({ ...data, groupChannelPrizeId: selectedGroupPrize?.id }).then((res) => {
+                addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
                 const convert = ({
                     "id": data?.idProxy,
                     "strategySpinId": material?.strategySSR?.id,
-                    "masterAllocationSelectedId": data?.id,
-                    "attributes": JSON.stringify(data?.attributes)
+                    "channelPrizeId": data?.id,
+                    "position": data?.attributes?.position,
+                    "allowPrizing": data?.attributes?.allowPrizing,
+                    "percent": data?.attributes?.percent,
+                    "quantity": data?.attributes?.quantity,
+                    "hidden": data?.attributes?.hidden,
                 });
-                updateProxyStrategy(convert).then((res) => {
-                    dispatch(loadDataTableGroupAllocation({
+                updateProxyPrize(convert).then((res) => {
+                    dispatch(loadDataTableGroupChannelPrize({
                         header: {
                             pageNumber: 1,
                             pageSize: 999
@@ -234,9 +264,9 @@ const GroupAllocation = (props) => {
         }
     }
 
-    const removeAllocationSelectedCommand = (data) => {
-        removeMasterAllocationSelected(data).then((res) => {
-            dispatch(loadDataTableGroupAllocation({
+    const removePrizeCommand = (data) => {
+        removeChannelPrize(data).then((res) => {
+            dispatch(loadDataTableGroupChannelPrize({
                 header: {
                     pageNumber: 1,
                     pageSize: 999
@@ -248,18 +278,21 @@ const GroupAllocation = (props) => {
         })
     }
 
-
-    const updateAllocationSelectedCommand = (data) => {
-        updateMasterAllocationSelected(data).then((res) => {
+    const updatePrizeCommand = (data) => {
+        updateChannelPrize(data).then((res) => {
             addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
             const convert = ({
                 "id": data?.idProxy,
                 "strategySpinId": material?.strategySSR?.id,
-                "masterAllocationSelectedId": data?.id,
-                "attributes": JSON.stringify(data?.attributes)
+                "channelPrizeId": data?.id,
+                "position": data?.attributes?.position,
+                "allowPrizing": data?.attributes?.allowPrizing,
+                "percent": data?.attributes?.percent,
+                "quantity": data?.attributes?.quantity,
+                "hidden": data?.attributes?.hidden,
             });
-            updateProxyStrategy(convert).then((res) => {
-                dispatch(loadDataTableGroupAllocation({
+            updateProxyPrize(convert).then((res) => {
+                dispatch(loadDataTableGroupChannelPrize({
                     header: {
                         pageNumber: 1,
                         pageSize: 999
@@ -274,9 +307,9 @@ const GroupAllocation = (props) => {
     //end
 
     //
-    const updateGroupAllocationCommand = (data) => {
-        updateGroupAllocation(data).then((res) => {
-            dispatch(loadDataTableGroupAllocation({
+    const updateGroupPrizeCommand = (data) => {
+        updateGroupChannelPrize(data).then((res) => {
+            dispatch(loadDataTableGroupChannelPrize({
                 header: {
                     pageNumber: 1,
                     pageSize: 999
@@ -288,9 +321,9 @@ const GroupAllocation = (props) => {
         })
     }
 
-    const createGroupAllocationCommand = (data) => {
-        createGroupAllocation(data).then((res) => {
-            dispatch(loadDataTableGroupAllocation({
+    const createGroupPrizeCommand = (data) => {
+        createGroupChannelPrize(data).then((res) => {
+            dispatch(loadDataTableGroupChannelPrize({
                 header: {
                     pageNumber: 1,
                     pageSize: 999
@@ -302,31 +335,12 @@ const GroupAllocation = (props) => {
         })
     }
 
-    const removeGroupAllocationCommand = (data) => {
-        removeGroupAllocation(data).then((res) => {
-            if (res?.data?.succeeded) {
-                dispatch(loadDataTableGroupAllocation({
-                    header: {
-                        pageNumber: 1,
-                        pageSize: 999
-                    }
-                }))
-                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
-            }
-            else {
-                addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
-            }
-        }).catch((err) => {
-            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
-        })
-    }
-    //
     //
     const updateStrategyCommand = (data) => {
         updateStrategySpin(data).then((res) => {
             addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
             material?.refreshStrategyData().then((res2) => {
-                material?.updateStepValue(3);
+                material?.updateStepValue(2);
             })
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
@@ -339,43 +353,45 @@ const GroupAllocation = (props) => {
         <section class="choice-customer">
             <div class="wrapper-container">
                 <div class="wrap-sort d-flex align-items-center">
-                    <h1 class="title-small">Nhóm Khách hàng</h1>
+                    <h1 class="title-small">Nhóm giải thưởng</h1>
                     <SelectBoxv2
                         id="selectbox"
                         style={{ width: "353px", marginLeft: "16px" }}
                         optionLabel="name"
                         optionValue="id"
                         onChange={(data) => {
-                            findSelectedGroupAllocation(data)
+                            findSelectedGroupPrize(data)
                         }}
-                        value={selectedGroupAllocation?.id}
-                        options={groupAllocationsList ?? []}
+                        value={selectedGroupPrize?.id}
+                        options={groupChannelPrizeList ?? []}
                     />
                     {
-                        selectedGroupAllocation &&
+                        selectedGroupPrize &&
                         <>
                             <a class="edit"
                                 onClick={() => {
-                                    sendUpdateGroupAllocationCommand(selectedGroupAllocation)
+                                    sendUpdateGroupPrizeCommand(selectedGroupPrize)
                                 }}
-                                style={{ marginLeft: "-25px", cursor: "pointer" }}> <img src="/asset/images/icons/pencle.svg" alt="" /></a>
+                                style={{ marginLeft: "-25px", cursor: "pointer" }}>
+                                <img src="/asset/images/icons/pencle.svg" alt="" />
+                            </a>
                         </>
                     }
                     <button class="edit ms-3 btn btn-add" onClick={() => {
-                        setModalCustomGroupAllocation({ ...modalCustomGroupAllocation, type: 'new', data: { disabled: false }, isOpen: true })
+                        setModalCustomGroupPrize({ ...modalCustomGroupPrize, type: 'new', data: { disabled: false }, isOpen: true })
                     }}>
                         <img src="/asset/images/icons/add.svg" alt="" />
                     </button>
                 </div>
                 <div class="wrap-body">
                     {
-                        selectedGroupAllocation &&
+                        selectedGroupPrize &&
                         <div class="wrap-body_header d-flex align-items-center justify-content-between">
-                            <h1 class="title-small">Danh sách Khách hàng</h1>
+                            <h1 class="title-small">Danh sách giải thưởng</h1>
                             <div class="wrap-button d-flex align-items-center">
                                 {/* <button class="btn btn-search"> <img src="/asset/images/icons/search.svg" alt="" /></button> */}
                                 <button class="btn btn-add" onClick={() => {
-                                    setModalCustomAllocationSelected({ ...modalCustomAllocationSelected, type: 'new', data: { disabled: false, attributes: strategyConfig.maskEditModel }, isOpen: true })
+                                    setModalCustomPrizeSelected({ ...modalCustomPrizeSelected, type: 'new', data: { disabled: false, attributes: strategyConfig.maskEditModel }, isOpen: true })
                                 }}>
                                     <img src="/asset/images/icons/add.svg" alt="" />
                                     <span>&nbsp;Thêm mới</span>
@@ -387,11 +403,11 @@ const GroupAllocation = (props) => {
                     }
                     <div class="wrap-body_table">
                         {
-                            selectedGroupAllocation &&
+                            selectedGroupPrize &&
                             <DataGridControl
-                                rows={selectedGroupAllocation?.masterAllocationSelecteds}
+                                rows={selectedGroupPrize?.channelPrizes}
                                 columns={columns}
-                                count={selectedGroupAllocation?.masterAllocationSelecteds?.length ?? 0}
+                                count={selectedGroupPrize?.channelPrizes?.length ?? 0}
                                 disableSelectionOnClick
                             />
                         }
@@ -408,7 +424,7 @@ const GroupAllocation = (props) => {
                            </nav> */}
                         <div class="wrap-button d-flex align-items-center">
                             <button class="btn btn-backstep" onClick={() => {
-                                material?.updateStepValue(1);
+                                material?.updateStepValue(2);
                             }} type="button">
                                 <img src="/asset/images/icons/back.svg" alt="" /><span>Quay lại</span></button>
                             <button class="btn btn-submit" type="button"
@@ -427,51 +443,85 @@ const GroupAllocation = (props) => {
                 </div>
 
             </div>
-            {/* //modal danh sacsh khach hang */}
+            {/* //modal danh sacsh giai thuong */}
             {
                 <Modal
-                    isOpen={modalCustomAllocationSelected.isOpen}
+                    isOpen={modalCustomPrizeSelected.isOpen}
                     modalName="role-modal"
                     showOverlay={true}
-                    onClose={() => resetModalAllocationSelected()}
+                    onClose={() => resetModalPrizeSelected()}
                     title="Đối tượng phân bổ"
                     size="md"
                     centered
                 >
                     <Modal.Body>
                         {
-                            ['edit', 'new'].includes(modalCustomAllocationSelected.type) ?
+                            ['edit', 'new'].includes(modalCustomPrizeSelected.type) ?
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <span>Tên khách hàng</span>
+                                        <span>Tên giải thưởng</span>
                                         <InputControl type="text" id="name" onChange={(e) => {
                                             const value = e.target.value ?? '';
-                                            overwriteDataAllocationSelectedModal('masterId', value)
-                                        }} defaultValue={modalCustomAllocationSelected.data?.masterId} />
+                                            overwriteDataAllocationSelectedModal('name', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.name} />
                                     </div>
                                     <div className="col-md-6">
-                                        <span>Mã khách hàng</span>
-                                        <InputControl type="text" id="name" onChange={(e) => {
+                                        <span>Màu sắc</span>
+                                        <InputControl type="text" id="color" onChange={(e) => {
                                             const value = e.target.value ?? '';
-                                            overwriteDataAllocationSelectedModal('masterCode', value)
-                                        }} defaultValue={modalCustomAllocationSelected.data?.masterCode} />
+                                            overwriteDataAllocationSelectedModal('color', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.color} />
                                     </div>
-                                    <div className="col-md-6">
-                                        <span>Số lượt quay</span>
-                                        <InputControl type="text" id="name" onChange={(e) => {
+                                    <div className="col-md-12">
+                                        <span>Hình ảnh</span>
+                                        <InputControl type="text" id="image" onChange={(e) => {
                                             const value = e.target.value ?? '';
-                                            overwriteDataAllocationSelectedModal('quantity', Number.parseInt(value))
-                                        }} defaultValue={modalCustomAllocationSelected.data?.attributes?.quantity?.value} />
+                                            overwriteDataAllocationSelectedModal('image', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.image} />
                                     </div>
                                     <div className="col-md-6">
-                                        <span>Vô hiệu hoá</span>
+                                        <span>Vị trí giải thưởng</span>
+                                        <InputControl type="number" id="color" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('postion', Number.parseInt(value))
+                                        }} defaultValue={modalCustomPrizeSelected.data?.attributes?.position} />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <span>Cho phép trúng</span>
                                         <SelectBox id="selectbox"
                                             optionLabel="label"
                                             optionValue="value"
                                             onChange={(data) => {
-                                                overwriteDataAllocationSelectedModal('disabled', data)
+                                                overwriteDataAllocationSelectedModal('allowPrize', data)
                                             }}
-                                            value={modalCustomAllocationSelected.data?.attributes?.disabled?.value}
+                                            value={modalCustomPrizeSelected.data?.attributes?.allowPrizing}
+                                            isPortal
+                                            options={[{ label: "True", value: true }, { label: "False", value: false }]}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <span>Tỷ lệ trúng</span>
+                                        <InputControl type="number" id="color" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('percent', Number.parseFloat(value))
+                                        }} defaultValue={modalCustomPrizeSelected.data?.attributes?.percent} />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <span>Số lượng giải</span>
+                                        <InputControl type="number" id="quantity" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('quantity', Number.parseInt(value))
+                                        }} defaultValue={modalCustomPrizeSelected.data?.attributes?.quantity} />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <span>Ẩn giải</span>
+                                        <SelectBox id="selectbox"
+                                            optionLabel="label"
+                                            optionValue="value"
+                                            onChange={(data) => {
+                                                overwriteDataAllocationSelectedModal('hidden', data)
+                                            }}
+                                            value={modalCustomPrizeSelected.data?.attributes?.hidden}
                                             isPortal
                                             options={[{ label: "True", value: true }, { label: "False", value: false }]}
                                         />
@@ -485,24 +535,23 @@ const GroupAllocation = (props) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-outline-danger mr-25" onClick={() => {
-                            resetModalAllocationSelected()
+                            resetModalPrizeSelected()
                         }}>Đóng</button>
 
                         <button className="btn btn-outline-primary mr-25" onClick={() => {
-                            if (modalCustomAllocationSelected.type === 'new') {
-                                createAllocationSelectedCommand(modalCustomAllocationSelected.data)
+                            if (modalCustomPrizeSelected.type === 'new') {
+                                createPrizeCommand(modalCustomPrizeSelected.data)
                             }
-                            if (modalCustomAllocationSelected.type === 'edit') {
-                                updateAllocationSelectedCommand(modalCustomAllocationSelected.data)
-                                console.log({ data: modalCustomAllocationSelected.data });
+                            if (modalCustomPrizeSelected.type === 'edit') {
+                                updatePrizeCommand(modalCustomPrizeSelected.data)
                             }
-                            resetModalAllocationSelected();
+                            resetModalPrizeSelected();
                         }}>
                             {(() => {
-                                if (modalCustomAllocationSelected.type === 'new') {
+                                if (modalCustomPrizeSelected.type === 'new') {
                                     return "Tạo mới"
                                 }
-                                if (modalCustomAllocationSelected.type === 'edit') {
+                                if (modalCustomPrizeSelected.type === 'edit') {
                                     return "Cập nhật"
                                 }
                             })()}
@@ -511,28 +560,28 @@ const GroupAllocation = (props) => {
                 </Modal>
             }
 
-            {/* //modal nhom khach hang */}
+            {/* //modal nhom giai thuong*/}
             {
                 <Modal
-                    isOpen={modalCustomGroupAllocation.isOpen}
+                    isOpen={modalCustomGroupPrize.isOpen}
                     modalName="role-modal"
                     showOverlay={true}
-                    onClose={() => resetModalGroupAllocation()}
-                    title="Nhóm khách hàng"
+                    onClose={() => resetModalGroupPrize()}
+                    title="Nhóm giải thưởng"
                     size="md"
                     centered
                 >
                     <Modal.Body>
                         {
-                            ['edit', 'new'].includes(modalCustomGroupAllocation.type) ?
+                            ['edit', 'new'].includes(modalCustomGroupPrize.type) ?
                                 <>
                                     <div className="row">
                                         <div className="col-md-12">
-                                            <span>Tên nhóm khách hàng</span>
+                                            <span>Tên nhóm giải thưởng</span>
                                             <InputControl type="text" id="name" onChange={(e) => {
                                                 const value = e.target.value ?? '';
                                                 overwriteDataGroupAllocationModal('name', value)
-                                            }} defaultValue={modalCustomGroupAllocation.data?.name} />
+                                            }} defaultValue={modalCustomGroupPrize.data?.name} />
                                         </div>
                                     </div>
                                 </>
@@ -544,23 +593,23 @@ const GroupAllocation = (props) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-outline-danger mr-25" onClick={() => {
-                            resetModalGroupAllocation()
+                            resetModalGroupPrize()
                         }}>Đóng</button>
 
                         <button className="btn btn-outline-primary mr-25" onClick={() => {
-                            if (modalCustomGroupAllocation.type === 'new') {
-                                createGroupAllocationCommand(modalCustomGroupAllocation.data)
+                            if (modalCustomGroupPrize.type === 'new') {
+                                createGroupPrizeCommand(modalCustomGroupPrize.data)
                             }
-                            if (modalCustomGroupAllocation.type === 'edit') {
-                                updateGroupAllocationCommand(modalCustomGroupAllocation.data)
+                            if (modalCustomGroupPrize.type === 'edit') {
+                                updateGroupPrizeCommand(modalCustomGroupPrize.data)
                             }
-                            resetModalGroupAllocation();
+                            resetModalGroupPrize();
                         }}>
                             {(() => {
-                                if (modalCustomGroupAllocation.type === 'new') {
+                                if (modalCustomGroupPrize.type === 'new') {
                                     return "Tạo mới"
                                 }
-                                if (modalCustomGroupAllocation.type === 'edit') {
+                                if (modalCustomGroupPrize.type === 'edit') {
                                     return "Cập nhật"
                                 }
                             })()}
@@ -571,4 +620,4 @@ const GroupAllocation = (props) => {
         </section>
     );
 }
-export default GroupAllocation;
+export default GroupChannelPrize;
