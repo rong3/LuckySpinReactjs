@@ -74,17 +74,19 @@ const LuckySpinComponent = (props) => {
     }, [authRequire.enabled])
 
     useEffect(() => {
-        if (props?.data) {
+        if (props?.data || props?.id) {
             try {
                 const data = transformWheelData(props?.data);
                 console.log({ data: data });
                 setDefaultConfigData(data)
             }
             catch {
-                setDefault()
             }
         }
-        else setDefault()
+        else {
+            setLoadingWheel(false);
+            setDefault()
+        }
     }, [props?.data])
 
     useEffect(() => {
