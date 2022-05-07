@@ -61,7 +61,7 @@ function LogSpinComponent(props) {
                         channelPrizeName: x?.proxyStrategyPrize?.channelPrize?.name,
                     }
                 )).sort(function (a, b) {
-                    return b?.prizeName?.localeCompare(a?.prizeName);
+                    return a?.channelPrizeName?.localeCompare(b?.channelPrizeName);
                 })
                 var groupKey = remapData.reduce(function (r, a) {
                     r[a.channelPrizeName] = r[a.channelPrizeName] || [];
@@ -197,7 +197,7 @@ function LogSpinComponent(props) {
                                                         count={dataItem?.length}
                                                         disableSelectionOnClick
                                                     />
-                                                   
+
                                                 </AccordionDetails>
                                             </Accordion>
                                         )
