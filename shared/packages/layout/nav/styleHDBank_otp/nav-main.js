@@ -31,19 +31,23 @@ function NavBarStyle360(props) {
                 <div class="wrap-header-right d-flex align-items-center ms-auto">
                     <div class="wrap-list-user">
                         <ul class="d-flex align-items-center">
-                            <li class="nav-item">
+                            {/* <li class="nav-item">
                                 <DynamicLink href="/" as="/">
                                     <a class="username d-flex align-items-center">
                                         <p>Khoa </p><img src="/asset/images/avatar.png" alt="" />
                                     </a>
                                 </DynamicLink>
-                            </li>
+                            </li> */}
                             <li class="nav-item">
-                                <DynamicLink href="/" as="/">
-                                    <a class="logout">
-                                        <img src="/asset/images/icons/logout.svg" alt="" />
-                                    </a>
-                                </DynamicLink>
+                                <a class="logout" onClick={() => {
+                                    auth.signout().then((res) => {
+                                        setTimeout(() => {
+                                            router.push("/login");
+                                        }, 2000);
+                                    });
+                                }}>
+                                    <img src="/asset/images/icons/logout.svg" alt="" />
+                                </a>
                             </li>
                         </ul>
                     </div>
