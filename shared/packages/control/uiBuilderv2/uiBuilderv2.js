@@ -17,7 +17,7 @@ const UIBuilderv2 = ({ section, attribute, modelChange, indexData, ...props }) =
                 key: key,
                 label: attribute[key]?.label,
                 value: attribute[key]?.value,
-                type: convertType(typeof attribute[key]?.value),
+                type: attribute[key]?.section?.id === 5 ? 'sound' : convertType(typeof attribute[key]?.value),
                 section: attribute[key]?.section,
                 hide: attribute[key]?.hide,
                 col: attribute[key]?.col
@@ -26,13 +26,10 @@ const UIBuilderv2 = ({ section, attribute, modelChange, indexData, ...props }) =
         }
     }, [attribute])
 
-    useEffect(() => {
-
-    }, [propConvert])
-
     const convertType = (type) => {
         switch (type) {
             case 'string': return 'text';
+            case 'sound': return 'sound';
             case 'number': return 'number';
             case 'boolean': return 'boolean';
             default: return "text";
@@ -55,6 +52,21 @@ const UIBuilderv2 = ({ section, attribute, modelChange, indexData, ...props }) =
                 item.value = value;
                 modelChange(item.key, item.value)
             }} defaultValue={item.value} />
+        }
+        if (["sound"].includes(item.type)) {
+            return <>
+                <input onChange={(e) => {
+                    const value = convertDataType(item?.type, e.target.value) ?? null;
+                    item.value = value;
+                    modelChange(item.key, item.value)
+                }} defaultValue={item.value} class="form-control" type="type" placeholder="mp3" />
+                <img class="icon"
+                    onClick={() => {
+                        let audio = new Audio(item?.value);
+                        audio.play();
+                    }}
+                    src="/asset/images/icons/bxs-volume-full.svg" alt="" />
+            </>
         }
         if (["boolean"].includes(item.type)) {
             return <SelectBox id="selectbox"

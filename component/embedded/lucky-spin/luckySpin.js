@@ -356,8 +356,8 @@ const LuckySpinComponent = (props) => {
         wheel_audio.currentTime = 0;
         applause_audio.play();
         swal(
-            "Chúc mừng",
-            "Bạn đã trúng " + indicatedSegment?.text + ".",
+            "Kết quả",
+            "Bạn đã quay vào " + indicatedSegment?.text + ".",
             "success"
         );
         importHistory(indicatedSegment?.text);
@@ -443,7 +443,7 @@ const LuckySpinComponent = (props) => {
             else {
                 CookieHelper.removeCookie(authenticationConstant.tokenKey);
                 swal(
-                    "Lỗi",
+                    "Thông tin",
                     res?.data?.message ?? "Mã không hợp lệ",
                     "error"
                 );
