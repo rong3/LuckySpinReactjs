@@ -140,7 +140,6 @@ const GroupAllocation = (props) => {
         },
     ]
 
-
     const renderActionGrid = (params) => {
         return (
             <div className="box-action-container">
@@ -176,8 +175,14 @@ const GroupAllocation = (props) => {
         }))
     }, [])
 
+    // useEffect(() => {
+    //     if (material?.strategySSR) {
+    //         setSelectedGroupAllocation(material?.strategySSR?.groupAllocation)
+    //     }
+    // }, [material?.strategySSR])
+
     useEffect(() => {
-        if (selectedGroupAllocation) {
+        if (selectedGroupAllocation && groupAllocationsList?.length > 0) {
             findSelectedGroupAllocation(selectedGroupAllocation?.id)
         }
     }, [groupAllocationsList])
@@ -324,8 +329,8 @@ const GroupAllocation = (props) => {
     //
     const updateStrategyCommand = (data) => {
         updateStrategySpin(data).then((res) => {
-            addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
-            material?.refreshStrategyData().then((res2) => {
+            // addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
+            material?.refreshStrategyData(material?.strategySSR?.id).then((res2) => {
                 material?.updateStepValue(3);
             })
         }).catch((err) => {

@@ -9,6 +9,8 @@ import { loadDataTableWheel } from "../../redux/actions/wheelInstanceAction"
 import { loadDataTableThemeSpin } from "../../redux/actions/themeAction"
 import { loadDataTableGroupChannelPrize } from "../../redux/actions/groupChannelPrizeAction"
 import { masterData } from "./masterData"
+import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../services/strategySpin.service"
+import showConfirm from "../../shared/packages/control/dialog/confirmation"
 
 function DashBoardComponent(props) {
     const router = useRouter();
@@ -18,45 +20,60 @@ function DashBoardComponent(props) {
     }
     const { addToast } = useToasts();
     const { strategyList } = useSelector((state) => state.strategy);
-    const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
-    const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
-    const { themeInstanceList } = useSelector((state) => state.themeInstance);
-    const { masterObjectAllocationList } = useSelector((state) => state.masterObjectAllocation);
-    const { groupChannelPrizeList } = useSelector((state) => state.groupChannelPrize);
+    // const { groupAllocationsList } = useSelector((state) => state.groupAllocation);
+    // const { wheelInstanceList } = useSelector((state) => state.wheelInstance);
+    // const { themeInstanceList } = useSelector((state) => state.themeInstance);
+    // const { masterObjectAllocationList } = useSelector((state) => state.masterObjectAllocation);
+    // const { groupChannelPrizeList } = useSelector((state) => state.groupChannelPrize);
 
     const [selectedStrategy, setSelectedStrategy] = useState(null);
 
     useEffect(() => {
         dispatch(loadDataTable());
-        dispatch(loadDataTableGroupAllocation({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-        dispatch(loadDataTableWheel({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-        dispatch(loadDataTableThemeSpin({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
-        dispatch(loadDataTableGroupChannelPrize({
-            header: {
-                pageNumber: 1,
-                pageSize: 999
-            }
-        }))
+        // dispatch(loadDataTableGroupAllocation({
+        //     header: {
+        //         pageNumber: 1,
+        //         pageSize: 999
+        //     }
+        // }))
+        // dispatch(loadDataTableWheel({
+        //     header: {
+        //         pageNumber: 1,
+        //         pageSize: 999
+        //     }
+        // }))
+        // dispatch(loadDataTableThemeSpin({
+        //     header: {
+        //         pageNumber: 1,
+        //         pageSize: 999
+        //     }
+        // }))
+        // dispatch(loadDataTableGroupChannelPrize({
+        //     header: {
+        //         pageNumber: 1,
+        //         pageSize: 999
+        //     }
+        // }))
     }, [])
 
     useEffect(() => {
         console.log({ selectedStrategy });
     }, [selectedStrategy])
+
+    const removeStrategyCommand = (data) => {
+        removeStrategySpin(data).then((res) => {
+            if (res?.Succeeded === false) {
+                addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+            }
+            else {
+                dispatch(loadDataTable());
+                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+            }
+        }).catch((err) => {
+            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+        })
+    }
+
 
     return (
         <section class="home-1">
@@ -90,7 +107,12 @@ function DashBoardComponent(props) {
                                                 }}>
                                                     <img src="/asset/images/icons/edit.svg" alt="" />
                                                 </a>
-                                                <a class="delete">
+                                                <a class="delete" onClick={async () => {
+                                                    const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${item?.name} ?`, "Xoá", "Trở về");
+                                                    if (confirm && item?.id) {
+                                                        removeStrategyCommand(item.id);
+                                                    }
+                                                }}>
                                                     <img src="/asset/images/icons/trash.svg" alt="" />
                                                 </a>
                                             </div>
@@ -104,14 +126,21 @@ function DashBoardComponent(props) {
                 {
                     <div class="wrap-right">
                         <div class="wrap-right_header">
-                            <a href={`/embedded/lucky-spin?id=${selectedStrategy?.id}`} target={"_blank"}>
-                                {
-                                    selectedStrategy ?
-                                        <img src="/asset/images/circle-review.jpg" alt="" /> :
-                                        <img src="/asset/images/default.png" alt="" />
-                                }
-                            </a>
+                            {/* href={`/embedded/lucky-spin?id=${selectedStrategy?.id}`} target={"_blank"} */}
+                            {
+                                selectedStrategy ?
+                                    <div class="wrap-right_img" onClick={() => {
+                                        changeRoute(`/embedded/lucky-spin?id=${selectedStrategy?.id}`)
+                                    }}>
+                                        <figure style={{ alignItems: 'center', height: '250px', display: 'flex', justifyContent: 'center', backgroundSize: 'cover', backgroundImage: `url(${JSON.parse(selectedStrategy?.themeInstance && selectedStrategy?.themeInstance?.configJson)?.main_bg?.value})` }}>
+                                            <img style={{ width: '150px', height: '150px' }}
+                                                src={JSON.parse(selectedStrategy?.wheelInstance && selectedStrategy?.wheelInstance?.configJson)?.wheel_bg?.value} alt="" />
+                                        </figure>
 
+                                    </div>
+                                    :
+                                    <img src="/asset/images/default.png" alt="" />
+                            }
                         </div>
                         <div class="wrap-right_body">
                             <ul>

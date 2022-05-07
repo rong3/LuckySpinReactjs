@@ -126,7 +126,7 @@ td.the_wheel {
 /* EDITOR LAYOUT*/
 .layout_editor_spin {
     cursor: pointer;
-    z-index: 10;
+    z-index: 9999;
     position: fixed;
     width: 435px;
     height: 80vh;

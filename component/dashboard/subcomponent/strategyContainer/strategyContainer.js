@@ -26,18 +26,20 @@ const StrategyContainer = (props) => {
         setContainerData({ ...containerData })
     }
 
-    async function loadDataStrategy() {
-        let res = await getListStrategySpinAdminbyId(id);
-        const dataRes = res?.data?.data;
-        setData(dataRes)
+    async function loadDataStrategy(id) {
+        if (id) {
+            let res = await getListStrategySpinAdminbyId(id);
+            const dataRes = res?.data?.data;
+            setData(dataRes)
+        }
     }
 
     useEffect(() => {
         async function fetchMyAPI() {
-            await loadDataStrategy()
+            await loadDataStrategy(id)
         }
         fetchMyAPI()
-    }, [])
+    }, [id])
 
     const stepDirectComponent = (step, extensionData = null) => {
         const genericProps = {
@@ -48,10 +50,10 @@ const StrategyContainer = (props) => {
             refreshStrategyData: loadDataStrategy
         }
         switch (step) {
-            case 4: return <CreateStrategy material={{...genericProps}} />
-            case 2: return <GroupAllocation material={{...genericProps}} />
-            case 3: return <GroupChannelPrize material={{...genericProps}} />
-            case 1: return <UIWheel material={{...genericProps}} />
+            case 1: return <CreateStrategy material={{ ...genericProps }} />
+            case 2: return <GroupAllocation material={{ ...genericProps }} />
+            case 3: return <GroupChannelPrize material={{ ...genericProps }} />
+            case 4: return <UIWheel material={{ ...genericProps }} />
             default: return <></>
         }
     }

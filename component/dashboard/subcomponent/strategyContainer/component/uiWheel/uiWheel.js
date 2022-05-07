@@ -9,6 +9,7 @@ import SelectBoxv2 from "../../../../../../shared/packages/control/selectBoxv2/s
 import DataGridControl from '../../../../../../shared/packages/control/grid/datagrid';
 import WheelUI from "./component/wheel/wheel"
 import BackGroundUI from "./component/background/background"
+import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 
 const UIWheel = (props) => {
     const { material } = props
@@ -27,6 +28,15 @@ const UIWheel = (props) => {
             data: null
         }
     })
+
+    const updateStrategyCommand = (data) => {
+        updateStrategySpin(data).then((res) => {
+            addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
+            changeRoute("/");
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
+        })
+    }
 
     return (
         <section class="choice-layout">
@@ -58,23 +68,48 @@ const UIWheel = (props) => {
                                 src={tabData?.wheelUI?.data?.configJson?.wheel_bg?.value} alt="" />
                         </figure>
                         <figcaption>
-                            <ul>
-                                <li>
-                                    <h2>Tên giao diện</h2>
-                                    <p>{tabData?.wheelUI?.data?.name}</p>
-                                </li>
-                                <li>
-                                    <h2>Mô tả</h2>
-                                    <p>{tabData?.wheelUI?.data?.desc}</p>
-                                </li>
-                            </ul>
+                            {
+                                selectTab === 0 ?
+                                    <ul>
+                                        <li>
+                                            <h2>Tên giao diện</h2>
+                                            <p>{tabData?.wheelUI?.data?.name}</p>
+                                        </li>
+                                        <li>
+                                            <h2>Mô tả</h2>
+                                            <p>{tabData?.wheelUI?.data?.desc}</p>
+                                        </li>
+                                    </ul>
+                                    :
+                                    <ul>
+                                        <li>
+                                            <h2>Tên hình ảnh</h2>
+                                            <p>{tabData?.backgroundUI?.data?.name}</p>
+                                        </li>
+                                        <li>
+                                            <h2>Mô tả</h2>
+                                            <p>{tabData?.backgroundUI?.data?.desc}</p>
+                                        </li>
+                                    </ul>
+                            }
                         </figcaption>
                     </div>
                     <div class="wrap-right_button">
                         <button class="btn btn-backstep" type="button" onClick={() => {
                             material?.updateStepValue(3);
                         }}> <img src="/asset/images/icons/back.svg" alt="" /><span>Quay lại</span></button>
-                        <button class="btn btn-submit" type="button"> <span>Hoàn thành</span><em class="material-icons">check</em></button>
+                        <button class="btn btn-submit" type="button"
+                            onClick={() => {
+                                if (material?.strategySSR) {
+                                    const wheelSelectedId = tabData.wheelUI?.data?.id ?? null;
+                                    const themeSelectedId = tabData.backgroundUI?.data?.id ?? null;
+                                    var clone = { ...material?.strategySSR }
+                                    clone.wheelInstanceId = wheelSelectedId;
+                                    clone.themeInstanceId = themeSelectedId;
+                                    updateStrategyCommand(clone);
+                                }
+                            }}
+                        > <span>Hoàn thành</span><em class="material-icons">check</em></button>
                     </div>
                 </div>
             </div>

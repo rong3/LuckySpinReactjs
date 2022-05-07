@@ -53,7 +53,7 @@ const CreateStrategy = (props) => {
     const updateStrategyCommand = (data) => {
         updateStrategySpin(data).then((res) => {
             addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
-            material?.refreshStrategyData().then((res2) => {
+            material?.refreshStrategyData(material?.strategySSR?.id).then((res2) => {
                 material?.updateStepValue(2);
             })
         }).catch((err) => {
@@ -158,7 +158,6 @@ const CreateStrategy = (props) => {
                                     }} type="button"> <img src="/asset/images/icons/back.svg" alt="" /><span>Quay lại</span></button>
                                     <button class="btn btn-submit"
                                         onClick={() => {
-                                            console.log({ strategySpinModel });
                                             if (material?.strategySSR) {
                                                 updateStrategyCommand(strategySpinModel)
                                             }

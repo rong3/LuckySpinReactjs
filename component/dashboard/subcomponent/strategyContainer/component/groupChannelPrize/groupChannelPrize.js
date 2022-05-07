@@ -12,7 +12,6 @@ import Modal from "../../../../../../shared/packages/control/modal/index";
 import { InputControl } from "../../../../../../shared/packages/control/input/inputControl"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
 import { createGroupChannelPrize, updateGroupChannelPrize, removeGroupChannelPrize } from "../../../../../../services/groupChannelPrize.service"
-import { createGroupAllocation, updateGroupAllocation, removeGroupAllocation } from "../../../../../../services/groupAllocation.service"
 import { createChannelPrize, updateChannelPrize, removeChannelPrize } from "../../../../../../services/channelPrize.service"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
@@ -51,7 +50,7 @@ const GroupChannelPrize = (props) => {
     }
 
     const overwriteDataAllocationSelectedModal = (prefix, value) => {
-        if (!["quantity", "postion", "allowPrize", "percent", "hidden"].includes(prefix)) {
+        if (!["quantity", "position", "allowPrize", "percent", "hidden"].includes(prefix)) {
             modalCustomPrizeSelected.data[prefix] = value;
         }
         else {
@@ -176,7 +175,6 @@ const GroupChannelPrize = (props) => {
         },
     ]
 
-
     const renderActionGrid = (params) => {
         return (
             <div className="box-action-container">
@@ -212,7 +210,7 @@ const GroupChannelPrize = (props) => {
     }, [])
 
     useEffect(() => {
-        if (selectedGroupPrize) {
+        if (selectedGroupPrize && groupChannelPrizeList?.length > 0) {
             findSelectedGroupPrize(selectedGroupPrize?.id)
         }
     }, [groupChannelPrizeList])
@@ -348,8 +346,8 @@ const GroupChannelPrize = (props) => {
     //
     const updateStrategyCommand = (data) => {
         updateStrategySpin(data).then((res) => {
-            addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
-            material?.refreshStrategyData().then((res2) => {
+            // addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
+            material?.refreshStrategyData(material?.strategySSR?.id).then((res2) => {
                 material?.updateStepValue(4);
             })
         }).catch((err) => {
@@ -493,7 +491,7 @@ const GroupChannelPrize = (props) => {
                                         <span>Vị trí giải thưởng</span>
                                         <InputControl type="number" id="color" onChange={(e) => {
                                             const value = e.target.value ?? '';
-                                            overwriteDataAllocationSelectedModal('postion', Number.parseInt(value))
+                                            overwriteDataAllocationSelectedModal('position', Number.parseInt(value))
                                         }} defaultValue={modalCustomPrizeSelected.data?.attributes?.position} />
                                     </div>
                                     <div className="col-md-6">

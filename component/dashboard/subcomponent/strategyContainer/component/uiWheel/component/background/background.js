@@ -97,6 +97,73 @@ const BackGroundUI = (props) => {
         }
     }, [themeInstanceList, material?.strategySSR])
 
+    const overwriteDataModal = (prefix, value) => {
+        modalCustom.data[prefix] = value;
+        setModalCustom({ ...modalCustom });
+    }
+
+    const updateThemeCommand = (data) => {
+        func.tabData.backgroundUI.data.id = data?.id;
+        func.tabData.backgroundUI.data.name = data?.name;
+        func.tabData.backgroundUI.data.desc = data?.desc;
+        func.tabData.backgroundUI.data.configJson['main_bg'].value = data?.main_bg;
+        func.tabData.backgroundUI.data.configJson['main_bg_mb'].value = data?.main_bg_mb;
+        const copyData = {
+            id: data?.id,
+            name: data?.name,
+            desc: data?.desc,
+            configJson: JSON.stringify(func.tabData.backgroundUI.data.configJson)
+        };
+
+        updateTheme(copyData).then((res) => {
+            addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const createThemeCommand = (data) => {
+        let maskCopyEdit = _.cloneDeep(themeConfig);
+        maskCopyEdit.main_bg.value = data?.main_bg;
+        maskCopyEdit.main_bg_mb.value = data?.main_bg_mb;
+
+        const copyData = {
+            name: data?.name,
+            desc: data?.desc,
+            configJson: JSON.stringify(maskCopyEdit)
+        };
+        createTheme(copyData).then((res) => {
+            dispatch(loadDataTableThemeSpin({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            setRefresh(true)
+            setTimeout(() => {
+                setRefresh(false)
+            }, 0);
+            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Thêm thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+    const removeThemeCommand = (data) => {
+        removeTheme(data).then((res) => {
+            dispatch(loadDataTableThemeSpin({
+                header: {
+                    pageNumber: 1,
+                    pageSize: 999
+                }
+            }))
+            addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+        }).catch((err) => {
+            addToast(<div className="text-center">Xoá thất bại</div>, { appearance: 'error' });
+        })
+    }
+
+
     return (
         <div class="tab-container">
             {
@@ -104,7 +171,12 @@ const BackGroundUI = (props) => {
                 <div class="swiper mySwiper layout-bg">
                     <div class="swiper-header d-flex align-items-center">
                         <h1>Chọn hình ảnh vòng quay</h1>
-                        <button class="btn btn-default" type="submit"> <img src="/asset/images/icons/cloud-upload-2.svg" alt="" /><span>Tải lên</span></button>
+                        <button class="btn btn-default" onClick={() => {
+                            setModalCustom({ ...modalCustom, isOpen: true, type: 'new', data: {} })
+                        }} type="button">
+                            <img src="/asset/images/icons/cloud-upload-2.svg" alt="" />
+                            <span>Tải lên</span>
+                        </button>
                         <div class="swiper__arrows">
                             <div class="swiper-button-prev"></div>
                             <div class="swiper-button-next"></div>
@@ -131,7 +203,8 @@ const BackGroundUI = (props) => {
                                                                 id: item?.id,
                                                                 name: item?.name,
                                                                 desc: item?.desc,
-                                                                main_bg: item?.configJson?.main_bg?.value
+                                                                main_bg: item?.configJson?.main_bg?.value,
+                                                                main_bg_mb: item?.configJson?.main_bg_mb?.value,
                                                             }
                                                         })
                                                     }
@@ -141,7 +214,7 @@ const BackGroundUI = (props) => {
                                                     <li onClick={async () => {
                                                         const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá đối tượng ${item?.name} ?`, "Xoá", "Trở về");
                                                         if (confirm && item?.id) {
-                                                            removeWheelCommand(item?.id);
+                                                            removeThemeCommand(item?.id);
                                                         }
                                                     }}>
                                                         <a><img src="/asset/images/icons/delete.svg" alt="" /></a></li>
@@ -155,6 +228,90 @@ const BackGroundUI = (props) => {
                     </div>
                 </div>
             }
+
+            {/* popup */}
+            <Modal
+                isOpen={modalCustom.isOpen}
+                modalName="role-modal"
+                showOverlay={true}
+                onClose={() => resetModal()}
+                title={modalCustom?.type === 'new' ? "Tạo mới giao diện vòng quay" : "Sửa thông tin giao diện vòng quay"}
+                size="xl"
+                centered
+            >
+                <Modal.Body>
+                    <div class="popup-detail" id="popup-bg-2">
+                        <div class="popup-main">
+                            <div class="popup-body">
+                                <ul class="d-flex align-items-center justify-content-center">
+                                    <li>
+                                        <a>
+                                            <figure>
+                                                <img src="/asset/images/icons/photo-upload.svg" alt="" />
+                                                <figcaption>
+                                                    <p>Tải hình <span>Desktop</span></p>
+                                                </figcaption>
+                                            </figure>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <figure> <img src="/asset/images/icons/photo-upload.svg" alt="" />
+                                                <figcaption>
+                                                    <p>Tải hình <span>Mobile</span></p>
+                                                </figcaption>
+                                            </figure>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <form class="wrap-form">
+                                    <div class="form-group">
+                                        <label for="">Tên hình ảnh</label>
+                                        <InputControl type="text" id="name" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('name', value)
+                                        }} defaultValue={modalCustom.data?.name} placeholder="Nhập tên giao diện" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Mô tả</label>
+                                        <InputControl type="text" id="desc" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('desc', value)
+                                        }} defaultValue={modalCustom.data?.desc} />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Url ảnh nền desktop</label>
+                                        <InputControl type="text" id="wheelbg" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('main_bg', value)
+                                        }} defaultValue={modalCustom.data?.main_bg} />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Url ảnh nền mobile</label>
+                                        <InputControl type="text" id="wheelbg" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataModal('main_bg_mb', value)
+                                        }} defaultValue={modalCustom.data?.main_bg_mb} />
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-submit" type="button" onClick={() => {
+                                            if (modalCustom.type === 'new') {
+                                                createThemeCommand(modalCustom.data)
+                                            }
+                                            if (modalCustom.type === 'edit') {
+                                                updateThemeCommand(modalCustom.data)
+                                            }
+                                            resetModal();
+                                        }}>
+                                            <span>{modalCustom?.type === "new" ? "Tạo mới" : "Cập nhật"}</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
         // /* <div style="display: none;"><a href="/asset/images/bg-review-1.jpg" data-fancybox="gallery" data-thumb="/asset/images/bg-review-1.jpg"></a><a href="/asset/images/bg-review-2.jpg" data-fancybox="gallery" data-thumb="/asset/images/bg-review-2.jpg"></a><a href="/asset/images/bg-review-3.jpg" data-fancybox="gallery" data-thumb="/asset/images/bg-review-3.jpg"></a></div> */}
     )

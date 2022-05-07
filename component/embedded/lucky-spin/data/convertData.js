@@ -27,7 +27,7 @@ export const transformWheelData = (dataOriginal) => {
             id: wheelInstance?.id,
             name: wheelInstance?.name,
             spin_config: {
-                imageRender: wheelInstance?.configJson?.imageRender?.value,
+                imageRender: wheelInstance?.configJson?.imageRender?.value ?? false,
                 drawText: wheelInstance?.configJson?.drawText?.value,
                 wheel_bg: wheelInstance?.configJson?.wheel_bg?.value,
                 object: {
@@ -56,11 +56,11 @@ export const transformWheelData = (dataOriginal) => {
                 canvas: {
                     pointerExtenal: {
                         isUse: wheelInstance?.configJson?.canvas_pointerExtenal_isUse?.value,
-                        translateX: wheelInstance?.configJson?.canvas_pointerExtenal_translateX?.value,
-                        translateY: wheelInstance?.configJson?.canvas_pointerExtenal_translateY?.value,
-                        drawX: wheelInstance?.configJson?.canvas_pointerExtenal_drawX?.value,
-                        drawY: wheelInstance?.configJson?.canvas_pointerExtenal_drawY?.value,
-                        rotate: wheelInstance?.configJson?.canvas_pointerExtenal_rotate?.value,
+                        translateX: wheelInstance?.configJson?.canvas_pointerExtenal_translateX?.value ?? 0,
+                        translateY: wheelInstance?.configJson?.canvas_pointerExtenal_translateY?.value ?? 0,
+                        drawX: wheelInstance?.configJson?.canvas_pointerExtenal_drawX?.value ?? 0,
+                        drawY: wheelInstance?.configJson?.canvas_pointerExtenal_drawY?.value ?? 0,
+                        rotate: wheelInstance?.configJson?.canvas_pointerExtenal_rotate?.value ?? 0,
                         url: wheelInstance?.configJson?.canvas_pointerExtenal_url?.value,
                     },
                     width: wheelInstance?.configJson?.canvas_width?.value,
@@ -98,7 +98,7 @@ export const transformWheelData = (dataOriginal) => {
                 key: themeInstance?.configJson?.key?.value,
                 main_bg: themeInstance?.configJson?.main_bg?.value,
                 main_bg_mb: themeInstance?.configJson?.main_bg_mb?.value,
-                style: themeInstance?.configJson?.style?.value??"",
+                style: themeInstance?.configJson?.style?.value ?? "",
                 audio: {
                     spinStart: wheelInstance?.configJson?.audio_spinStart?.value,
                     spinEnd: wheelInstance?.configJson?.audio_spinEnd?.value,
