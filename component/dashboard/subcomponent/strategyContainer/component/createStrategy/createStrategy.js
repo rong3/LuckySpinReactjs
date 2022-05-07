@@ -53,6 +53,7 @@ const CreateStrategy = (props) => {
     const createStrategyCommand = (data) => {
         createStrategySpin(data).then((res) => {
             if (material?.isInternalModeParent) {
+                //neu la noi bo thi tu tao nhom KH va xoa khi xoa chien luoc
                 const autoGroupAssign = {
                     name: 'Nhóm nội bộ ' + res?.data?.data?.id,
                     desc: 'Dữ liệu nội bộ'
