@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SelectBoxv2 from "../../../../../../shared/packages/control/selectBoxv2/selectBoxv2"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 import { loadDataTableMasterObj } from "../../../../../../redux/actions/masterObjectAllocationActions"
+import { createGroupAllocation, updateGroupAllocation, removeGroupAllocation } from "../../../../../../services/groupAllocation.service"
 
 const CreateStrategy = (props) => {
     const { material } = props
@@ -12,6 +13,7 @@ const CreateStrategy = (props) => {
     const { addToast } = useToasts();
     const dispatch = useDispatch();
     const [strategySpinModel, setStrategySpinModel] = useState({});
+    const [isInternalMode, setIsInternalMode] = useState(false);
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
@@ -26,10 +28,20 @@ const CreateStrategy = (props) => {
     }, [])
 
     useEffect(() => {
+        material?.setIsInternalModeParent(isInternalMode);
+    }, [isInternalMode])
+
+    useEffect(() => {
         if (material?.strategySSR) {
             setStrategySpinModel(material?.strategySSR)
         }
     }, [material?.strategySSR])
+
+    useEffect(() => {
+        if (strategySpinModel?.masterObjectAllocation) {
+            setIsInternalMode(strategySpinModel?.masterObjectAllocation?.objectKey === "in-system");
+        }
+    }, [strategySpinModel?.masterObjectAllocation])
 
     const { masterObjectAllocationList } = useSelector((state) => state.masterObjectAllocation);
 
@@ -40,10 +52,24 @@ const CreateStrategy = (props) => {
 
     const createStrategyCommand = (data) => {
         createStrategySpin(data).then((res) => {
-            changeRoute(`/strategySpin/container?id=${res?.data?.data}`)
-            setTimeout(() => {
-                material?.updateStepValue(2);
-            }, 100);
+            if (material?.isInternalModeParent) {
+                const autoGroupAssign = {
+                    name: 'Nhóm nội bộ ' + res?.data?.data?.id,
+                    desc: 'Dữ liệu nội bộ'
+                }
+                createGroupAllocation(autoGroupAssign).then((res2) => {
+                    var clone = { ...res?.data?.data }
+                    clone.groupAllocationId = res2?.data?.data;
+                    updateStrategyCommand(clone)
+                    changeRoute(`/strategySpin/container?id=${res?.data?.data?.id}`)
+                })
+            }
+            else {
+                changeRoute(`/strategySpin/container?id=${res?.data?.data?.id}`)
+                setTimeout(() => {
+                    material?.updateStepValue(2);
+                }, 0);
+            }
             addToast(<div className="text-center">Đã tạo chiến lược</div>, { appearance: 'success' });
         }).catch((err) => {
             addToast(<div className="text-center">Tạo chiến lược thất bại</div>, { appearance: 'error' });
@@ -60,7 +86,6 @@ const CreateStrategy = (props) => {
             addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
         })
     }
-
 
     return (
         <section class="create-strategy">
@@ -94,6 +119,12 @@ const CreateStrategy = (props) => {
                                         optionLabel="objectName"
                                         optionValue="id"
                                         onChange={(data) => {
+                                            if (masterObjectAllocationList?.find(x => x.id === data)?.objectKey === 'in-system') {
+                                                setIsInternalMode(true)
+                                            }
+                                            else {
+                                                setIsInternalMode(false)
+                                            }
                                             overwriteDataModal('masterObjectAllocationId', data)
                                         }}
                                         value={strategySpinModel?.masterObjectAllocationId}
@@ -110,7 +141,11 @@ const CreateStrategy = (props) => {
                                             overwriteDataModal('quantitySpinEnum', data)
                                         }}
                                         value={strategySpinModel?.quantitySpinEnum}
-                                        options={material?.masterData?.quantitySpin ?? []}
+                                        options={
+                                            isInternalMode ?
+                                                material?.masterData?.quantitySpin?.filter(x => x?.id !== "Config") ?? []
+                                                :
+                                                material?.masterData?.quantitySpin ?? []}
                                     />
                                 </div>
                                 <div class="form-group col-lg-6">

@@ -96,7 +96,11 @@ const UIWheel = (props) => {
                     </div>
                     <div class="wrap-right_button">
                         <button class="btn btn-backstep" type="button" onClick={() => {
-                            material?.updateStepValue(3);
+                            if (material?.isInternalModeParent) {
+                                material?.updateStepValue(2);
+                            }
+                            else
+                                material?.updateStepValue(3);
                         }}> <img src="/asset/images/icons/back.svg" alt="" /><span>Quay lại</span></button>
                         <button class="btn btn-submit" type="button"
                             onClick={() => {

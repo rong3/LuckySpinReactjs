@@ -13,6 +13,8 @@ const StrategyContainer = (props) => {
     const { id } = props;
     const router = useRouter()
     const [data, setData] = useState(null);
+    const [isInternalModeParent, setIsInternalModeParent] = useState(false);
+
     const changeRoute = (route) => {
         router.replace(route ?? "/")
     }
@@ -46,21 +48,35 @@ const StrategyContainer = (props) => {
             masterData: masterData,
             strategySSR: data,
             containerData: containerData,
+            isInternalModeParent: isInternalModeParent,
             updateStepValue: updateStepValue,
-            refreshStrategyData: loadDataStrategy
+            refreshStrategyData: loadDataStrategy,
+            setIsInternalModeParent: setIsInternalModeParent,
         }
-        switch (step) {
-            case 1: return <CreateStrategy material={{ ...genericProps }} />
-            case 2: return <GroupAllocation material={{ ...genericProps }} />
-            case 3: return <GroupChannelPrize material={{ ...genericProps }} />
-            case 4: return <UIWheel material={{ ...genericProps }} />
-            default: return <></>
+        if (isInternalModeParent) {
+            switch (step) {
+                case 1: return <CreateStrategy material={{ ...genericProps }} />
+                case 2: return <GroupChannelPrize material={{ ...genericProps }} />
+                case 3: return <UIWheel material={{ ...genericProps }} />
+                default: return <></>
+            }
+        }
+        else {
+            switch (step) {
+                case 1: return <CreateStrategy material={{ ...genericProps }} />
+                case 2: return <GroupAllocation material={{ ...genericProps }} />
+                case 3: return <GroupChannelPrize material={{ ...genericProps }} />
+                case 4: return <UIWheel material={{ ...genericProps }} />
+                default: return <></>
+            }
         }
     }
 
     return (
         <>
-            <StepBar containerData={containerData} {...props} />
+            <StepBar containerData={containerData}
+                isInternalModeParent={isInternalModeParent}
+                {...props} />
             {
                 stepDirectComponent(containerData.step)
             }

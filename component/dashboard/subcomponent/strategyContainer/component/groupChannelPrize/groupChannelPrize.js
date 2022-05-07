@@ -348,7 +348,11 @@ const GroupChannelPrize = (props) => {
         updateStrategySpin(data).then((res) => {
             // addToast(<div className="text-center">Cập nhật chiến lược thành công</div>, { appearance: 'success' });
             material?.refreshStrategyData(material?.strategySSR?.id).then((res2) => {
-                material?.updateStepValue(4);
+                if (material?.isInternalModeParent) {
+                    material?.updateStepValue(3);
+                }
+                else
+                    material?.updateStepValue(4);
             })
         }).catch((err) => {
             addToast(<div className="text-center">Cập nhật chiến lược thất bại</div>, { appearance: 'error' });
@@ -432,7 +436,12 @@ const GroupChannelPrize = (props) => {
                            </nav> */}
                         <div class="wrap-button d-flex align-items-center">
                             <button class="btn btn-backstep" onClick={() => {
-                                material?.updateStepValue(2);
+                                if (material?.isInternalModeParent) {
+                                    material?.updateStepValue(1);
+                                }
+                                else {
+                                    material?.updateStepValue(2);
+                                }
                             }} type="button">
                                 <img src="/asset/images/icons/back.svg" alt="" /><span>Quay lại</span></button>
                             <button class="btn btn-submit" type="button"
