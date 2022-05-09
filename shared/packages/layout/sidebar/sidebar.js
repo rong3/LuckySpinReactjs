@@ -55,26 +55,23 @@ const SideBarComponent = (props) => {
     ]
 
     return (
-        <div id="sidebar-nav">
-            <div class="open-sidebar"> <em class="material-icons">keyboard_arrow_right</em></div>
-            <div class="sidebar">
-                <ul class="side-nav">
-                    {
-                        menu?.map((item, idx) => {
-                            return (
-                                <li class={`side-item ${idx === 0 ? ' active' : ''}`}>
-                                    <DynamicLink href={item.href} as={item?.as}>
-                                        <a>
-                                            <img class="icon" src={item?.icon} alt="" />
-                                            <span>{item?.name}</span>
-                                        </a>
-                                    </DynamicLink>
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
-            </div>
+        <div class="sidebar">
+            <ul class="side-nav">
+                {
+                    menu?.map((item, idx) => {
+                        return (
+                            <li class={`side-item ${idx === 0 ? ' active' : ''}`}>
+                                <DynamicLink href={item.href} as={item?.as}>
+                                    <a>
+                                        <img class="icon" src={item?.icon} alt="" />
+                                        <span>{item?.name}</span>
+                                    </a>
+                                </DynamicLink>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
         </div>
     );
 }

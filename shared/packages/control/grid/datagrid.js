@@ -50,10 +50,10 @@ function DataGridControl({ rows, columns, pageSize, ...rest }) {
                 rows={rows}
                 autoHeight
                 columns={columns}
-                rowHeight={45}
+                rowHeight={65}
                 disableExtendRowFullWidth={false}
                 scrollbarSize={50}
-                headerHeight={45}
+                headerHeight={65}
                 pageSize={pageSizeProps}
                 rowsPerPageOptions={[5, 10, 20, 50, 100]}
                 onPageSizeChange={(newPageSize) => setPageSizeProps(newPageSize)}

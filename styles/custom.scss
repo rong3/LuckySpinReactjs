@@ -168,7 +168,6 @@ img {
     display: none !important;
 }
 
-
 .empty-placeholder {
     display: flex;
     align-items: center;
@@ -208,6 +207,12 @@ img {
     }
 }
 
+input,
+button,
+select:focus {
+    outline: 0 !important;
+    box-shadow: none !important;
+}
 
 .reveal {
     position: relative;

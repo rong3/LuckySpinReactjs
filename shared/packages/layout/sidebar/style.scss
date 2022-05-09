@@ -1,145 +1,145 @@
-#sidebar-nav {
-    -webkit-transition: all 0.2s ease-in-out;
-    -o-transition: all ease-in-out 0.2s;
-    position: fixed;
-    top: 61px;
-    left: 0;
-    z-index: 9999;
-    transition: all 0.2s ease-in-out;
-    border-right: 1px solid #d3d8de;
-    background: #f8f9fa;
-    width: 110px;
-    height: 100vh;
-}
-#sidebar-nav .open-sidebar {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    cursor: pointer;
-    background: #eb2629;
-    padding: 5px 13.5px;
-}
-#sidebar-nav .open-sidebar em {
-    -webkit-transition: all 0.2s ease-in-out;
-    -o-transition: all ease-in-out 0.2s;
-    transition: all 0.2s ease-in-out;
-    color: #fff;
-}
-@media screen and (min-width: 601px) {
-    #sidebar-nav .open-sidebar {
-        display: none;
-    }
-}
-#sidebar-nav .sidebar {
-    position: relative;
-    padding-top: 15px;
-    height: 100%;
-}
-#sidebar-nav .sidebar .side-nav {
-    z-index: 2;
-    background: #f8f9fa;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-}
-#sidebar-nav .sidebar .side-nav,
-#sidebar-nav .sidebar .side-nav .side-item,
-#sidebar-nav .sidebar .side-nav .side-item a {
-    -webkit-transition: all 0.3s ease-in-out;
-    -o-transition: all ease-in-out 0.3s;
-    position: relative;
-    transition: all 0.3s ease-in-out;
-}
-#sidebar-nav .sidebar .side-nav .side-item a {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 8px 0;
-    text-align: center;
-}
-#sidebar-nav .sidebar .side-nav .side-item a .icon {
-    -webkit-transition: all 0.3s ease-in-out;
-    -o-transition: all ease-in-out 0.3s;
-    transition: all 0.3s ease-in-out;
-    width: 32px;
-    height: 32px;
-}
-#sidebar-nav .sidebar .side-nav .side-item a span {
-    padding: 8px 10px;
-    color: #464646;
-    font-size: 12px;
-}
-#sidebar-nav .sidebar .side-nav .side-item a:before {
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -webkit-transition: all 0.3s ease-in-out;
-    -o-transition: all ease-in-out 0.3s;
-    position: absolute;
-    top: 50%;
-    left: 2px;
-    transform: translateY(-50%);
-    visibility: hidden;
-    opacity: 0;
-    transition: all 0.3s ease-in-out;
-    background: #d12421;
-    width: 2px;
-    height: 0;
-    content: "";
-}
-#sidebar-nav .sidebar .side-nav .side-item.active a,
-#sidebar-nav .sidebar .side-nav .side-item:hover a {
-    background: #fff;
-}
-#sidebar-nav .sidebar .side-nav .side-item.active a .icon,
-#sidebar-nav .sidebar .side-nav .side-item:hover a .icon {
-    -webkit-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    transform: scale(1.1);
-}
-#sidebar-nav .sidebar .side-nav .side-item.active a:before,
-#sidebar-nav .sidebar .side-nav .side-item:hover a:before {
-    visibility: visible;
-    opacity: 1;
-    height: 36px;
-}
-#sidebar-nav .sidebar .side-nav .side-item:nth-child(2) a .icon {
-    -webkit-transform: translateZ(0) scale(1);
-    -webkit-animation: phone-icon 3s infinite;
-    transform: translateZ(0) scale(1);
-    animation: phone-icon 3s infinite;
-}
-#sidebar-nav.is-open {
-    left: 0;
-}
-#sidebar-nav.is-open .open-sidebar em {
-    -webkit-transform: rotate(-180deg);
-    -ms-transform: rotate(-180deg);
-    transform: rotate(-180deg);
-}
-@media screen and (max-width: 768.98px) {
-    #sidebar-nav {
-        top: 51px;
-    }
-}
-@media screen and (max-width: 600.98px) {
-    #sidebar-nav {
-        left: -110px;
-    }
-}
+// #sidebar-nav {
+//     -webkit-transition: all 0.2s ease-in-out;
+//     -o-transition: all ease-in-out 0.2s;
+//     position: fixed;
+//     top: 61px;
+//     left: 0;
+//     z-index: 9999;
+//     transition: all 0.2s ease-in-out;
+//     border-right: 1px solid #d3d8de;
+//     background: #f8f9fa;
+//     width: 110px;
+//     height: 100vh;
+// }
+// #sidebar-nav .open-sidebar {
+//     -webkit-box-align: center;
+//     -ms-flex-align: center;
+//     -webkit-box-pack: center;
+//     -ms-flex-pack: center;
+//     display: -webkit-box;
+//     display: -ms-flexbox;
+//     display: flex;
+//     position: absolute;
+//     top: 0;
+//     left: 100%;
+//     align-items: center;
+//     justify-content: center;
+//     z-index: 1000;
+//     cursor: pointer;
+//     background: #eb2629;
+//     padding: 5px 13.5px;
+// }
+// #sidebar-nav .open-sidebar em {
+//     -webkit-transition: all 0.2s ease-in-out;
+//     -o-transition: all ease-in-out 0.2s;
+//     transition: all 0.2s ease-in-out;
+//     color: #fff;
+// }
+// @media screen and (min-width: 601px) {
+//     #sidebar-nav .open-sidebar {
+//         display: none;
+//     }
+// }
+// #sidebar-nav .sidebar {
+//     position: relative;
+//     padding-top: 15px;
+//     height: 100%;
+// }
+// #sidebar-nav .sidebar .side-nav {
+//     z-index: 2;
+//     background: #f8f9fa;
+//     width: 100%;
+//     height: 100%;
+//     overflow-y: auto;
+// }
+// #sidebar-nav .sidebar .side-nav,
+// #sidebar-nav .sidebar .side-nav .side-item,
+// #sidebar-nav .sidebar .side-nav .side-item a {
+//     -webkit-transition: all 0.3s ease-in-out;
+//     -o-transition: all ease-in-out 0.3s;
+//     position: relative;
+//     transition: all 0.3s ease-in-out;
+// }
+// #sidebar-nav .sidebar .side-nav .side-item a {
+//     -webkit-box-orient: vertical;
+//     -webkit-box-direction: normal;
+//     -ms-flex-direction: column;
+//     -webkit-box-align: center;
+//     -ms-flex-align: center;
+//     display: -webkit-box;
+//     display: -ms-flexbox;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     padding: 8px 0;
+//     text-align: center;
+// }
+// #sidebar-nav .sidebar .side-nav .side-item a .icon {
+//     -webkit-transition: all 0.3s ease-in-out;
+//     -o-transition: all ease-in-out 0.3s;
+//     transition: all 0.3s ease-in-out;
+//     width: 32px;
+//     height: 32px;
+// }
+// #sidebar-nav .sidebar .side-nav .side-item a span {
+//     padding: 8px 10px;
+//     color: #464646;
+//     font-size: 12px;
+// }
+// #sidebar-nav .sidebar .side-nav .side-item a:before {
+//     -webkit-transform: translateY(-50%);
+//     -ms-transform: translateY(-50%);
+//     -webkit-transition: all 0.3s ease-in-out;
+//     -o-transition: all ease-in-out 0.3s;
+//     position: absolute;
+//     top: 50%;
+//     left: 2px;
+//     transform: translateY(-50%);
+//     visibility: hidden;
+//     opacity: 0;
+//     transition: all 0.3s ease-in-out;
+//     background: #d12421;
+//     width: 2px;
+//     height: 0;
+//     content: "";
+// }
+// #sidebar-nav .sidebar .side-nav .side-item.active a,
+// #sidebar-nav .sidebar .side-nav .side-item:hover a {
+//     background: #fff;
+// }
+// #sidebar-nav .sidebar .side-nav .side-item.active a .icon,
+// #sidebar-nav .sidebar .side-nav .side-item:hover a .icon {
+//     -webkit-transform: scale(1.1);
+//     -ms-transform: scale(1.1);
+//     transform: scale(1.1);
+// }
+// #sidebar-nav .sidebar .side-nav .side-item.active a:before,
+// #sidebar-nav .sidebar .side-nav .side-item:hover a:before {
+//     visibility: visible;
+//     opacity: 1;
+//     height: 36px;
+// }
+// #sidebar-nav .sidebar .side-nav .side-item:nth-child(2) a .icon {
+//     -webkit-transform: translateZ(0) scale(1);
+//     -webkit-animation: phone-icon 3s infinite;
+//     transform: translateZ(0) scale(1);
+//     animation: phone-icon 3s infinite;
+// }
+// #sidebar-nav.is-open {
+//     left: 0;
+// }
+// #sidebar-nav.is-open .open-sidebar em {
+//     -webkit-transform: rotate(-180deg);
+//     -ms-transform: rotate(-180deg);
+//     transform: rotate(-180deg);
+// }
+// @media screen and (max-width: 768.98px) {
+//     #sidebar-nav {
+//         top: 51px;
+//     }
+// }
+// @media screen and (max-width: 600.98px) {
+//     #sidebar-nav {
+//         left: -110px;
+//     }
+// }

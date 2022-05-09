@@ -8,6 +8,23 @@ function NavBarStyle360(props) {
     const auth = useAuth();
     const router = useRouter();
 
+    useEffect(() => {
+        var e = document.querySelector(".btn-hamburger-lines"),
+            t = document.querySelector("#sidebar-nav"),
+            s = document.querySelector("#overlay"),
+            i = document.querySelector("#btn-search"),
+            n = document.querySelector(".wrap-form .close");
+        e.onclick = function () {
+            console.log("test"), e.classList.toggle("is-active"), t.classList.toggle("is-open"), s.classList.toggle("active")
+        }, s.onclick = function () {
+            e.classList.remove("is-active"), t.classList.remove("is-open"), s.classList.remove("active")
+        }, i && (i.onclick = function () {
+            document.querySelector(".wrap-form").classList.toggle("is-open"), i.classList.toggle("active")
+        }, n.onclick = function () {
+            document.querySelector(".wrap-form").classList.remove("is-open"), i.classList.remove("active")
+        })
+    }, [])
+
     return (
         <header>
             <div class="wrap-header d-flex align-items-center">
@@ -50,6 +67,9 @@ function NavBarStyle360(props) {
                                 </a>
                             </li>
                         </ul>
+                    </div>
+                    <div class="menu-toggle d-flex align-items-center">
+                        <div class="btn btn-hamburger-lines"><span> </span><span> </span><span> </span><span></span></div>
                     </div>
                 </div>
             </div>

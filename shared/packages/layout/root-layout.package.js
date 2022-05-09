@@ -13,7 +13,6 @@ const CommonLayout = ({ children }) => {
                 <main>
                     <div class="wrapper-main">
                         <div id="sidebar-nav">
-                            <div class="open-sidebar"> <em class="material-icons">keyboard_arrow_right</em></div>
                             {
                                 <SideBarComponent />
                             }

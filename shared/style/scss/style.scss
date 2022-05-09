@@ -991,6 +991,13 @@ $primary-mui-color: #ccc;
     box-shadow: none !important;
   }
 }
+
+.MuiDataGrid-root .MuiDataGrid-columnHeaderTitle {
+  font-weight: bold !important;
+}
+.MuiDataGrid-root .MuiDataGrid-row {
+  background: #f8f9fa;
+}
 .MuiDataGrid-cell:focus {
   outline: solid $primary-mui-color 1px !important;
 }

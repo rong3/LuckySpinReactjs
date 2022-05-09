@@ -56,52 +56,45 @@ const Login = () => {
     };
 
     return (
-        <section class="login-section">
-            <div class="wrapper-container d-flex align-items-center justify-content-center">
-                <div class="wrap-login d-flex align-items-center justify-content-center">
-                    <div class="wrap-left">
-                        <figure>
-                            <img src="/asset/images/login-bg.png" alt="" />
-                            <figcaption>
-                                <p class="desc">Amet minim mollit non deserunt ullamco <br />est sit aliqua dolor do amet sint.</p>
-                            </figcaption>
-                        </figure>
-                    </div>
-                    <div class="wrap-right">
-                        <form class="wrap-form">
-                            <div class="caption">
-                                <h1>Chào mừng đến &nbsp;<span>Admin panel</span></h1>
-                                <p>Nhập thông tin đăng nhập</p>
+        <section class="login-bg">
+            <div class="wrapper-container d-flex align-items-center">
+                <div class="wrapper-left">
+                    <div class="logo"> <a href=""><img src="/asset/images/logo.png" alt="" /></a></div>
+                    <div class="img-bg"><img src="/asset/images/login-bg.png" alt="" /></div>
+                </div>
+                <div class="wrapper-right">
+                    <div class="wrapper-content">
+                        <div class="wrap-header d-flex">
+                            <div class="title-login">
+                                <p>Chào mừng bạn đến với </p>
+                                <h1>Admin panel</h1>
                             </div>
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="User name" onChange={(e) => {
+                        </div>
+                        <form class="wrap-form">
+                            <div class="form-group d-flex">
+                                <label for="">Tên Đăng Nhập</label>
+                                <input class="form-control" type="text" onChange={(e) => {
                                     const value = e?.target?.value;
                                     credential.email = value;
                                     setCredential({ ...credential });
-                                }} />
+                                }} placeholder="Nhập tên user" />
                             </div>
-                            <div class="form-group">
-                                <input class="form-control" id="core" type="password" placeholder="Password"
+                            <div class="form-group d-flex">
+                                <label for="">Nhập Mật khẩu</label>
+                                <input class="form-control" type="password" placeholder="Nhập mật khẩu"
                                     onChange={(e) => {
                                         const value = e?.target?.value;
                                         credential.password = value;
                                         setCredential({ ...credential });
                                     }}
                                 />
-                                <img class="show-pass" src="/asset/images/icons/eye.svg" alt="" />
+                                <img class="icon" src="/asset/images/icons/eye.svg" alt="" />
                             </div>
-                            <div class="form-group">
-                                <input id="remember" type="checkbox" />
-                                <label class="label-remember" for="remember">Nhớ trạng thái đăng nhập</label>
-                            </div>
-                            <button type="button" class="btn btn-submit" onClick={login}> <span>Đăng nhập</span></button>
+                            <button class="btn btn-submit" onClick={login} type="button">
+                                <span>Đăng Nhập</span>
+                            </button>
                         </form>
                     </div>
-                </div>
-            </div>
-            <div class="footer-section">
-                <div class="footer-content">
-                    <div class="flower"> <img src="/asset/images/flower.png" alt="" /></div>
                 </div>
             </div>
         </section>

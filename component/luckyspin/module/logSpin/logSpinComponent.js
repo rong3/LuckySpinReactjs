@@ -124,7 +124,7 @@ function LogSpinComponent(props) {
             <header>
             </header>
             <main>
-                <section class="history-section">
+                <section class="history-section section-main">
                     {/* <h1 class="section-title d-flex align-items-center"> <img class="icon" src="/asset/images/icons/side-5.svg" alt="" />&nbsp; Lịch sử chiến lược</h1> */}
                     <div class="wrapper-container d-flex">
                         <div class="wrap-left">
@@ -132,15 +132,19 @@ function LogSpinComponent(props) {
                                 <h2>Tên chiến lược</h2>
                             </div>
                             <div class="wrap-left_body">
-                                <input class="form-control" onChange={(e) => {
-                                    const value = e.target.value ?? '';
-                                    const filter = [...strategyList]?.filter(x =>
-                                        x?.name?.toLowerCase().trim()
-                                            .indexOf(value.toLowerCase().trim()) !== -1);
-                                    setStrategyListSearch([...filter])
-                                }}
-                                    type="text" />
-                                <br />
+
+                                <form class="wrap-form">
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            const filter = [...strategyList]?.filter(x =>
+                                                x?.name?.toLowerCase().trim()
+                                                    .indexOf(value.toLowerCase().trim()) !== -1);
+                                            setStrategyListSearch([...filter])
+                                        }} placeholder="Tìm kiếm..." />
+                                        <button><img src="/asset/images/icons/search.svg" alt="" /></button>
+                                    </div>
+                                </form>
                                 <ul>
                                     {
                                         strategyListSearch?.map((item, i) => {
@@ -152,6 +156,7 @@ function LogSpinComponent(props) {
                                                         <a class="title">
                                                             {item?.name}
                                                         </a>
+                                                        <div class="date"><span>{`Ngày tạo: ${item?.created}`} </span></div>
                                                     </div>
                                                 </li>
                                             )

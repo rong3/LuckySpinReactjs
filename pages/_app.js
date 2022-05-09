@@ -45,7 +45,7 @@ function Default({ Component, pageProps }) {
   }
 
   useEffect(() => {
-    // loadLazyCSS('/asset/css/main.min.css');
+    loadLazyCSS('/asset/css/main.min.css');
     loadLazyCSS('/asset/css/core.css');
     loadLazyCSS('/asset/fonts/all.css');
     loadLazyCSS('/asset/css/plugin.min.css');
