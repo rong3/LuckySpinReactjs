@@ -37,13 +37,17 @@ function LogSpinComponent(props) {
     const { t } = useTranslation('common');
     const [selectedStrategy, setSelectedStrategy] = useState(null);
     const [strategyList, setStrategyList] = useState([])
+    const [strategyListSearch, setStrategyListSearch] = useState([])
+
 
     useEffect(() => {
         getListLiteStrategySpin({
             pageNumber: 1,
             pageSize: 999
         }).then((res) => {
-            const data = res?.data?.data ?? [];
+            const isDescending = false;
+            const data = res?.data?.data?.sort((a, b) => isDescending ? new Date(b.created).getTime() - new Date(a.created).getTime() : new Date(a.created).getTime() - new Date(b.created).getTime()) ?? [];
+            setStrategyListSearch([...data])
             setStrategyList([...data]);
         })
     }, [])
@@ -77,9 +81,9 @@ function LogSpinComponent(props) {
         }
     }, [selectedStrategy])
 
-    useEffect(() => {
-        console.log({ listLogSpin });
-    }, [listLogSpin])
+    // useEffect(() => {
+    //     console.log({ listLogSpin });
+    // }, [listLogSpin])
 
     const columns = [
         {
@@ -128,9 +132,18 @@ function LogSpinComponent(props) {
                                 <h2>Tên chiến lược</h2>
                             </div>
                             <div class="wrap-left_body">
+                                <input class="form-control" onChange={(e) => {
+                                    const value = e.target.value ?? '';
+                                    const filter = [...strategyList]?.filter(x =>
+                                        x?.name?.toLowerCase().trim()
+                                            .indexOf(value.toLowerCase().trim()) !== -1);
+                                    setStrategyListSearch([...filter])
+                                }}
+                                    type="text" />
+                                <br />
                                 <ul>
                                     {
-                                        strategyList?.map((item, i) => {
+                                        strategyListSearch?.map((item, i) => {
                                             return (
                                                 <li onClick={() => {
                                                     setSelectedStrategy(item)

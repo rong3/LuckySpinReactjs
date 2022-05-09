@@ -50,7 +50,7 @@ const GroupChannelPrize = (props) => {
     }
 
     const overwriteDataAllocationSelectedModal = (prefix, value) => {
-        if (!["quantity", "position", "allowPrize", "percent", "hidden"].includes(prefix)) {
+        if (!["quantity", "position", "allowPrizing", "percent", "hidden", "msgExtra"].includes(prefix)) {
             modalCustomPrizeSelected.data[prefix] = value;
         }
         else {
@@ -68,7 +68,7 @@ const GroupChannelPrize = (props) => {
     function getAttribute(params) {
         if (params.field === 'position')
             return params.row?.attributes?.position;
-        if (params.field === 'allowPrize')
+        if (params.field === 'allowPrizing')
             return params.row?.attributes?.allowPrizing;
         if (params.field === 'percent')
             return params.row?.attributes?.percent;
@@ -76,6 +76,8 @@ const GroupChannelPrize = (props) => {
             return params.row?.attributes?.quantity;
         if (params.field === 'hidden')
             return params.row?.attributes?.hidden;
+        if (params.field === 'msgExtra')
+            return params.row?.attributes?.msgExtra;
         else
             return ""
     }
@@ -89,14 +91,14 @@ const GroupChannelPrize = (props) => {
             flex: 1,
             editable: false,
         },
-        {
-            field: 'image',
-            headerName: 'Hình ảnh',
-            headerClassName: 'headerColumn',
-            minWidth: 200,
-            flex: 1,
-            editable: false,
-        },
+        // {
+        //     field: 'image',
+        //     headerName: 'Hình ảnh',
+        //     headerClassName: 'headerColumn',
+        //     minWidth: 200,
+        //     flex: 1,
+        //     editable: false,
+        // },
         {
             field: 'color',
             headerName: 'Màu sắc',
@@ -125,7 +127,7 @@ const GroupChannelPrize = (props) => {
             valueGetter: getAttribute,
         },
         {
-            field: 'allowPrize',
+            field: 'allowPrizing',
             headerName: 'Cho phép trúng',
             headerClassName: 'headerColumn',
             minWidth: 100,
@@ -154,6 +156,15 @@ const GroupChannelPrize = (props) => {
         {
             field: 'hidden',
             headerName: 'Ẩn giải',
+            headerClassName: 'headerColumn',
+            minWidth: 100,
+            flex: 1,
+            editable: false,
+            valueGetter: getAttribute,
+        },
+        {
+            field: 'msgExtra',
+            headerName: 'Nội dung trúng thưởng',
             headerClassName: 'headerColumn',
             minWidth: 100,
             flex: 1,
@@ -256,6 +267,7 @@ const GroupChannelPrize = (props) => {
                     "percent": data?.attributes?.percent,
                     "quantity": data?.attributes?.quantity,
                     "hidden": data?.attributes?.hidden,
+                    "msgExtra": data?.attributes?.msgExtra,
                 });
                 updateProxyPrize(convert).then((res) => {
                     dispatch(loadDataTableGroupChannelPrize({
@@ -298,6 +310,7 @@ const GroupChannelPrize = (props) => {
                 "percent": data?.attributes?.percent,
                 "quantity": data?.attributes?.quantity,
                 "hidden": data?.attributes?.hidden,
+                "msgExtra": data?.attributes?.msgExtra,
             });
             updateProxyPrize(convert).then((res) => {
                 dispatch(loadDataTableGroupChannelPrize({
@@ -509,7 +522,7 @@ const GroupChannelPrize = (props) => {
                                             optionLabel="label"
                                             optionValue="value"
                                             onChange={(data) => {
-                                                overwriteDataAllocationSelectedModal('allowPrize', data)
+                                                overwriteDataAllocationSelectedModal('allowPrizing', data)
                                             }}
                                             value={modalCustomPrizeSelected.data?.attributes?.allowPrizing}
                                             isPortal
@@ -542,6 +555,13 @@ const GroupChannelPrize = (props) => {
                                             isPortal
                                             options={[{ label: "True", value: true }, { label: "False", value: false }]}
                                         />
+                                    </div>
+                                    <div className="col-md-12">
+                                        <span>Nội dung trúng thưởng</span>
+                                        <InputControl type="text" id="msgExtra" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('msgExtra', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.attributes?.msgExtra} />
                                     </div>
                                 </div>
                                 :

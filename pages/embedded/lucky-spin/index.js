@@ -41,7 +41,7 @@ export default function LuckySpin(props) {
         async function fetchMyAPI() {
             let res = await getListStrategySpinbyId(router?.query?.id);
             const dataRes = res?.data?.data;
-            const getchannelPrizesIds = dataRes?.wheelInstance?.channelPrizes?.map(x => x.id) ?? [];
+            const getchannelPrizesIds = dataRes?.groupChannelPrize?.channelPrizes?.map(x => x.id) ?? [];
             const getProxyPrizeAttribute = await getProxyPrize({
                 "strategySpinId": router?.query?.id,
                 "channelPrizeIds": getchannelPrizesIds
@@ -71,7 +71,11 @@ export default function LuckySpin(props) {
                 <link rel="stylesheet" type="text/css" href="/asset/images/luckyspin/theme/HDbank/css/hdbank_wheel.min.css" />
             </head>
             <NonLayout>
-                <LuckySpinComponent {...props} data={data} />
+                {
+                    data &&
+                    <LuckySpinComponent {...props} data={data} />
+                }
+
             </NonLayout>
         </React.Fragment>
     );

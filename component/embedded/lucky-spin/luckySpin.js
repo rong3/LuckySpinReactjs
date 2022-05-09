@@ -357,37 +357,13 @@ const LuckySpinComponent = (props) => {
         applause_audio.play();
         swal(
             "Kết quả",
-            "Bạn đã quay vào " + indicatedSegment?.text + ".",
+            indicatedSegment?.msgExtra ? indicatedSegment?.msgExtra :
+                "Bạn đã quay vào " + indicatedSegment?.text + ".",
             "success"
         );
-        importHistory(indicatedSegment?.text);
         setWheelSpinning(false);
     }
 
-
-    //function import history
-    function importHistory(result) {
-        // historyWheel.type = authRequire.type;
-        // if ([type_allocation[0]?.key, type_allocation[1]?.key, type_allocation[3]?.key].includes(authRequire.type)) {
-        //     const model = {
-        //         id: authRequire.credential.id,
-        //         name: authRequire.credential.name,
-        //         prize: result,
-        //         time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
-        //     }
-        //     historyWheel.data.push(model);
-        // }
-        // if ([type_allocation[2]?.key].includes(authRequire.type)) {
-        //     const model = {
-        //         id: null,
-        //         name: null,
-        //         prize: result,
-        //         time: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString()
-        //     }
-        //     historyWheel.data.push(model);
-        // }
-        // setHistoryWheel({ ...historyWheel })
-    }
     /**
      * Apply editor preview
      * @param {*} obj 
@@ -546,17 +522,6 @@ const LuckySpinComponent = (props) => {
                                                     })?.spinBtn
                                                 }
                                             }
-                                            {/* {
-                                                {
-                                                    ...
-                                                    theme_area(import_config?.theme?.config_json?.key, {
-                                                        authRequire: authRequire,
-                                                        reset_wheel: reset_wheel,
-                                                        historyWheel: historyWheel,
-                                                        isMobile: props?.isMobile
-                                                    })?.historyTable
-                                                }
-                                            } */}
                                         </div>
                                     </div>
 

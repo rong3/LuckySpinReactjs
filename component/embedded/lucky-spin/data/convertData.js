@@ -86,7 +86,8 @@ export const transformWheelData = (dataOriginal) => {
                         textFontSize: item?.textFontSize,
                         percent: _findProxyAttr?.percent,
                         quantity: _findProxyAttr?.quantity,
-                        hidden: _findProxyAttr?.hidden
+                        hidden: _findProxyAttr?.hidden,
+                        msgExtra: _findProxyAttr?.msgExtra,
                     }
                 })
             },
