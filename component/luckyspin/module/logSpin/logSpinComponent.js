@@ -182,15 +182,25 @@ function LogSpinComponent(props) {
                                     <div class="tab-content">
                                     </div>
                                     <ul class="tab-list d-flex align-items-center" style={{ cursor: 'pointer' }}>
-                                        <li onClick={() => setSelectedStyleView(0)}> <a class={`b-nav-tab ${selectedStyleView === 0 ? 'active' : ''}`}>Xem kiểu nhóm</a></li>
-                                        <li onClick={() => setSelectedStyleView(1)}> <a class={`b-nav-tab ${selectedStyleView === 1 ? 'active' : ''}`}>Xem kiểu danh sách</a></li>
+                                        <li onClick={(e) => {
+                                            setSelectedStyleView(0)
+                                        }}>
+                                            <span class={`b-nav-tab ${selectedStyleView === 0 ? 'active' : ''}`}>
+                                                Xem kiểu nhóm
+                                            </span>
+                                        </li>
+                                        <li onClick={() => setSelectedStyleView(1)}>
+                                            <span class={`b-nav-tab ${selectedStyleView === 1 ? 'active' : ''}`}>
+                                                Xem kiểu danh sách
+                                            </span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                             {
                                 isLoading ?
                                     <div class="wrap-right_body">
-                                        <p>Đang tải dữ liêu...</p>
+                                        <p>Đang tải dữ liệu...</p>
                                     </div>
                                     :
                                     <div class="wrap-right_body">

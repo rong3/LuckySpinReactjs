@@ -26,7 +26,7 @@ export function request(method,
 ) {
     const defaultHeaders = {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin":"*",
+        "Access-Control-Allow-Origin": "*",
         "local": locale,
         ...headers
     }
@@ -56,7 +56,7 @@ export function request(method,
     }).catch(error => {
         //execute the status code enum and operation like logout , remove cookie when expired
         //Emitter.emit(EMITTER_EVENT.ACCESS_DENIED, error?.response?.data);
-        if(error?.response?.status===401){
+        if (error?.response?.status === 401 || error?.response?.status === 403) {
             CookieHelper.removeCookie(authenticationConstant.tokenKey);
             Utility.redirect('/login')
         }

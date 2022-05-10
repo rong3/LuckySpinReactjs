@@ -106,9 +106,14 @@ const LuckySpinComponent = (props) => {
             authRequire.type = typeAuth
             if (['in-system', 'out-system'].includes(typeAuth)) {
                 authRequire.enabled = true;
-                authRequire.isAuth = false;
+                if (CookieHelper.getCookie("access_token")) {
+                    authRequire.isAuth = true;
+                }
+                else {
+                    authRequire.isAuth = false;
+                    resetAuthData();
+                }
                 authRequire.isOtp = false;
-                resetAuthData();
                 setAuthRequire({ ...authRequire })
             }
             if (['non-system'].includes(typeAuth)) {
@@ -282,7 +287,6 @@ const LuckySpinComponent = (props) => {
     function startWheelSpin() {
         if (props?.id && authRequire.enabled) {
             spinService({
-                "masterAllocationSelectedId": authRequire.masterSelectedId,
                 "strategySpinId": props?.id
             }).then((res) => {
                 const data = res?.data;
@@ -410,6 +414,7 @@ const LuckySpinComponent = (props) => {
             const response = res?.data?.data;
             if (response?.success) {
                 authRequire.masterSelectedId = response?.masterId;
+                localStorage.setItem("keyName", response?.masterId)
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
                 CookieHelper.setCookie(authenticationConstant.tokenKey, response?.access_Token);
@@ -421,6 +426,7 @@ const LuckySpinComponent = (props) => {
             }
             else {
                 setLoading(false)
+                localStorage.removeItem("keyName");
                 CookieHelper.removeCookie(authenticationConstant.tokenKey);
                 swal(
                     "Thông tin",
@@ -448,10 +454,10 @@ const LuckySpinComponent = (props) => {
 
     const renderName = () => {
         if (['in-system'].includes(authRequire.type)) {
-            return authRequire.credential.id ?? "Khách"
+            return authRequire.credential.id ?? localStorage.getItem("keyName") ?? "Khách"
         }
         else {
-            return authRequire.credential.id ?? 'Khách'
+            return authRequire.credential.id ?? localStorage.getItem("keyName") ?? 'Khách'
         }
     }
 
