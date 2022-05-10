@@ -414,7 +414,7 @@ const LuckySpinComponent = (props) => {
             const response = res?.data?.data;
             if (response?.success) {
                 authRequire.masterSelectedId = response?.masterId;
-                localStorage.setItem("keyName", response?.masterId)
+                localStorage.setItem("keyName", authRequire.credential.id)
                 authRequire.enabled = true;
                 authRequire.isAuth = true;
                 CookieHelper.setCookie(authenticationConstant.tokenKey, response?.access_Token);
