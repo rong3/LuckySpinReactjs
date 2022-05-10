@@ -18,6 +18,7 @@ const LuckySpinComponent = (props) => {
     const [wheelInstance, setWheelInstance] = useState(null)
     let [wheelSpinning, setWheelSpinning] = useState(false)
     const [import_config, setImport_config] = useState(null);
+    const [loading, setLoading] = useState(false)
     const [authRequire, setAuthRequire] = useState({
         type: type_allocation[2]?.objectKey,
         enabled: false,
@@ -398,6 +399,7 @@ const LuckySpinComponent = (props) => {
     /**Authorize func */
     //enable auth
     function checkAuthSpin() {
+        setLoading(true)
         authGateWayMasterSelected({
             "strategyId": props?.id,
             "groupAllocationId": import_config.allocation?.id,
@@ -412,11 +414,13 @@ const LuckySpinComponent = (props) => {
                 authRequire.isAuth = true;
                 CookieHelper.setCookie(authenticationConstant.tokenKey, response?.access_Token);
                 setAuthRequire({ ...authRequire })
+                setLoading(false)
                 setTimeout(() => {
                     editor_config_apply(master_config_data)
                 }, 0);
             }
             else {
+                setLoading(false)
                 CookieHelper.removeCookie(authenticationConstant.tokenKey);
                 swal(
                     "Thông tin",
@@ -463,7 +467,8 @@ const LuckySpinComponent = (props) => {
                                 theme_area(import_config?.theme?.config_json?.key, {
                                     authRequire: authRequire,
                                     inputEvent: inputEvent,
-                                    checkAuthSpin: checkAuthSpin
+                                    checkAuthSpin: checkAuthSpin,
+                                    loading: loading
                                 })?.login
                             }
                         }

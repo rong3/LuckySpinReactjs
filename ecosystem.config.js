@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
       {
-        name: "HDBANK_WEBSITE",
+        name: "LUCKYSPIN",
         script: "./server/index.js",
         watch: false,
         instances: "max",

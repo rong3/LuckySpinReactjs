@@ -73,31 +73,59 @@ export const style_login_new = (data) => {
 export const style_login_HDBank = (data) => {
     const type_otp = data?.authRequire?.type === "otp";
     return <section class="main-wrapper login-page">
-        <div class="wrapper-container d-flex align-items-center justify-content-center">
-            <div class="wrap-login"> <a href=""><img class="logo" src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt="" /></a>
-                <div class="login-title">
-                    <p class="small-txt">Chào mừng bạn đến với</p>
-                    <h1 class="big-txt">Vòng quay may mắn</h1>
+        {
+            data?.loading ?
+                <div id="loading-container">
+                    <div class="loading-wrapper">
+                        <div id="loading-logo">
+                            <div class="loading-spinner-rolling">
+                                <div class="ldio">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-status">Đang đăng nhập</div>
+                    </div>
                 </div>
-                <form class="wrap-form">
-                    <div class="form-group">
-                        <label class="label" for="">Tên truy cập</label>
-                        <input class="form-control" onChange={(e) => {
-                            const value = e.target?.value;
-                            data?.inputEvent('master_id', value)
-                        }} type="text" placeholder="Nhập tên user" />
+                :
+                <div class="wrapper-container d-flex align-items-center justify-content-center">
+                    <div class="wrap-login"> <a href=""><img class="logo" src="/asset/images/luckyspin/theme/HDbank/background/logo.png" alt="" /></a>
+                        <div class="login-title">
+                            <p class="small-txt">Chào mừng bạn đến với</p>
+                            <h1 class="big-txt">Vòng quay may mắn</h1>
+                        </div>
+                        <form class="wrap-form">
+                            <div class="form-group">
+                                <label class="label" for="">Tên truy cập</label>
+                                <input class="form-control" onChange={(e) => {
+                                    const value = e.target?.value;
+                                    data?.inputEvent('master_id', value)
+                                }}
+                                    onKeyPress={event => {
+                                        if (event.key === 'Enter') {
+                                            data?.checkAuthSpin()
+                                        }
+                                    }}
+                                    type="text" placeholder="Nhập tên user" />
+                            </div>
+                            <div class="form-group">
+                                <label class="label" for="">Mã Pin</label>
+                                <input class="form-control" onChange={(e) => {
+                                    const value = e.target?.value;
+                                    data?.inputEvent('master_pass', value)
+                                }} onKeyPress={event => {
+                                    if (event.key === 'Enter') {
+                                        data?.checkAuthSpin()
+                                    }
+                                }} id="core" type="password" placeholder="Nhập mã pin" />
+                                <img class="show-pass" src="/asset/images/luckyspin/theme/HDbank/background/eye.svg" alt="" />
+                            </div>
+
+                            <button type="button" class="btn btn-submit" onClick={() => data?.checkAuthSpin()}> <span>Truy cập ngay</span></button>
+
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label class="label" for="">Mã Pin</label>
-                        <input class="form-control" onChange={(e) => {
-                            const value = e.target?.value;
-                            data?.inputEvent('master_pass', value)
-                        }} id="core" type="password" placeholder="Nhập mã pin" />
-                        <img class="show-pass" src="/asset/images/luckyspin/theme/HDbank/background/eye.svg" alt="" />
-                    </div>
-                    <button type="button" class="btn btn-submit" onClick={() => data?.checkAuthSpin()}> <span>Truy cập ngay</span></button>
-                </form>
-            </div>
-        </div>
+                </div>
+        }
     </section>
 }
