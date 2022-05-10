@@ -78,10 +78,14 @@ const LuckySpinComponent = (props) => {
         if (props?.data || props?.id) {
             try {
                 const data = transformWheelData(props?.data);
-                console.log({ data: data });
+                // console.log({ data: data });
                 setDefaultConfigData(data)
             }
             catch {
+                // setDefault()
+                // setTimeout(() => {
+                //     setLoadingWheel(false);
+                // }, 100);
             }
         }
         else {
@@ -361,7 +365,7 @@ const LuckySpinComponent = (props) => {
         wheel_audio.currentTime = 0;
         applause_audio.play();
         swal(
-            "Kết quả",
+            "",
             indicatedSegment?.msgExtra ? indicatedSegment?.msgExtra :
                 "Bạn đã quay vào " + indicatedSegment?.text + ".",
             "success"
@@ -453,107 +457,133 @@ const LuckySpinComponent = (props) => {
     }
 
     const renderName = () => {
-        if (['in-system'].includes(authRequire.type)) {
-            return authRequire.credential.id ?? localStorage.getItem("keyName") ?? "Khách"
+        try {
+            if (['in-system'].includes(authRequire.type)) {
+                return authRequire.credential.id ?? localStorage?.getItem("keyName") ?? "Khách"
+            }
+            else {
+                return authRequire.credential.id ?? localStorage?.getItem("keyName") ?? 'Khách'
+            }
         }
-        else {
-            return authRequire.credential.id ?? localStorage.getItem("keyName") ?? 'Khách'
-        }
+        catch { }
     }
 
     return (
-        <>
-            <ConfigSpinComponent export={importData} devMode={changeDevMode} />
-            {
-                (authRequire.enabled && !authRequire.isAuth) ?
-                    <div class="luckyspin-wrapper" id="login-wrapper">
-                        {
-                            {
-                                ...
-                                theme_area(import_config?.theme?.config_json?.key, {
-                                    authRequire: authRequire,
-                                    inputEvent: inputEvent,
-                                    checkAuthSpin: checkAuthSpin,
-                                    loading: loading
-                                })?.login
-                            }
-                        }
-                    </div>
-                    :
-                    loadingWheel ||
-                    <>
-                        <header>
-                            <nav class="navbar d-flex align-items-center justify-content-between">
-                                <div class="navbar-brand"> <a> <img src="/asset/images/luckyspin/theme/HDBank_OPT2/background/logo2.png" alt="" /></a></div>
-                                <div class="navbar-right">
-                                    <div class="dropdown"><a class="navbar-avatar dropdown-toggle" href="#">
-                                        <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
-                                        <p style={{ color: "#000" }}>&nbsp; Xin chào, {renderName()}</p></a>
-                                        <ul class="dropdown-menu">
-                                            <li onClick={() => {
-                                                CookieHelper.removeCookie("access_token");
-                                                window.location.reload();
-                                            }}><a>Đăng xuất</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </nav>
-                        </header>
+        props?.dataFailed ?
+            <section
+                className="page404"
+                style={{
+                    borderRadius: '20px',
+                    backgroundImage: `url(/asset/images/producttion/bg.png)`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center center',
+                }}
+            >
+                <div className="page-container">
+                    {
 
-                        <section class="luckyspin-wrapper main-wrapper page-circle" id="luckyspin-wrapper">
-                            <div class="wrapper-container d-flex align-items-center justify-content-center">
-                                <div class="wrap-circle">
-                                    <div class="panel_luckySpin" id="home">
-                                        <div align="center">
-                                            <table cellpadding="0" cellspacing="0" border="0">
-                                                <tr>
-                                                    <td class="the_wheel" id="the_wheel" align="center" valign="center">
-                                                        <canvas id="canvas" width={master_config_data?.canvas?.width} height={master_config_data?.canvas?.height} data-responsiveMinWidth={master_config_data?.canvas?.width}
-                                                            data-responsiveScaleHeight="true">
-                                                            <p>Sorry, your browser doesn't support canvas. Please try
-                                                                another.
-                                                            </p>
-                                                        </canvas>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <div className="row" style={{ width: '100vw' }}>
-                                            {
-                                                (props?.id === null || authRequire.type === "non-system") &&
-                                                <div className="col-md-12" align="center">
-                                                    <a role={"button"} onClick={() => {
-                                                        setDevMode(true)
-                                                    }}>
-                                                        <em className="material-icons">settings</em>
-                                                    </a>
-                                                </div>
-                                            }
-                                            {
-                                                {
-                                                    ...
-                                                    theme_area(import_config?.theme?.config_json?.key, {
-                                                        authRequire: authRequire,
-                                                        disabled: wheelSpinning,
-                                                        startSpin: startSpin
-                                                    })?.spinBtn
-                                                }
-                                            }
-                                        </div>
-                                    </div>
-
-                                </div>
+                        <>
+                            <div className="page-title">
+                                <h1>Oops!</h1>
+                                <h2>Dữ liệu vòng quay không tồn tại</h2>
                             </div>
-                            <audio controls="controls" id="wheel_audio" src={import_config?.theme?.config_json?.audio?.spinStart} type="audio/mp3"></audio>
-                            <audio controls="controls" id="applause_audio" src={import_config?.theme?.config_json?.audio?.spinEnd} type="audio/mp3"></audio>
-                        </section>
-                        {
-                            devMode &&
-                            <EditorSpinComponent master_config_data={master_config_data} devMode={changeDevMode} editor_config_apply={editor_config_apply} />
-                        }
-                    </>
-            }
-        </>
+                        </>
+                    }
+                </div>
+            </section>
+            :
+            <>
+                <ConfigSpinComponent export={importData} devMode={changeDevMode} />
+                {
+                    (authRequire.enabled && !authRequire.isAuth) ?
+                        <div class="luckyspin-wrapper" id="login-wrapper">
+                            {
+                                {
+                                    ...
+                                    theme_area(import_config?.theme?.config_json?.key, {
+                                        authRequire: authRequire,
+                                        inputEvent: inputEvent,
+                                        checkAuthSpin: checkAuthSpin,
+                                        loading: loading
+                                    })?.login
+                                }
+                            }
+                        </div>
+                        :
+                        loadingWheel ||
+                        <>
+                            <header>
+                                <nav class="navbar d-flex align-items-center justify-content-between">
+                                    <div class="navbar-brand"> <a> <img src="/asset/images/luckyspin/theme/HDBank_OPT2/background/logo2.png" alt="" /></a></div>
+                                    <div class="navbar-right">
+                                        <div class="dropdown"><a class="navbar-avatar dropdown-toggle" href="#">
+                                            <img class="avatar" src="/asset/images/luckyspin/theme/HDbank/background/avarta.png" alt="" />
+                                            <p style={{ color: "#000" }}>&nbsp; Xin chào, {renderName()}</p></a>
+                                            <ul class="dropdown-menu">
+                                                <li onClick={() => {
+                                                    CookieHelper.removeCookie("access_token");
+                                                    window.location.reload();
+                                                }}><a>Đăng xuất</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </header>
+
+                            <section class="luckyspin-wrapper main-wrapper page-circle" id="luckyspin-wrapper">
+                                <div class="wrapper-container d-flex align-items-center justify-content-center">
+                                    <div class="wrap-circle">
+                                        <div class="panel_luckySpin" id="home">
+                                            <div align="center">
+                                                <table cellpadding="0" cellspacing="0" border="0">
+                                                    <tr>
+                                                        <td class="the_wheel" id="the_wheel" align="center" valign="center">
+                                                            <canvas id="canvas" width={master_config_data?.canvas?.width} height={master_config_data?.canvas?.height} data-responsiveMinWidth={master_config_data?.canvas?.width}
+                                                                data-responsiveScaleHeight="true">
+                                                                <p>Sorry, your browser doesn't support canvas. Please try
+                                                                    another.
+                                                                </p>
+                                                            </canvas>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div className="row" style={{ width: '100vw' }}>
+                                                {
+                                                    (props?.id === null || authRequire.type === "non-system") &&
+                                                    <div className="col-md-12" align="center">
+                                                        <a role={"button"} onClick={() => {
+                                                            setDevMode(true)
+                                                        }}>
+                                                            <em className="material-icons">settings</em>
+                                                        </a>
+                                                    </div>
+                                                }
+                                                {
+                                                    {
+                                                        ...
+                                                        theme_area(import_config?.theme?.config_json?.key, {
+                                                            authRequire: authRequire,
+                                                            disabled: wheelSpinning,
+                                                            startSpin: startSpin
+                                                        })?.spinBtn
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <audio controls="controls" id="wheel_audio" src={import_config?.theme?.config_json?.audio?.spinStart} type="audio/mp3"></audio>
+                                <audio controls="controls" id="applause_audio" src={import_config?.theme?.config_json?.audio?.spinEnd} type="audio/mp3"></audio>
+                            </section>
+                            {
+                                devMode &&
+                                <EditorSpinComponent master_config_data={master_config_data} devMode={changeDevMode} editor_config_apply={editor_config_apply} />
+                            }
+                        </>
+                }
+            </>
     );
 }
 

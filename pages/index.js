@@ -10,7 +10,7 @@ function HomePage() {
   return (
     <React.Fragment>
       <Head>
-        <title>{t('mainMenu.dashboard')}</title>
+        <title>Admin Panel</title>
       </Head>
       <DashBoardComponent />
     </React.Fragment>
@@ -18,5 +18,5 @@ function HomePage() {
 }
 
 HomePage.Layout = CommonLayout;
-HomePage.Title = Utility.trans('mainMenu.dashboard');
+HomePage.Title = "Admin Panel";
 export default HomePage;

@@ -3,14 +3,15 @@ import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from "react-redux";
 import { useToasts } from "react-toast-notifications";
 import { loadDataTable } from "../../redux/actions/strategyActions"
-import { loadDataTableGroupAllocation } from "../../redux/actions/groupAllocationActions"
-import { loadDataTableMasterObj } from "../../redux/actions/masterObjectAllocationActions"
-import { loadDataTableWheel } from "../../redux/actions/wheelInstanceAction"
-import { loadDataTableThemeSpin } from "../../redux/actions/themeAction"
-import { loadDataTableGroupChannelPrize } from "../../redux/actions/groupChannelPrizeAction"
+// import { loadDataTableGroupAllocation } from "../../redux/actions/groupAllocationActions"
+// import { loadDataTableMasterObj } from "../../redux/actions/masterObjectAllocationActions"
+// import { loadDataTableWheel } from "../../redux/actions/wheelInstanceAction"
+// import { loadDataTableThemeSpin } from "../../redux/actions/themeAction"
+// import { loadDataTableGroupChannelPrize } from "../../redux/actions/groupChannelPrizeAction"
 import { masterData } from "./masterData"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../services/strategySpin.service"
 import showConfirm from "../../shared/packages/control/dialog/confirmation"
+import { CookieHelper } from "../../shared/packages/utils/cookie"
 
 function DashBoardComponent(props) {
     const router = useRouter();
@@ -130,7 +131,11 @@ function DashBoardComponent(props) {
                             {
                                 selectedStrategy ?
                                     <div class="wrap-right_img" onClick={() => {
-                                        changeRoute(`/embedded/lucky-spin?id=${selectedStrategy?.id}`)
+                                        CookieHelper.removeCookie("access_token");
+                                        setTimeout(() => {
+                                            window.location.href = `/embedded/lucky-spin?id=${selectedStrategy?.id}`;
+                                        }, 0);
+                                        // window.open(`/embedded/lucky-spin?id=${selectedStrategy?.id}`, '_blank', 'toolbar=0,location=0,menubar=0,fullscreen=yes');
                                     }}>
                                         <figure style={{ alignItems: 'center', height: '250px', display: 'flex', justifyContent: 'center', backgroundSize: 'cover', backgroundImage: `url(${JSON.parse(selectedStrategy?.themeInstance && selectedStrategy?.themeInstance?.configJson)?.main_bg?.value})` }}>
                                             <img style={{ width: '150px', height: '150px' }}

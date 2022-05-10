@@ -11,6 +11,7 @@ export default function LuckySpin(props) {
     const [currentSize, setCurrentSize] = useState(sizeBrowserCache.current);
     const router = useRouter()
     const [data, setData] = useState(null);
+    const [dataFailed, setDataFailed] = useState(false)
     const detectMetaViewPort = (size) => {
         if (size < 768) {
             return <meta name="viewport"
@@ -49,9 +50,14 @@ export default function LuckySpin(props) {
             if (getProxyPrizeAttribute) {
                 try {
                     const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
-                    setData(_mergeData)
+                    setData(_mergeData);
+                    if (res?.Succeeded===false) {
+                        setDataFailed(true)
+                    }
                 }
-                catch { }
+                catch {
+                    setDataFailed(true)
+                }
             }
         }
 
@@ -67,13 +73,13 @@ export default function LuckySpin(props) {
                 {
                     detectMetaViewPort(currentSize)
                 }
-                <title>HDBank Lucky Spin</title>
+                <title>Vòng quay may mắn</title>
                 <link rel="stylesheet" type="text/css" href="/asset/images/luckyspin/theme/HDbank/css/hdbank_wheel.min.css" />
             </head>
             <NonLayout>
                 {
-                    data &&
-                    <LuckySpinComponent {...props} data={data} />
+                    // data &&
+                    <LuckySpinComponent {...props} dataFailed={dataFailed} data={{ ...data }} />
                 }
 
             </NonLayout>

@@ -13,7 +13,7 @@ export default function StrategySpinPage(props) {
     return (
         <React.Fragment>
             <Head>
-                <title>{t('mainMenu.dashboard')}</title>
+                <title>{"Tạo chiến lược"}</title>
             </Head>
             <StrategyContainer {...props} />
         </React.Fragment>
@@ -35,5 +35,5 @@ export async function getServerSideProps(router) {
 
 
 StrategySpinPage.Layout = CommonLayout;
-StrategySpinPage.Title = "Chiến lược";
+StrategySpinPage.Title = "Tạo chiến lược";
 StrategySpinPage.Href = "/strategySpin/container";

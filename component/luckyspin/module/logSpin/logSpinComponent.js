@@ -146,10 +146,9 @@ function LogSpinComponent(props) {
                                                     .indexOf(value.toLowerCase().trim()) !== -1);
                                             setStrategyListSearch([...filter])
                                         }} placeholder="Tìm kiếm..." />
-                                        <button><img src="/asset/images/icons/search.svg" alt="" /></button>
+                                        <button type='button'><img src="/asset/images/icons/search.svg" alt="" /></button>
                                     </div>
                                 </form>
-
                                 <ul>
                                     {
                                         strategyListSearch?.map((item, i) => {
