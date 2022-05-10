@@ -3153,8 +3153,8 @@ section {
 }
 .choice-customer .wrapper-container .wrap-body_table .wrap-button .btn-backstep,
 .choice-customer .wrapper-container .wrap-body_table .wrap-button .btn-submit {
-    opacity: 0.4;
-    pointer-events: none;
+    /* opacity: 0.4;
+    pointer-events: none; */
 }
 .choice-customer .wrapper-container .wrap-body.active .wrap-body_table table tr {
     display: table-row;
