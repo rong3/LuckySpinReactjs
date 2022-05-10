@@ -28,30 +28,30 @@ const SideBarComponent = (props) => {
             icon: '/asset/images/icons/side-5.svg',
             name: 'Lịch sử Chiến lược'
         },
-        {
-            href: "/strategySpin",
-            as: '/strategySpin',
-            icon: '/asset/images/icons/side-2.svg',
-            name: 'Chiến lược cũ'
-        },
-        {
-            href: "/proxyAllocationGroup",
-            as: '/proxyAllocationGroup',
-            icon: '/asset/images/icons/side-2.svg',
-            name: 'Nhóm khách hàng cũ'
-        },
-        {
-            href: "/wheelSpin",
-            as: '/wheelSpin',
-            icon: '/asset/images/icons/side-2.svg',
-            name: 'Giao diện & giải thưởng cũ'
-        },
-        {
-            href: "/logSpin",
-            as: '/logSpin',
-            icon: '/asset/images/icons/side-2.svg',
-            name: 'Lịch sử Chiến lược cũ'
-        }
+        // {
+        //     href: "/strategySpin",
+        //     as: '/strategySpin',
+        //     icon: '/asset/images/icons/side-2.svg',
+        //     name: 'Chiến lược cũ'
+        // },
+        // {
+        //     href: "/proxyAllocationGroup",
+        //     as: '/proxyAllocationGroup',
+        //     icon: '/asset/images/icons/side-2.svg',
+        //     name: 'Nhóm khách hàng cũ'
+        // },
+        // {
+        //     href: "/wheelSpin",
+        //     as: '/wheelSpin',
+        //     icon: '/asset/images/icons/side-2.svg',
+        //     name: 'Giao diện & giải thưởng cũ'
+        // },
+        // {
+        //     href: "/logSpin",
+        //     as: '/logSpin',
+        //     icon: '/asset/images/icons/side-2.svg',
+        //     name: 'Lịch sử Chiến lược cũ'
+        // }
     ]
 
     return (
