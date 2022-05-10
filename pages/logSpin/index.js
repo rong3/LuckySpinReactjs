@@ -10,7 +10,7 @@ export default function LogSpinPage(props) {
     return (
         <React.Fragment>
             <Head>
-                <title>{t('mainMenu.dashboard')}</title>
+                <title>Lịch sử vòng quay</title>
             </Head>
             <LogSpinComponent {...props} />
         </React.Fragment>
