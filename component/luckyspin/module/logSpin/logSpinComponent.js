@@ -46,10 +46,10 @@ function LogSpinComponent(props) {
             pageNumber: 1,
             pageSize: 999
         }).then((res) => {
-            const isDescending = false;
-            const data = res?.data?.data?.sort((a, b) => isDescending ? new Date(b.created).getTime() - new Date(a.created).getTime() : new Date(a.created).getTime() - new Date(b.created).getTime()) ?? [];
-            setStrategyListSearch([...data])
-            setStrategyList([...data]);
+            // const isDescending = false;
+            // const data = res?.data?.data?.sort((a, b) => isDescending ? new Date(b.created).getTime() - new Date(a.created).getTime() : new Date(a.created).getTime() - new Date(b.created).getTime()) ?? [];
+            setStrategyListSearch([...res?.data?.data])
+            setStrategyList([...res?.data?.data]);
         })
     }, [])
 
