@@ -35,6 +35,7 @@ function LogSpinComponent(props) {
         group: {}
     });
     const { t } = useTranslation('common');
+    const [isLoading, setIsLoading] = useState(false);
     const [selectedStrategy, setSelectedStrategy] = useState(null);
     const [strategyList, setStrategyList] = useState([])
     const [strategyListSearch, setStrategyListSearch] = useState([])
@@ -54,6 +55,7 @@ function LogSpinComponent(props) {
 
     useEffect(() => {
         if (selectedStrategy?.id) {
+            setIsLoading(true);
             getLogSpin({ keySearch: 'strategyId', keyValue: selectedStrategy?.id }).then((res) => {
                 const data = res?.data?.data ?? [];
                 var remapData = data?.map(x => (
@@ -77,6 +79,9 @@ function LogSpinComponent(props) {
                     list: remapData,
                     group: groupKey
                 });
+                setIsLoading(false)
+            }).catch(() => {
+                setIsLoading(false)
             })
         }
     }, [selectedStrategy])
@@ -132,7 +137,6 @@ function LogSpinComponent(props) {
                                 <h2>Tên chiến lược</h2>
                             </div>
                             <div class="wrap-left_body">
-
                                 <form class="wrap-form">
                                     <div class="form-group">
                                         <input class="form-control" type="text" onChange={(e) => {
@@ -145,12 +149,14 @@ function LogSpinComponent(props) {
                                         <button><img src="/asset/images/icons/search.svg" alt="" /></button>
                                     </div>
                                 </form>
+
                                 <ul>
                                     {
                                         strategyListSearch?.map((item, i) => {
                                             return (
                                                 <li onClick={() => {
-                                                    setSelectedStrategy(item)
+                                                    if (!isLoading)
+                                                        setSelectedStrategy(item)
                                                 }} className={item?.id === selectedStrategy?.id ? 'active' : ''}>
                                                     <div class="title-item">
                                                         <a class="title">
@@ -166,6 +172,7 @@ function LogSpinComponent(props) {
                                 </ul>
                             </div>
                         </div>
+
                         <div class="wrap-right">
                             <div class="wrap-right_header d-flex align-items-center justify-content-between">
                                 <div class="wrap-right_header--title d-flex align-items-center"><img class="icon" src="/asset/images/icons/list.svg" alt="" />
@@ -180,57 +187,64 @@ function LogSpinComponent(props) {
                                     </ul>
                                 </div>
                             </div>
-                            <div class="wrap-right_body">
-                                {
-                                    selectedStyleView === 0 &&
-                                    Object.keys(listLogSpin?.group)?.map((itemOutside, i) => {
-                                        const dataItem = listLogSpin?.group[itemOutside];
-                                        return (
-                                            <Accordion style={{
-                                                width: "100%",
-                                                padding: '5px',
-                                                boxShadow: 'none',
-                                                marginBottom: "5px",
-                                            }}>
-                                                <AccordionSummary
-                                                    expandIcon={
-                                                        <>
-                                                            <ExpandMoreIcon />
-                                                        </>
-                                                    }
-                                                    aria-controls="panel1a-content"
-                                                    IconButtonProps={{
-                                                    }}
-                                                >
-                                                    <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
-                                                    &nbsp;
-                                                    <b>{itemOutside}</b>
-                                                    &nbsp;
-                                                    {`(${dataItem?.length} khách hàng trúng giải)`}
-                                                </AccordionSummary>
-                                                <AccordionDetails>
-                                                    <DataGridControl
-                                                        rows={dataItem}
-                                                        columns={columns}
-                                                        count={dataItem?.length}
-                                                        disableSelectionOnClick
-                                                    />
+                            {
+                                isLoading ?
+                                    <div class="wrap-right_body">
+                                        <p>Đang tải dữ liêu...</p>
+                                    </div>
+                                    :
+                                    <div class="wrap-right_body">
+                                        {
+                                            selectedStyleView === 0 &&
+                                            Object.keys(listLogSpin?.group)?.map((itemOutside, i) => {
+                                                const dataItem = listLogSpin?.group[itemOutside];
+                                                return (
+                                                    <Accordion style={{
+                                                        width: "100%",
+                                                        padding: '5px',
+                                                        boxShadow: 'none',
+                                                        marginBottom: "5px",
+                                                    }}>
+                                                        <AccordionSummary
+                                                            expandIcon={
+                                                                <>
+                                                                    <ExpandMoreIcon />
+                                                                </>
+                                                            }
+                                                            aria-controls="panel1a-content"
+                                                            IconButtonProps={{
+                                                            }}
+                                                        >
+                                                            <img class="icon" src="/asset/images/icons/gift-2.svg" alt="" />
+                                                            &nbsp;
+                                                            <b>{itemOutside}</b>
+                                                            &nbsp;
+                                                            {`(${dataItem?.length} khách hàng trúng giải)`}
+                                                        </AccordionSummary>
+                                                        <AccordionDetails>
+                                                            <DataGridControl
+                                                                rows={dataItem}
+                                                                columns={columns}
+                                                                count={dataItem?.length}
+                                                                disableSelectionOnClick
+                                                            />
 
-                                                </AccordionDetails>
-                                            </Accordion>
-                                        )
-                                    })
-                                }
-                                {
-                                    selectedStyleView === 1 &&
-                                    <DataGridControl
-                                        rows={listLogSpin?.list}
-                                        columns={columns}
-                                        count={listLogSpin?.list?.length}
-                                        disableSelectionOnClick
-                                    />
-                                }
-                            </div>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                )
+                                            })
+                                        }
+                                        {
+                                            selectedStyleView === 1 &&
+                                            <DataGridControl
+                                                rows={listLogSpin?.list}
+                                                columns={columns}
+                                                count={listLogSpin?.list?.length}
+                                                disableSelectionOnClick
+                                            />
+                                        }
+                                    </div>
+                            }
                         </div>
                     </div>
                 </section>
