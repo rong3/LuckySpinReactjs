@@ -26,6 +26,7 @@ export function request(method,
 ) {
     const defaultHeaders = {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin":"*",
         "local": locale,
         ...headers
     }
