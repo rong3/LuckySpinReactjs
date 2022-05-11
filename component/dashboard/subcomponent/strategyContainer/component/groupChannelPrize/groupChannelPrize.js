@@ -101,7 +101,7 @@ const GroupChannelPrize = (props) => {
         // },
         {
             field: 'color',
-            headerName: 'Màu sắc',
+            headerName: 'Màu nền',
             headerClassName: 'headerColumn',
             minWidth: 200,
             flex: 1,
@@ -116,6 +116,50 @@ const GroupChannelPrize = (props) => {
                     <p>&nbsp;{cell?.row?.color}</p>
                 </>
             }
+        },
+        {
+            field: 'strokeStyle',
+            headerName: 'Màu đường kẻ',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+            renderCell: (cell) => {
+                return <>
+                    <button class="edit ms-3 btn" style={{
+                        height: '25px',
+                        background: cell?.row?.strokeStyle
+                    }}>
+                    </button>
+                    <p>&nbsp;{cell?.row?.strokeStyle}</p>
+                </>
+            }
+        },
+        {
+            field: 'textFillStyle',
+            headerName: 'Màu chữ',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
+            renderCell: (cell) => {
+                return <>
+                    <button class="edit ms-3 btn" style={{
+                        height: '25px',
+                        background: cell?.row?.textFillStyle
+                    }}>
+                    </button>
+                    <p>&nbsp;{cell?.row?.textFillStyle}</p>
+                </>
+            }
+        },
+        {
+            field: 'textFontSize',
+            headerName: 'Font size giải',
+            headerClassName: 'headerColumn',
+            minWidth: 200,
+            flex: 1,
+            editable: false,
         },
         {
             field: 'position',
@@ -496,19 +540,40 @@ const GroupChannelPrize = (props) => {
                                         }} defaultValue={modalCustomPrizeSelected.data?.name} />
                                     </div>
                                     <div className="col-md-6">
-                                        <span>Màu sắc</span>
+                                        <span>Màu nền giải thưởng</span>
                                         <InputControl type="text" id="color" onChange={(e) => {
                                             const value = e.target.value ?? '';
                                             overwriteDataAllocationSelectedModal('color', value)
                                         }} defaultValue={modalCustomPrizeSelected.data?.color} />
                                     </div>
-                                    <div className="col-md-12">
+                                    <div className="col-md-6">
+                                        <span>Màu đường kẻ</span>
+                                        <InputControl type="text" id="strokeStyle" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('strokeStyle', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.strokeStyle} />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <span>Màu chữ</span>
+                                        <InputControl type="text" id="textFillStyle" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('textFillStyle', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.textFillStyle} />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <span>Font size giải</span>
+                                        <InputControl type="text" id="textFontSize" onChange={(e) => {
+                                            const value = e.target.value ?? '';
+                                            overwriteDataAllocationSelectedModal('textFontSize', value)
+                                        }} defaultValue={modalCustomPrizeSelected.data?.textFontSize} />
+                                    </div>
+                                    {/* <div className="col-md-12">
                                         <span>Hình ảnh</span>
                                         <InputControl type="text" id="image" onChange={(e) => {
                                             const value = e.target.value ?? '';
                                             overwriteDataAllocationSelectedModal('image', value)
                                         }} defaultValue={modalCustomPrizeSelected.data?.image} />
-                                    </div>
+                                    </div> */}
                                     <div className="col-md-6">
                                         <span>Vị trí giải thưởng</span>
                                         <InputControl type="number" id="color" onChange={(e) => {

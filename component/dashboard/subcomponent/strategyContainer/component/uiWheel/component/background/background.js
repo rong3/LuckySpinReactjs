@@ -240,7 +240,7 @@ const BackGroundUI = (props) => {
                 centered
             >
                 <Modal.Body>
-                    <div class="popup-detail" id="popup-bg-2">
+                    <div class="popup-detail">
                         <div class="popup-main">
                             <div class="popup-body">
                                 <ul class="d-flex align-items-center justify-content-center">

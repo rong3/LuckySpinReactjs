@@ -51,7 +51,7 @@ export default function LuckySpin(props) {
                 try {
                     const _mergeData = { ...dataRes, proxyPrizeAtribute: [...getProxyPrizeAttribute?.data?.data] }
                     setData(_mergeData);
-                    if (res?.Succeeded===false) {
+                    if (res?.Succeeded === false) {
                         setDataFailed(true)
                     }
                 }
@@ -64,6 +64,9 @@ export default function LuckySpin(props) {
         fetchMyAPI()
 
         $(window).resize(updateWindowDimensions);
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
         return () => $(window).off("resize", updateWindowDimensions);
     }, [])
 

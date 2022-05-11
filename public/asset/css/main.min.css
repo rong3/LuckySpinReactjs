@@ -4070,9 +4070,9 @@ section {
     }
 }
 .popup-detail {
-    display: none;
+    /* display: none;
     padding: 24px 56px !important;
-    width: 758px;
+    width: 758px; */
 }
 .popup-detail .popup-main .popup-header {
     margin-bottom: 24px;
