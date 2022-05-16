@@ -16,12 +16,12 @@ const SideBarComponent = (props) => {
             icon: '/asset/images/icons/side-3.svg',
             name: 'Nhóm khách hàng'
         },
-        // {
-        //     href: "/",
-        //     as: '/',
-        //     icon: '/asset/images/icons/side-4.svg',
-        //     name: 'Giao diện & giải thưởng'
-        // },
+        {
+            href: "/prizing",
+            as: '/prizing',
+            icon: '/asset/images/icons/side-4.svg',
+            name: 'Nhóm giải thưởng'
+        },
         {
             href: "/logSpin",
             as: '/logSpin',
