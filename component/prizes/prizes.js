@@ -289,7 +289,7 @@ function PrizingComponent(props) {
 
     return (
         <section class="history-section section-main">
-            <h1 class="section-title d-flex align-items-center"> <img class="icon" src="/asset/images/icons/side-3.svg" alt="" />&nbsp; Quản lý nhóm khách hàng</h1>
+            <h1 class="section-title d-flex align-items-center"> <img class="icon" src="/asset/images/icons/side-4.svg" alt="" />&nbsp; Quản lý nhóm giải thưởng</h1>
             <div class="wrapper-container d-flex">
                 <div class="wrap-left">
                     <div class="wrap-left_header d-flex">
