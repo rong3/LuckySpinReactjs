@@ -4,18 +4,18 @@ import DynamicLink from "../../../../component/common/DynamicLink/DynamicLink";
 const SideBarComponent = (props) => {
 
     const menu = [
-        // {
-        //     href: "/",
-        //     as: '/',
-        //     icon: '/asset/images/icons/side-2.svg',
-        //     name: 'Chiến lược'
-        // },
-        // {
-        //     href: "/",
-        //     as: '/',
-        //     icon: '/asset/images/icons/side-3.svg',
-        //     name: 'Nhóm khách hàng'
-        // },
+        {
+            href: "/",
+            as: '/',
+            icon: '/asset/images/icons/side-2.svg',
+            name: 'Chiến lược'
+        },
+        {
+            href: "/customer",
+            as: '/customer',
+            icon: '/asset/images/icons/side-3.svg',
+            name: 'Nhóm khách hàng'
+        },
         // {
         //     href: "/",
         //     as: '/',
