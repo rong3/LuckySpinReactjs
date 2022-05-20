@@ -19,6 +19,16 @@ export const getProxyPrizeAdmin = (data) => {
     );
 };
 
+
+export const createProxyPrize = (data) => {
+    return request(
+        'POST',
+        `ProxyStrategyPrize`,
+        'vi',
+        data
+    );
+};
+
 export const updateProxyPrize = (data) => {
     return request(
         'POST',

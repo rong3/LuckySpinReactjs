@@ -17,3 +17,12 @@ export const spinService = (data) => {
         'vi', data
     );
 };
+
+export const deleteLogSpinService = (id) => {
+    return request(
+        'DELETE',
+        `LogSpin/${id}`,
+        'vi'
+    );
+};
+

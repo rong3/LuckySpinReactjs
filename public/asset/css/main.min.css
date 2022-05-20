@@ -2062,10 +2062,7 @@ section {
         font-size: 16px;
     }
 }
-.wrapper-main {
-    padding-top: 60px;
-    padding-left: 110px;
-}
+
 @media screen and (max-width: 600px) {
     .wrapper-main {
         padding-left: 0;

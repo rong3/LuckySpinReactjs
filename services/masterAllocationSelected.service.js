@@ -35,6 +35,15 @@ export const updateMasterAllocationSelected = (data) => {
     );
 };
 
+export const uploadMasterAllocationSelected = (data) => {
+    return request(
+        'POST',
+        `MasterAllocationSelected/upload`,
+        'vi',
+        data
+    );
+};
+
 export const removeMasterAllocationSelected= (id) => {
     return request(
         'DELETE',

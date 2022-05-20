@@ -15,7 +15,7 @@ import { createGroupChannelPrize, updateGroupChannelPrize, removeGroupChannelPri
 import { createChannelPrize, updateChannelPrize, removeChannelPrize } from "../../../../../../services/channelPrize.service"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
-import { updateProxyPrize } from "../../../../../../services/proxyPrize.service"
+import { updateProxyPrize, createProxyPrize } from "../../../../../../services/proxyPrize.service"
 
 const GroupChannelPrize = (props) => {
     const { material } = props
@@ -301,11 +301,10 @@ const GroupChannelPrize = (props) => {
     const createPrizeCommand = (data) => {
         if (selectedGroupPrize?.id) {
             createChannelPrize({ ...data, groupChannelPrizeId: selectedGroupPrize?.id }).then((res) => {
-                addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
-                const convert = ({
+                let convertUpdate = ({
                     "id": data?.idProxy,
                     "strategySpinId": material?.strategySSR?.id,
-                    "channelPrizeId": data?.id,
+                    "channelPrizeId": res?.data?.data,
                     "position": data?.attributes?.position,
                     "allowPrizing": data?.attributes?.allowPrizing,
                     "percent": data?.attributes?.percent,
@@ -313,13 +312,20 @@ const GroupChannelPrize = (props) => {
                     "hidden": data?.attributes?.hidden,
                     "msgExtra": data?.attributes?.msgExtra,
                 });
-                updateProxyPrize(convert).then((res) => {
-                    dispatch(loadDataTableGroupChannelPrize({
-                        header: {
-                            pageNumber: 1,
-                            pageSize: 999
-                        }
-                    }))
+                createProxyPrize(convertUpdate).then((pro) => {
+                    convertUpdate.id = pro?.data?.data ?? null;
+                    if (convertUpdate.id) {
+                        updateProxyPrize(convertUpdate).then((res) => {
+                            dispatch(loadDataTableGroupChannelPrize({
+                                header: {
+                                    pageNumber: 1,
+                                    pageSize: 999
+                                }
+                            }))
+                            addToast(<div className="text-center">Thêm thành công</div>, { appearance: 'success' });
+                        }).catch((err) => {
+                        })
+                    }
                 }).catch((err) => {
                 })
             }).catch((err) => {

@@ -10,7 +10,7 @@ import { strategyConfig, prizeConfig } from "../../../../../luckyspin/module/str
 import Modal from "../../../../../../shared/packages/control/modal/index";
 import { InputControl } from "../../../../../../shared/packages/control/input/inputControl"
 import showConfirm from "../../../../../../shared/packages/control/dialog/confirmation"
-import { createMasterAllocationSelected, updateMasterAllocationSelected, removeMasterAllocationSelected } from "../../../../../../services/masterAllocationSelected.service"
+import { createMasterAllocationSelected, updateMasterAllocationSelected, uploadMasterAllocationSelected, removeMasterAllocationSelected } from "../../../../../../services/masterAllocationSelected.service"
 import { createGroupAllocation, updateGroupAllocation, removeGroupAllocation } from "../../../../../../services/groupAllocation.service"
 import { updateStrategySpin, createStrategySpin, removeStrategySpin } from "../../../../../../services/strategySpin.service"
 import SelectBox from "../../../../../../shared/packages/control/selectBox/selectBox"
@@ -385,8 +385,35 @@ const GroupAllocation = (props) => {
                                     <img src="/asset/images/icons/add.svg" alt="" />
                                     <span>&nbsp;Thêm mới</span>
                                 </button>
-                                {/* <button class="btn btn-upload" type="submit"> <img src="/asset/images/icons/cloud-upload.svg" alt="" /><span>&nbsp;Tải lên</span></button>
-                                <button class="btn btn-setting" type="submit" data-fancybox="" data-src="#dialog-content"> <img src="/asset/images/icons/setting.svg" alt="" /><span>&nbsp;Cấu hình chung</span></button> */}
+                                <button class="btn btn-upload" type="button" onClick={() => {
+                                    document.getElementById('input_file_template').click();
+                                }}>
+                                    <img src="/asset/images/icons/cloud-upload.svg" alt="" /><span>&nbsp;Tải lên</span>
+                                </button>
+                                <input type="file" id="input_file_template"
+                                    onChange={(e) => {
+                                        const file = e.target.files[0] ?? null;
+                                        if (file) {
+                                            const formData = new FormData();
+                                            formData.append("Templates", file);
+                                            formData.append("GroupAllocationId", selectedGroupAllocation?.id);
+                                            formData.append("StrategySpinId", material?.strategySSR?.id);
+                                            uploadMasterAllocationSelected(formData).then(() => {
+                                                dispatch(loadDataTableGroupAllocation({
+                                                    header: {
+                                                        pageNumber: 1,
+                                                        pageSize: 999
+                                                    }
+                                                }))
+                                                addToast(<div className="text-center">Cập nhật thành công</div>, { appearance: 'success' });
+                                            }).catch((err) => {
+                                                addToast(<div className="text-center">Cập nhật thất bại</div>, { appearance: 'error' });
+                                            })
+                                        }
+                                        e.target.value = '';
+                                    }}
+                                    accept=".xls,.xlsx" style={{ display: 'none' }} />
+                                {/*  <button class="btn btn-setting" type="submit" data-fancybox="" data-src="#dialog-content"> <img src="/asset/images/icons/setting.svg" alt="" /><span>&nbsp;Cấu hình chung</span></button> */}
                             </div>
                         </div>
                     }

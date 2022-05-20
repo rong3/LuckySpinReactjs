@@ -10,10 +10,10 @@ import mobileDetectHOC from "../../../../shared/packages/hocs/mobileDetect"
 import { usePermission } from "../../../../shared/packages/provider/accessGateway"
 import withPermission from "../../../../shared/packages/hocs/permission/permissionHOC"
 import DataGridControl from '../../../../shared/packages/control/grid/datagrid';
-import { getLogSpin } from "../../../../services/logSpin.service"
+import { getLogSpin, deleteLogSpinService } from "../../../../services/logSpin.service"
 import { loadDataTable } from "../../../../redux/actions/strategyActions"
 import { getListLiteStrategySpin } from "../../../../services/strategySpin.service"
-
+import showConfirm from "../../../../shared/packages/control/dialog/confirmation"
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -121,8 +121,44 @@ function LogSpinComponent(props) {
             flex: 1,
             editable: false,
         },
-
+        {
+            field: 'action',
+            headerName: 'Thao tác',
+            sortable: false,
+            headerClassName: 'headerColumn',
+            headerAlign: 'center',
+            minWidth: 200,
+            flex: 1,
+            disableClickEventBubbling: true,
+            renderCell: (cell) => {
+                return renderActionGrid(cell)
+            }
+        },
     ]
+
+    const renderActionGrid = (params) => {
+        return (
+            <div className="box-action-container">
+                <div>
+                    <i className="fas fa-trash text-danger" onClick={async (e) => {
+                        const confirm = await showConfirm("Xác nhận", `Bạn có chắc chắn muốn xoá?`, "Xoá", "Trở về");
+                        if (confirm && params?.row?.id) {
+                            deleteLogSpinService(params?.row?.id).then((res) => {
+                                const temp = selectedStrategy.id;
+                                selectedStrategy.id = null;
+                                setSelectedStrategy({ ...selectedStrategy })
+                                setTimeout(() => {
+                                    selectedStrategy.id = temp;
+                                    setSelectedStrategy({ ...selectedStrategy })
+                                }, 0);
+                                addToast(<div className="text-center">Xoá thành công</div>, { appearance: 'success' });
+                            });
+                        }
+                    }}></i>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <body class="history">
