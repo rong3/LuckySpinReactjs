@@ -98,7 +98,7 @@ function DashBoardComponent(props) {
                                             onClick={() => setSelectedStrategy(item)}
                                         >
                                             <div class="title-item">
-                                                <a class="title">
+                                                <a target={'_blank'} href={`https://webuat.hdbank.com.vn/luckydraw/vongquay/${item?.urlPublic ?? item?.id}`} class="title">
                                                     {item?.name}
                                                 </a>
                                             </div>
