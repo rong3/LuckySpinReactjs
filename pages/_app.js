@@ -75,10 +75,12 @@ function Default({ Component, pageProps }) {
         <I18nextProvider i18n={i18n}>
           <ToastProvider autoDismiss={true} autoDismissTimeout={2000} placement="bottom-right">
             <Layout>
-              <ThemeProvider theme={darkState ? dark() : light()}>
-                <Loading loading={loading} />
-                <Component {...pageProps} />
-              </ThemeProvider>
+              {/* <SocketProvider> */}
+                <ThemeProvider theme={darkState ? dark() : light()}>
+                  <Loading loading={loading} />
+                  <Component {...pageProps} />
+                </ThemeProvider>
+              {/* </SocketProvider> */}
             </Layout>
           </ToastProvider>
         </I18nextProvider>

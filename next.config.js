@@ -10,7 +10,8 @@ module.exports =
   env: {
     BASE_URL: process.env.BASE_URL,
     BASE_AUTH_URL: process.env.BASE_AUTH_URL,
-    PREFIX_VONGQUAY: process.env.PREFIX_VONGQUAY
+    PREFIX_VONGQUAY: process.env.PREFIX_VONGQUAY,
+    SOCKET_HOST: process.env.SOCKET_HOST
   },
   swcMinify: false,
   images: {

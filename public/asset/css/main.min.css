@@ -3474,7 +3474,7 @@ section {
 }
 .section-main.history-section .wrap-left_body {
     padding: 0 16px;
-    height: 100%;
+    height: 700px;
     overflow-y: auto;
 }
 .section-main.history-section .wrap-left_body .wrap-form {
